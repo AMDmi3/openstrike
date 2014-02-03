@@ -17,6 +17,8 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <stdexcept>
+
 #include <dat/buffer.hh>
 
 #include <dat/datgraphics.hh>
