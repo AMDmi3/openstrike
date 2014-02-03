@@ -1,0 +1,7 @@
+SET(SOURCES
+	unpacker.cc
+)
+
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
+ADD_EXECUTABLE(unpacker ${SOURCES})
+TARGET_LINK_LIBRARIES(unpacker datfile)
