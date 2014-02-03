@@ -56,10 +56,13 @@ public:
 	Buffer(std::istream& stream, size_t size);
 	virtual ~Buffer() {}
 
+	/* It's better to have these explicit declarations, however
+	 * currently only gcc-4.9 and clang-3.4 are able to compile them
 	Buffer(const Buffer&) = default;
 	Buffer(Buffer&&) noexcept = default;
 	Buffer& operator=(const Buffer&) = default;
 	Buffer& operator=(Buffer&&) noexcept = default;
+	*/
 
 	virtual const unsigned char* GetData() const;
 	virtual size_t GetSize() const;
@@ -80,10 +83,13 @@ public:
 
 	virtual ~Slice() {}
 
+	/* It's better to have these explicit declarations, however
+	 * currently only gcc-4.9 and clang-3.4 are able to compile them
 	Slice(const Slice&) = default;
 	Slice(Slice&&) noexcept = default;
 	Slice& operator=(const Slice&) = default;
 	Slice& operator=(Slice&&) noexcept = default;
+	*/
 
 	virtual const unsigned char* GetData() const;
 	virtual size_t GetSize() const;
