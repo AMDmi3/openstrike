@@ -56,10 +56,10 @@ public:
 	Buffer(std::istream& stream, size_t size);
 	virtual ~Buffer() {}
 
-	Buffer(const Buffer& other) = default;
-	Buffer(Buffer&& other) noexcept = default;
-	Buffer& operator=(const Buffer& other) = default;
-	Buffer& operator=(Buffer&& other) noexcept = default;
+	Buffer(const Buffer&) = default;
+	Buffer(Buffer&&) noexcept = default;
+	Buffer& operator=(const Buffer&) = default;
+	Buffer& operator=(Buffer&&) noexcept = default;
 
 	virtual const unsigned char* GetData() const;
 	virtual size_t GetSize() const;
@@ -80,10 +80,10 @@ public:
 
 	virtual ~Slice() {}
 
-	Slice(const Slice& other) = default;
-	Slice(Slice&& other) noexcept = default;
-	Slice& operator=(const Slice& other) = default;
-	Slice& operator=(Slice&& other) noexcept = default;
+	Slice(const Slice&) = default;
+	Slice(Slice&&) noexcept = default;
+	Slice& operator=(const Slice&) = default;
+	Slice& operator=(Slice&&) noexcept = default;
 
 	virtual const unsigned char* GetData() const;
 	virtual size_t GetSize() const;
