@@ -44,6 +44,7 @@ int realmain(int argc, char** argv) {
 	SDL2pp::Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
 
 	render.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
+	render.SetLogicalSize(640, 480);
 
 	SpriteManager spriteman(render);
 
@@ -67,12 +68,14 @@ int realmain(int argc, char** argv) {
 		}
 
 		// Render
-		render.SetDrawColor(0, 32, 32);
+		render.SetDrawColor(0, 0, 0);
 		render.Clear();
 
 		int frameid = SDL_GetTicks() / 100 % 14;
 		spriteman.Render(spriteid + frameid, 0, 0, SpriteManager::FRAMECORNER);
 
+		render.SetDrawColor(32, 32, 32);
+		render.DrawRect(SDL2pp::Rect(0, 0, 640, 480));
 		render.Present();
 
 		// Frame limiter
