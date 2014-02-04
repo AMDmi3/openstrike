@@ -83,7 +83,7 @@ int realmain(int argc, char** argv) {
 		render.Clear();
 
 		int x = 0, y = 0, maxheight = 0;
-		for (int i = 0; i < graphics.GetNumSprites(); ++i) {
+		for (unsigned int i = 0; i < graphics.GetNumSprites(); ++i) {
 			if (graphics.GetWidth(i) == 0 || graphics.GetHeight(i) == 0)
 				continue;
 

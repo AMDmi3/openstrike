@@ -22,15 +22,17 @@
 
 #include <vector>
 
+#include <dat/buffer.hh>
+
 class DatGraphics {
 protected:
 	struct Sprite {
-		int width;
-		int height;
-		int xoffset;
-		int yoffset;
-		int framewidth;
-		int frameheight;
+		unsigned short width;
+		unsigned short height;
+		unsigned short xoffset;
+		unsigned short yoffset;
+		unsigned short framewidth;
+		unsigned short frameheight;
 		Slice data;
 	};
 
@@ -86,16 +88,16 @@ protected:
 public:
 	DatGraphics(const MemRange& data);
 
-	int GetNumSprites() const;
+	unsigned int GetNumSprites() const;
 
-	int GetWidth(int num) const;
-	int GetHeight(int num) const;
-	int GetFrameWidth(int num) const;
-	int GetFrameHeight(int num) const;
-	int GetXOffset(int num) const;
-	int GetYOffset(int num) const;
+	unsigned short GetWidth(unsigned int num) const;
+	unsigned short GetHeight(unsigned int num) const;
+	unsigned short GetFrameWidth(unsigned int num) const;
+	unsigned short GetFrameHeight(unsigned int num) const;
+	unsigned short GetXOffset(unsigned int num) const;
+	unsigned short GetYOffset(unsigned int num) const;
 
-	std::vector<unsigned char> GetPixels(int num) const;
+	std::vector<unsigned char> GetPixels(unsigned int num) const;
 };
 
 #endif // DATGRAPHICS_HH

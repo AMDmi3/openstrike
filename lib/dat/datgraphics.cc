@@ -85,35 +85,35 @@ DatGraphics::DatGraphics(const MemRange& data) : data_(data) {
 	}
 }
 
-int DatGraphics::GetNumSprites() const {
+unsigned int DatGraphics::GetNumSprites() const {
 	return sprites_.size();
 }
 
-int DatGraphics::GetWidth(int num) const {
+unsigned short DatGraphics::GetWidth(unsigned int num) const {
 	return sprites_[num].width;
 }
 
-int DatGraphics::GetHeight(int num) const {
+unsigned short DatGraphics::GetHeight(unsigned int num) const {
 	return sprites_[num].height;
 }
 
-int DatGraphics::GetFrameWidth(int num) const {
+unsigned short DatGraphics::GetFrameWidth(unsigned int num) const {
 	return sprites_[num].framewidth;
 }
 
-int DatGraphics::GetFrameHeight(int num) const {
+unsigned short DatGraphics::GetFrameHeight(unsigned int num) const {
 	return sprites_[num].frameheight;
 }
 
-int DatGraphics::GetXOffset(int num) const {
+unsigned short DatGraphics::GetXOffset(unsigned int num) const {
 	return sprites_[num].xoffset;
 }
 
-int DatGraphics::GetYOffset(int num) const {
+unsigned short DatGraphics::GetYOffset(unsigned int num) const {
 	return sprites_[num].yoffset;
 }
 
-std::vector<unsigned char> DatGraphics::GetPixels(int num) const {
+std::vector<unsigned char> DatGraphics::GetPixels(unsigned int num) const {
 	size_t pixels_size = sprites_[num].width * sprites_[num].height * 4;
 
 	std::vector<unsigned char> pixels(pixels_size, 0);
@@ -129,6 +129,7 @@ std::vector<unsigned char> DatGraphics::GetPixels(int num) const {
 	while (data_pos < data.GetSize() && out_pos + 4 <= pixels_size) {
 		mask = data[data_pos++];
 
+		// optimize by computing max. available number of iterations
 		for (int j = 0; j < 8 && pixel_in_line < width && data_pos < data.GetSize() && out_pos + 4 <= pixels_size; j++, pixel_in_line++) {
 			if (mask & (0x80 >> j)) {
 				unsigned char color = data[data_pos++];
