@@ -59,3 +59,8 @@ through graphics and Q or Escape to close the viewer.
 ## License
 
 GPLv3, see COPYING
+
+The project also bundles third party software under its own licenses:
+
+* extlibs/SDL2pp (C++11 SDL2 wrapper library) - zlib license
+* extlibs/boost (a tiny bit from boost) - Boost Software License
