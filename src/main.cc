@@ -49,9 +49,9 @@ int realmain(int argc, char** argv) {
 
 	int spriteid = 0;
 	{
-		Buffer data = datfile.GetData("BOMBER");
+		Buffer data = datfile.GetData("EXPLODE");
 		DatGraphics gfx(data);
-		spriteid = spriteman.Add(gfx, 0, 3);
+		spriteid = spriteman.Add(gfx, 0, 14);
 	}
 
 	while (1) {
@@ -70,7 +70,7 @@ int realmain(int argc, char** argv) {
 		render.SetDrawColor(0, 32, 32);
 		render.Clear();
 
-		int frameid = SDL_GetTicks() / 500 % 3;
+		int frameid = SDL_GetTicks() / 100 % 14;
 		spriteman.Render(spriteid + frameid, 0, 0, SpriteManager::FRAMECORNER);
 
 		render.Present();
