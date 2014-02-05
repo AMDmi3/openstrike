@@ -98,6 +98,10 @@ std::string DatFile::GetName(int num) const {
 	return toc_by_num_.at(num).name;
 }
 
+bool DatFile::Exists(const std::string& name) const {
+	return toc_by_name_.find(name) != toc_by_name_.end();
+}
+
 Buffer DatFile::GetData(int num) const {
 	return GetData(GetTocEntry(num));
 }

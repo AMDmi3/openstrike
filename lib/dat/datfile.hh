@@ -66,6 +66,8 @@ public:
 	int GetCount() const;
 	std::string GetName(int num) const;
 
+	bool Exists(const std::string& name) const;
+
 	Buffer GetData(int num) const;
 	Buffer GetData(const std::string& name) const;
 };
