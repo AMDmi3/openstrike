@@ -4,12 +4,13 @@ F/OSS Desert Strike and Jungle Strike reimplementation.
 
 ## Status
 
-The project is currently on the early stages of development, so the
-only functionality exists at the time is a set of classes to read
-.DAT file format from Desert and Jungle Strike games and decode
-sprites from it. On top of that, two utilities exists: unpacker
-which extracts separate files stored in .DAT and viewer which is
-interactive SDL2 application used to view sprite sets.
+The project is currently on the early stages of development, and
+is not yet playable. What it can offer right now:
+
+* An utility to unpack Desert/Jungle Strike .DAT files
+* SDL2 - based viewer for sprites in these files
+* A game skeleton which currently demonstrates an ability to load
+  and render some sprites
 
 ## Building
 
@@ -29,28 +30,38 @@ To build the project, run:
 
 ## Running
 
-After the project is built, you can run the utilities. Both require
-path to .DAT file from Desert or Jungle Strike (usually named
-DESERT.DAT or JUNGLE.DAT correspondingly), further referred to as
-```file.DAT```
+To run any of binaries produced by the project, you need original
+Desert/Jungle Strike .DAT files (further referred as ```file.DAT```)
 
-* View contents of data file (as a list of entries):
-  ```
-util/unpacker/unpacker -l file.DAT
+### Unpacker
+
+To view all entries in .DAT file:
+```
+% util/unpacker/unpacker -l file.DAT
 ```
 
-* Extract contents of data file (into current directory):
-  ```
-util/unpacker/unpacker -x file.DAT
+To extract them into current directory:
+```
+% util/unpacker/unpacker -x file.DAT
 ```
 
-* Interactively view sprites from a data file:
-  ```
+### Viewer
+
+```
 util/viewer/viewer file.DAT
 ```
 
-in this utility, use arrow keys or Page Up/Page Down to navigate
-through graphics and Q or Escape to close the viewer.
+Use arrow keys or Page Up/Page Down to navigate through graphics
+and Q or Escape to close the viewer.
+
+### Game
+
+```
+src/openstrike file.DAT
+```
+
+Use left/right keys to rotate the chopper. That's all it does for
+now.
 
 ## Author
 
