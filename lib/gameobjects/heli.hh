@@ -17,14 +17,44 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#ifndef HELI_HH
+#define HELI_HH
 
-class Heli;
+#include <game/gameobject.hh>
 
-class Visitor {
+class Game;
+class Visitor;
+
+class Heli : public GameObject {
+protected:
+	float direction_;
+	unsigned int rotor_phase_;
+
 public:
-	virtual void Visit(const Heli&) {}
+	Heli(Game& game);
+
+	virtual void Accept(Visitor& visitor) const;
+	virtual void Update(unsigned int deltams);
+
+	float GetDirection() const {
+		return direction_;
+	}
+
+	unsigned int GetRotorPhase() const {
+		return rotor_phase_;
+	}
+
+	void Left() {
+		direction_ -= 15.0f;
+		if (direction_ < 0.0f)
+			direction_ += 360.0f;
+	}
+
+	void Right() {
+		direction_ += 15.0f;
+		if (direction_ > 360.0f)
+			direction_ -= 360.0f;
+	}
 };
 
-#endif // VISITOR_HH
+#endif // HELI_HH

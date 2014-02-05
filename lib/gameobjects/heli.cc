@@ -17,14 +17,18 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#include <game/visitor.hh>
 
-class Heli;
+#include <gameobjects/heli.hh>
 
-class Visitor {
-public:
-	virtual void Visit(const Heli&) {}
-};
+Heli::Heli(Game& game) : GameObject(game) {
+	direction_ = 0.0;
+}
 
-#endif // VISITOR_HH
+void Heli::Accept(Visitor& visitor) const {
+	visitor.Visit(*this);
+}
+
+void Heli::Update(unsigned int deltams) {
+	rotor_phase_ += deltams;
+}
