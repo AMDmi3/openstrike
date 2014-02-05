@@ -52,7 +52,9 @@ unsigned int SpriteManager::Add(const DatGraphics& graphics, unsigned int first,
 		sprite.frameheight = graphics.GetFrameHeight(first + i);
 
 		// place sprite in atlas
-		const RectPacker::Rect& placed = rect_packer_.Place(sprite.width, sprite.height);
+		// XXX: padding is required when SDL_RenderSetLogicalSize is used
+		// XXX: otherwise parts of adjacent sprites are occasionally shown; investigate
+		const RectPacker::Rect& placed = rect_packer_.Place(sprite.width, sprite.height, 1);
 		sprite.atlaspage = placed.page;
 		sprite.atlasx = placed.x;
 		sprite.atlasy = placed.y;
