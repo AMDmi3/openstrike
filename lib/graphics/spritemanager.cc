@@ -81,24 +81,25 @@ void SpriteManager::Render(unsigned int id, int x, int y, int flags) {
 
 	int xoffset = 0, yoffset = 0;
 
-	switch (flags & PIVOTMASK) {
-	case IMAGECENTER:
-		xoffset = -sprite.width / 2;
-		yoffset = -sprite.height / 2;
-		break;
-	case FRAMECORNER:
-		xoffset = sprite.xoffset;
-		yoffset = sprite.yoffset;
-		break;
-	case FRAMECENTER:
-		xoffset = sprite.xoffset - sprite.framewidth / 2;
-		yoffset = sprite.yoffset - sprite.frameheight / 2;
-		break;
-	default:
-		break; // no extra offset
-	};
+	if (flags & PIVOT_USEFRAME) {
+		xoffset += sprite.xoffset;
+		yoffset += sprite.yoffset;
 
-	if (flags & HFLIP) {
+		if (flags & HFLIP_FRAME)
+			xoffset += sprite.framewidth - 2 * sprite.xoffset - sprite.width;
+	}
+
+	if (flags & PIVOT_USECENTER) {
+		if (flags & PIVOT_USEFRAME) {
+			xoffset -= sprite.framewidth / 2;
+			yoffset -= sprite.frameheight / 2;
+		} else {
+			xoffset -= sprite.width / 2;
+			yoffset -= sprite.width / 2;
+		}
+	}
+
+	if (flags & HFLIP_SPRITE) {
 		renderer_.Copy(
 				atlas_pages_[sprite.atlaspage],
 				SDL2pp::Rect(sprite.atlasx, sprite.atlasy, sprite.width, sprite.height),
