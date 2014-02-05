@@ -18,6 +18,7 @@
  */
 
 #include <iostream>
+#include <limits>
 
 #include <SDL2/SDL.h>
 
@@ -26,6 +27,10 @@
 #include <dat/datfile.hh>
 #include <dat/datgraphics.hh>
 #include <graphics/spritemanager.hh>
+
+#include <graphics/renderer.hh>
+#include <game/game.hh>
+#include <gameobjects/heli.hh>
 
 void usage(const char* progname) {
 	std::cerr << "Usage: " << progname << " <filename.dat>" << std::endl;
@@ -37,24 +42,26 @@ int realmain(int argc, char** argv) {
 		return 1;
 	}
 
+	// Data file
 	DatFile datfile(argv[1]);
 
+	// SDL stuff
 	SDL2pp::SDL sdl(SDL_INIT_VIDEO);
 	SDL2pp::Window window("OpenStrike", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE);
-	SDL2pp::Renderer render(window, -1, SDL_RENDERER_ACCELERATED);
+	SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-	render.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
-	render.SetLogicalSize(640, 480);
+	renderer.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
+	renderer.SetLogicalSize(640, 480);
 
-	SpriteManager spriteman(render);
+	// Game stuff
+	SpriteManager spriteman(renderer);
 
-	int spriteid = 0;
-	{
-		Buffer data = datfile.GetData("EXPLODE");
-		DatGraphics gfx(data);
-		spriteid = spriteman.Add(gfx, 0, 14);
-	}
+	Game game;
+	Renderer game_renderer(renderer, datfile, spriteman);
 
+	Heli* heli = game.Spawn<Heli>();
+
+	unsigned int delta_ms, prev_ms, this_ms = SDL_GetTicks();
 	while (1) {
 		// Process events
 		SDL_Event event;
@@ -64,19 +71,30 @@ int realmain(int argc, char** argv) {
 			} else if (event.type == SDL_KEYDOWN) {
 				if (event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_q)
 					return 0;
+				if (event.key.keysym.sym == SDLK_LEFT)
+					heli->Left();
+				if (event.key.keysym.sym == SDLK_RIGHT)
+					heli->Right();
 			}
 		}
 
+		// Update
+		prev_ms = this_ms;
+		this_ms = SDL_GetTicks();
+		delta_ms = (prev_ms <= this_ms) ? (this_ms - prev_ms) : (std::numeric_limits<unsigned int>::max() - prev_ms + this_ms);
+
+		game.Update(delta_ms);
+
 		// Render
-		render.SetDrawColor(0, 0, 0);
-		render.Clear();
+		renderer.SetDrawColor(0, 0, 0);
+		renderer.Clear();
 
-		int frameid = SDL_GetTicks() / 100 % 14;
-		spriteman.Render(spriteid + frameid, 0, 0, SpriteManager::FRAMECORNER);
+		renderer.SetDrawColor(32, 64, 0);
+		renderer.FillRect(SDL2pp::Rect(0, 0, 640, 480));
 
-		render.SetDrawColor(32, 32, 32);
-		render.DrawRect(SDL2pp::Rect(0, 0, 640, 480));
-		render.Present();
+		game.Accept(game_renderer);
+
+		renderer.Present();
 
 		// Frame limiter
 		SDL_Delay(1);
