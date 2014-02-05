@@ -26,7 +26,9 @@ init && git submodule update```.
 
 To build the project, run:
 
-```cmake . && make```
+```
+cmake . && make
+```
 
 ## Running
 
