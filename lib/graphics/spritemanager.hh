@@ -56,13 +56,20 @@ protected:
 
 public:
 	enum Flags {
-		IMAGECORNER = 0x00,
-		IMAGECENTER = 0x01,
-		FRAMECORNER = 0x02,
-		FRAMECENTER = 0x03,
-		PIVOTMASK   = 0x03,
+		PIVOT_USEFRAME     = 0x01, // use frame rect instead of sprite rect for pivot
+		PIVOT_USECENTER    = 0x02, // use center instead of corner for pivot
 
-		HFLIP       = 0x04,
+		PIVOT_IMAGECORNER  = 0,
+		PIVOT_IMAGECENTER  = PIVOT_USECENTER,
+		PIVOT_FRAMECORNER  = PIVOT_USEFRAME,
+		PIVOT_FRAMECENTER  = PIVOT_USEFRAME | PIVOT_USECENTER,
+
+		PIVOT_MASK         = PIVOT_USEFRAME | PIVOT_USECENTER,
+
+		HFLIP_FRAME        = 0x04,
+		HFLIP_SPRITE       = 0x08,
+
+		HFLIP        = HFLIP_FRAME | HFLIP_SPRITE,
 	};
 
 public:

@@ -63,17 +63,17 @@ void Renderer::Visit(const Heli& heli) {
 	phase = phase % 24;
 
 	int spriteid = 0;
-	bool hflip = false;
+	int flipflags = 0;
 
 	if (phase >= 13) {
 		phase = 24 - phase;
-		hflip = true;
+		flipflags = SpriteManager::HFLIP;
 	}
 
 	assert(phase >= 0 && phase <= 12);
 
-	spriteman_.Render(heli_sprite_ids_ + phase, 320, 240, SpriteManager::FRAMECENTER | (hflip ? SpriteManager::HFLIP : 0));
-	spriteman_.Render(shadow_sprite_ids_ + phase, 320, 280, SpriteManager::FRAMECENTER | (hflip ? SpriteManager::HFLIP : 0));
+	spriteman_.Render(heli_sprite_ids_ + phase, 320, 240, SpriteManager::PIVOT_FRAMECENTER | flipflags);
+	spriteman_.Render(shadow_sprite_ids_ + phase, 320, 280, SpriteManager::PIVOT_FRAMECENTER | flipflags);
 
-	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 320, 240, SpriteManager::FRAMECENTER);
+	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 320, 240, SpriteManager::PIVOT_FRAMECENTER);
 }
