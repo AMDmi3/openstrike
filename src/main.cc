@@ -69,12 +69,21 @@ int realmain(int argc, char** argv) {
 			if (event.type == SDL_QUIT) {
 				return 0;
 			} else if (event.type == SDL_KEYDOWN) {
-				if (event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_q)
+				switch (event.key.keysym.sym) {
+				case SDLK_LEFT:   heli->AddControlFlags(Heli::LEFT); break;
+				case SDLK_RIGHT:  heli->AddControlFlags(Heli::RIGHT); break;
+				case SDLK_UP:     heli->AddControlFlags(Heli::FORWARD); break;
+				case SDLK_DOWN:	  heli->AddControlFlags(Heli::BACKWARD); break;
+				case SDLK_ESCAPE: case SDLK_q:
 					return 0;
-				if (event.key.keysym.sym == SDLK_LEFT)
-					heli->Left();
-				if (event.key.keysym.sym == SDLK_RIGHT)
-					heli->Right();
+				}
+			} else if (event.type == SDL_KEYUP) {
+				switch (event.key.keysym.sym) {
+				case SDLK_LEFT:   heli->RemoveControlFlags(Heli::LEFT); break;
+				case SDLK_RIGHT:  heli->RemoveControlFlags(Heli::RIGHT); break;
+				case SDLK_UP:     heli->RemoveControlFlags(Heli::FORWARD); break;
+				case SDLK_DOWN:	  heli->RemoveControlFlags(Heli::BACKWARD); break;
+				}
 			}
 		}
 

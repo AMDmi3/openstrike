@@ -72,8 +72,12 @@ void Renderer::Visit(const Heli& heli) {
 
 	assert(phase >= 0 && phase <= 12);
 
-	spriteman_.Render(heli_sprite_ids_ + phase, 320, 240, SpriteManager::PIVOT_FRAMECENTER | flipflags);
-	spriteman_.Render(shadow_sprite_ids_ + phase, 320, 280, SpriteManager::PIVOT_FRAMECENTER | flipflags);
+	int shadow_offset = 16 + heli.GetHeight() * 20; // from Desert Strike
 
-	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 320, 240, SpriteManager::PIVOT_FRAMECENTER);
+	spriteman_.Render(shadow_sprite_ids_ + phase, 320, 240, SpriteManager::PIVOT_FRAMECENTER | flipflags);
+
+	// XXX: shadow should be transparent
+	spriteman_.Render(heli_sprite_ids_ + phase, 320, 240 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER | flipflags);
+
+	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 320, 240 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER);
 }

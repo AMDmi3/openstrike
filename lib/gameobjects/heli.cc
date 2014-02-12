@@ -22,7 +22,28 @@
 #include <gameobjects/heli.hh>
 
 Heli::Heli(Game& game) : GameObject(game) {
+	rotor_phase_ = 0;
+
 	direction_ = 0.0;
+
+	x_pos_ = 0.0;
+	y_pos_ = 0.0;
+	height_ = 1.0;
+
+	x_vel_ = 0.0;
+	y_vel_ = 0.0;
+
+	guns_ = gun_capacity_;
+	hydras_ = hydra_capacity_;
+	hellfires_ = hellfire_capacity_;
+
+	armor_ = armor_capacity_;
+	fuel_ = fuel_capacity_;
+	load_ = 0;
+
+	gun_reload_ = hydra_reload_ = hellfire_reload_ = 0; // ready to fire
+
+	control_flags_ = tick_control_flags_ = 0;
 }
 
 void Heli::Accept(Visitor& visitor) const {
@@ -30,5 +51,74 @@ void Heli::Accept(Visitor& visitor) const {
 }
 
 void Heli::Update(unsigned int deltams) {
+	UpdatePhysics(deltams);
+	UpdateWeapons(deltams);
+
+	// Post-update
+	tick_control_flags_ = 0;
+}
+
+void Heli::UpdatePhysics(unsigned int deltams) {
+	float delta_sec_ = deltams / 1000.0;
+
+	// Rotor (TODO: implement properly)
 	rotor_phase_ += deltams;
+
+	// Turning
+	float turn_rate = (control_flags_ & FORWARD) ? accel_turn_rate_ : still_turn_rate_;
+
+	if (control_flags_ & LEFT)
+		direction_ -= turn_rate * delta_sec_;
+	if (control_flags_ & RIGHT)
+		direction_ += turn_rate * delta_sec_;
+
+	while (direction_ < 0.0f)
+		direction_ += 360.0f;
+	while (direction_ > 360.0f)
+		direction_ -= 360.0f;
+
+	// XXX: acceleration
+
+	// XXX: position
+}
+
+void Heli::UpdateWeapons(unsigned int deltams) {
+	// take key taps into account
+	int combiled_control_flags = control_flags_ | tick_control_flags_;
+
+	// Cooldown
+	if (gun_reload_ > 0)
+		gun_reload_ -= deltams;
+	if (hydra_reload_ > 0)
+		hydra_reload_ -= deltams;
+	if (hellfire_reload_ > 0)
+		hellfire_reload_ -= deltams;
+
+	// Process gunfire
+	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
+		// TODO: fire gun
+
+		// Pseudocode:
+		// game_.Spawn<Bullet>(x_pos_ + gun_x_offset, y_pos_ + gun_y_offset, direction_);
+
+		guns_--;
+		gun_reload_ = gun_cooldown_;
+	}
+
+	if (combiled_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
+		// TODO: fire hydra
+
+		hydras_--;
+		hydra_reload_ = hydra_cooldown_;
+	}
+
+	if (combiled_control_flags & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
+		// TODO: fire hellfire
+
+		hellfires_--;
+		hellfire_reload_ = hellfire_cooldown_;
+	}
+
+	// XXX: no-ammo case should emit clicking sound; this
+	// probably should be done via emitting some kind of events
 }
