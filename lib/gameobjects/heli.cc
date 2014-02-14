@@ -120,5 +120,5 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	}
 
 	// XXX: no-ammo case should emit clicking sound; this
-	// probably should be done via emitting some kind of events
+	// probably should be done via emitting some kind of event
 }

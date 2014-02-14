@@ -17,24 +17,16 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GAMEOBJECT_HH
-#define GAMEOBJECT_HH
+#include <game/game.hh>
 
-class Game;
-class Visitor;
+#include <game/gameobject.hh>
 
-class GameObject {
-protected:
-	Game& game_;
+GameObject::GameObject(Game& game) : game_(game) {
+}
 
-public:
-	GameObject(Game& game);
-	virtual ~GameObject();
+GameObject::~GameObject() {
+}
 
-	virtual void Accept(Visitor& visitor) const = 0;
-	virtual void Update(unsigned int deltams) = 0;
-
-	void RemoveLater();
-};
-
-#endif // GAMEOBJECT_HH
+void GameObject::RemoveLater() {
+	game_.RemoveLater(this);
+}

@@ -22,6 +22,7 @@
 
 #include <memory>
 #include <list>
+#include <set>
 #include <utility>
 
 class Visitor;
@@ -29,10 +30,15 @@ class GameObject;
 
 class Game {
 protected:
-	typedef std::list<std::unique_ptr<GameObject>> ObjectsList;
+	typedef std::list<std::unique_ptr<GameObject>> ObjectList;
+	typedef std::set<const GameObject*> RemovedObjectsSet;
 
 protected:
-	ObjectsList objects_;
+	ObjectList objects_;
+	RemovedObjectsSet for_removal_;
+
+protected:
+	void RemoveScheduledObjects();
 
 public:
 	Game();
@@ -47,6 +53,8 @@ public:
 
 	void Accept(Visitor& visitor);
 	void Update(unsigned int deltams);
+
+	void RemoveLater(const GameObject* victim);
 };
 
 #endif // GAME_HH

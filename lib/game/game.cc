@@ -17,6 +17,8 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cassert>
+
 #include <game/gameobject.hh>
 
 #include <game/game.hh>
@@ -25,11 +27,40 @@ Game::Game() {
 }
 
 void Game::Accept(Visitor& visitor) {
-	for (auto& object : objects_)
-		object->Accept(visitor);
+	// remove objects that were scheduled from outside
+	RemoveScheduledObjects();
+
+	for (ObjectList::iterator object = objects_.begin(); object != objects_.end(); object++)
+		(*object)->Accept(visitor);
 }
 
 void Game::Update(unsigned int deltams) {
-	for (auto& object : objects_)
-		object->Update(deltams);
+	// remove objects that were scheduled from outside
+	RemoveScheduledObjects();
+
+	for (ObjectList::iterator object = objects_.begin(); object != objects_.end(); object++)
+		(*object)->Update(deltams);
+
+	// remove objects that were scheduled during update
+	RemoveScheduledObjects();
+}
+
+void Game::RemoveLater(const GameObject* victim) {
+	// note: only inserts once, e.g. no object will be removed twice
+	for_removal_.insert(victim);
+}
+
+void Game::RemoveScheduledObjects() {
+	if (for_removal_.empty())
+		return;
+
+	for (ObjectList::iterator object = objects_.begin(); object != objects_.end(); ) {
+		ObjectList::iterator current = object++;
+		RemovedObjectsSet::iterator victim = for_removal_.find(current->get());
+		if (victim != for_removal_.end()) {
+			for_removal_.erase(victim);
+			objects_.erase(current);
+		}
+	}
+	assert(for_removal_.empty());
 }
