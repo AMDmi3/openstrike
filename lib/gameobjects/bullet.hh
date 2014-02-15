@@ -17,16 +17,43 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#ifndef BULLET_HH
+#define BULLET_HH
 
-class Heli;
-class Bullet;
+#include <game/gameobject.hh>
 
-class Visitor {
+class Game;
+class Visitor;
+
+class Bullet : public GameObject {
+protected:
+	static constexpr float speed_ = 400.0;
+
+protected:
+	float x_pos_;
+	float y_pos_;
+	float height_;
+
+	float direction_;
+	float pitch_;
+
 public:
-	virtual void Visit(const Heli&) {}
-	virtual void Visit(const Bullet&) {}
+	Bullet(Game& game, float x, float y, float height, float direction, float pitch);
+
+	virtual void Accept(Visitor& visitor) const;
+	virtual void Update(unsigned int deltams);
+
+	float GetXPos() const {
+		return x_pos_;
+	}
+
+	float GetYPos() const {
+		return y_pos_;
+	}
+
+	float GetHeight() const {
+		return height_;
+	}
 };
 
-#endif // VISITOR_HH
+#endif // BULLET_HH

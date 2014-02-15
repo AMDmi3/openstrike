@@ -34,11 +34,13 @@ protected:
 	unsigned int heli_sprite_ids_;
 	unsigned int shadow_sprite_ids_;
 	unsigned int rotor_sprite_ids_;
+	unsigned int bullet_sprite_id_;
 
 public:
 	Renderer(SDL2pp::Renderer& renderer, DatFile& datfile, SpriteManager& spriteman);
 
 	virtual void Visit(const Heli& heli);
+	virtual void Visit(const Bullet& bullet);
 };
 
 #endif

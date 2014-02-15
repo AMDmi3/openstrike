@@ -17,7 +17,10 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <game/game.hh>
 #include <game/visitor.hh>
+
+#include <gameobjects/bullet.hh>
 
 #include <gameobjects/heli.hh>
 
@@ -96,10 +99,8 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 
 	// Process gunfire
 	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
-		// TODO: fire gun
-
-		// Pseudocode:
-		// game_.Spawn<Bullet>(x_pos_ + gun_x_offset, y_pos_ + gun_y_offset, direction_);
+		// XXX: spawn bullets at a heli's gun position
+		game_.Spawn<Bullet>(x_pos_ /* + gun_offset */, y_pos_ /* + gun_offset */, height_ /* + gun_offset */, direction_, weapon_fire_pitch_);
 
 		guns_--;
 		gun_reload_ = gun_cooldown_;

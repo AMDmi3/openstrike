@@ -21,11 +21,13 @@
 
 #include <SDL2pp/Renderer.hh>
 
-#include <gameobjects/heli.hh>
 #include <graphics/spritemanager.hh>
 #include <dat/datfile.hh>
 #include <dat/datgraphics.hh>
 #include <math/pi.hh>
+
+#include <gameobjects/heli.hh>
+#include <gameobjects/bullet.hh>
 
 #include <graphics/renderer.hh>
 
@@ -85,4 +87,8 @@ void Renderer::Visit(const Heli& heli) {
 	spriteman_.Render(heli_sprite_ids_ + phase, 320, 240 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER | flipflags);
 
 	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 320, 240 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER);
+}
+
+void Renderer::Visit(const Bullet& bullet) {
+	spriteman_.Render(bullet_sprite_id_, 320 + bullet.GetXPos(), 240 - bullet.GetYPos() / 2 - bullet.GetHeight(), SpriteManager::PIVOT_FRAMECENTER);
 }
