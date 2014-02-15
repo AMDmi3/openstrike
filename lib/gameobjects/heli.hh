@@ -54,9 +54,9 @@ protected:
 	static constexpr int armor_capacity_ = 600; // or just default?
 	static constexpr int fuel_capacity_ = 100;  // or just default?
 
-	static constexpr int gun_cooldown_ = 100; // ???
-	static constexpr int hydra_cooldown_ = 100; // ???
-	static constexpr int hellfire_cooldown_ = 100; // ???
+	static constexpr int gun_cooldown_ = 250; // Desert Strike (calculated 240 from video, rounded)
+	static constexpr int hydra_cooldown_ = 500; // Desert Strike (calculated 474 from video, rounded)
+	static constexpr int hellfire_cooldown_ = 1000; // Desert Strike (calculated 1150 from video - time to key press (no auto fire), rounded)
 
 public:
 	enum ControlFlags {
