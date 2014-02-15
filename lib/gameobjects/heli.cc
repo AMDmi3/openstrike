@@ -28,7 +28,7 @@ Heli::Heli(Game& game) : GameObject(game) {
 
 	x_pos_ = 0.0;
 	y_pos_ = 0.0;
-	height_ = 1.0;
+	height_ = maxheight_;
 
 	x_vel_ = 0.0;
 	y_vel_ = 0.0;

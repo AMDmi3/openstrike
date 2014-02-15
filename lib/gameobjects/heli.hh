@@ -48,6 +48,9 @@ protected:
 	// Drag force
 	static constexpr float drag_ = 0.0;
 
+	// Max height
+	static constexpr float maxheight_ = 20.0;
+
 	static constexpr int gun_capacity_ = 1178;
 	static constexpr int hydra_capacity_ = 38;
 	static constexpr int hellfire_capacity_ = 8;

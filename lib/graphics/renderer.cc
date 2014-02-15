@@ -72,7 +72,7 @@ void Renderer::Visit(const Heli& heli) {
 
 	assert(phase >= 0 && phase <= 12);
 
-	int shadow_offset = 16 + heli.GetHeight() * 20; // from Desert Strike
+	int shadow_offset = 16 + heli.GetHeight(); // sprite offset from Desert Strike
 
 	spriteman_.Render(shadow_sprite_ids_ + phase, 320, 240, SpriteManager::PIVOT_FRAMECENTER | flipflags);
 
