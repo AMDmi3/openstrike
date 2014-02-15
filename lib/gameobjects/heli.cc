@@ -59,7 +59,7 @@ void Heli::Update(unsigned int deltams) {
 }
 
 void Heli::UpdatePhysics(unsigned int deltams) {
-	float delta_sec_ = deltams / 1000.0;
+	float delta_sec = deltams / 1000.0f;
 
 	// Rotor (TODO: implement properly)
 	rotor_phase_ += deltams;
@@ -68,9 +68,9 @@ void Heli::UpdatePhysics(unsigned int deltams) {
 	float turn_rate = (control_flags_ & FORWARD) ? accel_turn_rate_ : still_turn_rate_;
 
 	if (control_flags_ & LEFT)
-		direction_ -= turn_rate * delta_sec_;
+		direction_ -= turn_rate * delta_sec;
 	if (control_flags_ & RIGHT)
-		direction_ += turn_rate * delta_sec_;
+		direction_ += turn_rate * delta_sec;
 
 	while (direction_ < 0.0f)
 		direction_ += 360.0f;
