@@ -69,7 +69,6 @@ void Renderer::Visit(const Heli& heli) {
 
 	phase = phase % 24;
 
-	int spriteid = 0;
 	int flipflags = 0;
 
 	if (phase >= 13) {

@@ -71,8 +71,6 @@ int realmain(int argc, char** argv) {
 
 	render.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
 
-	std::vector<SDL2pp::Texture> t;
-
 	while (1) {
 		window.SetTitle(std::string("OpenStrike Sprite Viewer [") + datfile.GetName(current_graphics) + "]");
 
