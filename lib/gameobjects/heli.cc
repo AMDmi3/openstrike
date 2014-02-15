@@ -112,7 +112,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 		hydra_reload_ = hydra_cooldown_;
 	}
 
-	if (combiled_control_flags & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
+	if (tick_control_flags_ /* hellfires have no autofire */ & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
 		// TODO: fire hellfire
 
 		hellfires_--;
