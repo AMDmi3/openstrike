@@ -20,6 +20,8 @@
 #ifndef HELI_HH
 #define HELI_HH
 
+#include <math/pi.hh>
+
 #include <game/gameobject.hh>
 
 class Game;
@@ -28,10 +30,10 @@ class Visitor;
 class Heli : public GameObject {
 protected:
 	// Turn rate when the heli is not accelerating forward
-	static constexpr float still_turn_rate_ = 360.0/2.25;
+	static constexpr float still_turn_rate_ = 2.0 * pi / 2.25; // rad/sec
 
 	// Turn rate when the heli is accelerating forward
-	static constexpr float accel_turn_rate_ = 360.0/4.5;
+	static constexpr float accel_turn_rate_ = 2.0 * pi / 4.5; // rad/sec
 
 	// Forward acceleration rate
 	static constexpr float forward_accel_ = 0.0;

@@ -73,9 +73,9 @@ void Heli::UpdatePhysics(unsigned int deltams) {
 		direction_ += turn_rate * delta_sec;
 
 	while (direction_ < 0.0f)
-		direction_ += 360.0f;
-	while (direction_ > 360.0f)
-		direction_ -= 360.0f;
+		direction_ += 2.0 * pi;
+	while (direction_ > 2.0 * pi)
+		direction_ -= 2.0 * pi;
 
 	// XXX: acceleration
 

@@ -25,6 +25,7 @@
 #include <graphics/spritemanager.hh>
 #include <dat/datfile.hh>
 #include <dat/datgraphics.hh>
+#include <math/pi.hh>
 
 #include <graphics/renderer.hh>
 
@@ -51,14 +52,18 @@ Renderer::Renderer(SDL2pp::Renderer& renderer, DatFile& datfile, SpriteManager& 
 		DatGraphics gfx(data);
 		rotor_sprite_ids_ = spriteman.Add(gfx, 0, 8);
 	}
+
+	{
+		Buffer data = datfile.GetData("WEAPONS");
+		DatGraphics gfx(data);
+		bullet_sprite_id_ = spriteman.Add(gfx, 0, 1);
+	}
 }
 
 void Renderer::Visit(const Heli& heli) {
 	float direction = heli.GetDirection();
-	while (direction < 0.0f)
-		direction += 360.0f;
 
-	int phase = (int)((direction + 7.5) / 15);
+	int phase = (int)((direction / pi * 12.0) + 0.5);
 
 	phase = phase % 24;
 
