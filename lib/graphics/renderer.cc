@@ -79,7 +79,7 @@ void Renderer::Visit(const Heli& heli) {
 
 	assert(phase >= 0 && phase <= 12);
 
-	int shadow_offset = 16 + heli.GetHeight(); // sprite offset from Desert Strike
+	int shadow_offset = 16 + heli.GetPos().z; // sprite offset from Desert Strike
 
 	spriteman_.Render(shadow_sprite_ids_ + phase, 320, 240, SpriteManager::PIVOT_FRAMECENTER | flipflags);
 
@@ -90,5 +90,6 @@ void Renderer::Visit(const Heli& heli) {
 }
 
 void Renderer::Visit(const Bullet& bullet) {
-	spriteman_.Render(bullet_sprite_id_, 320 + bullet.GetXPos(), 240 - bullet.GetYPos() / 2 - bullet.GetHeight(), SpriteManager::PIVOT_FRAMECENTER);
+	Vector3f pos = bullet.GetPos();
+	spriteman_.Render(bullet_sprite_id_, 320 + pos.x, 240 - pos.y / 2 - pos.z, SpriteManager::PIVOT_FRAMECENTER);
 }

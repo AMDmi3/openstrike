@@ -20,6 +20,8 @@
 #ifndef BULLET_HH
 #define BULLET_HH
 
+#include <math/geom.hh>
+
 #include <game/gameobject.hh>
 
 class Game;
@@ -27,32 +29,20 @@ class Visitor;
 
 class Bullet : public GameObject {
 protected:
-	static constexpr float speed_ = 400.0;
+	static constexpr float speed_ = 400.0; // XXX: make this variable?
 
 protected:
-	float x_pos_;
-	float y_pos_;
-	float height_;
-
-	float direction_;
-	float pitch_;
+	Vector3f pos_;
+	Vector3f vel_;
 
 public:
-	Bullet(Game& game, float x, float y, float height, float direction, float pitch);
+	Bullet(Game& game, Vector3f pos, float direction, float pitch);
 
 	virtual void Accept(Visitor& visitor) const;
 	virtual void Update(unsigned int deltams);
 
-	float GetXPos() const {
-		return x_pos_;
-	}
-
-	float GetYPos() const {
-		return y_pos_;
-	}
-
-	float GetHeight() const {
-		return height_;
+	Vector3f GetPos() const {
+		return pos_;
 	}
 };
 

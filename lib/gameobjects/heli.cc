@@ -29,12 +29,7 @@ Heli::Heli(Game& game) : GameObject(game) {
 
 	direction_ = 0.0;
 
-	x_pos_ = 0.0;
-	y_pos_ = 0.0;
-	height_ = maxheight_;
-
-	x_vel_ = 0.0;
-	y_vel_ = 0.0;
+	pos_.z = maxheight_;
 
 	guns_ = gun_capacity_;
 	hydras_ = hydra_capacity_;
@@ -83,6 +78,7 @@ void Heli::UpdatePhysics(unsigned int deltams) {
 	// XXX: acceleration
 
 	// XXX: position
+	pos_ += vel_ * delta_sec;
 }
 
 void Heli::UpdateWeapons(unsigned int deltams) {
@@ -100,7 +96,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	// Process gunfire
 	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
 		// XXX: spawn bullets at a heli's gun position
-		game_.Spawn<Bullet>(x_pos_ /* + gun_offset */, y_pos_ /* + gun_offset */, height_ /* + gun_offset */, direction_, weapon_fire_pitch_);
+		game_.Spawn<Bullet>(pos_ /* + gun_offset */, direction_, weapon_fire_pitch_);
 
 		guns_--;
 		gun_reload_ = gun_cooldown_;

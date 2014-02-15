@@ -21,6 +21,7 @@
 #define HELI_HH
 
 #include <math/pi.hh>
+#include <math/geom.hh>
 
 #include <game/gameobject.hh>
 
@@ -83,12 +84,8 @@ protected:
 
 	float direction_;
 
-	float x_pos_;
-	float y_pos_;
-	float height_;
-
-	float x_vel_;
-	float y_vel_;
+	Vector3f pos_;
+	Vector3f vel_;
 
 	// resources
 	int guns_;
@@ -133,16 +130,8 @@ public:
 		control_flags_ &= ~flags;
 	}
 
-	float GetXPos() const {
-		return x_pos_;
-	}
-
-	float GetYPos() const {
-		return y_pos_;
-	}
-
-	float GetHeight() const {
-		return height_;
+	Vector3f GetPos() const {
+		return pos_;
 	}
 };
 

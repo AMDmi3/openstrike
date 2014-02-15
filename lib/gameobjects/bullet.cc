@@ -23,12 +23,9 @@
 
 #include <gameobjects/bullet.hh>
 
-Bullet::Bullet(Game& game, float x, float y, float height, float direction, float pitch) : GameObject(game) {
-	x_pos_ = x;
-	y_pos_ = y;
-	height_ = height;
-	direction_ = direction;
-	pitch_ = pitch;
+Bullet::Bullet(Game& game, Vector3f pos, float direction, float pitch) : GameObject(game) {
+	pos_ = pos;
+	vel_ = Vector3f::FromYawPitch(direction, pitch) * speed_;
 }
 
 void Bullet::Accept(Visitor& visitor) const {
@@ -38,24 +35,15 @@ void Bullet::Accept(Visitor& visitor) const {
 void Bullet::Update(unsigned int deltams) {
 	float delta_sec = deltams / 1000.0f;
 
-	float dx = sin(direction_) * cos(pitch_);
-	float dy = cos(direction_) * cos(pitch_);
-	float dh = sin(pitch_);
-
-	x_pos_ += dx * speed_ * delta_sec;
-	y_pos_ += dy * speed_ * delta_sec;
-
 	// XXX: bullet actually moves along a parabola, should take into account
 	// rockets, otoh, move  along a straight line
-	height_ += dh * speed_ * delta_sec;
+	pos_ += vel_ * delta_sec;
 
-	if (height_ <= 0) {
+	if (pos_.z <= 0) {
 		// calculate exact collision point
-		float penetration = 1.0f + height_ / dh;
+		float penetration = pos_.z / vel_.z;
 
-		x_pos_ -= dx * speed_ * delta_sec * penetration;
-		y_pos_ -= dy * speed_ * delta_sec * penetration;
-		height_ = 0.0f;
+		pos_ -= vel_ * delta_sec * penetration;
 
 		RemoveLater();
 
