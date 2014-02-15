@@ -74,6 +74,9 @@ int realmain(int argc, char** argv) {
 				case SDLK_RIGHT:  heli->AddControlFlags(Heli::RIGHT); break;
 				case SDLK_UP:     heli->AddControlFlags(Heli::FORWARD); break;
 				case SDLK_DOWN:	  heli->AddControlFlags(Heli::BACKWARD); break;
+				case SDLK_z:	  heli->AddControlFlags(Heli::GUN); break;
+				case SDLK_x:	  heli->AddControlFlags(Heli::HYDRA); break;
+				case SDLK_c:	  heli->AddControlFlags(Heli::HELLFIRE); break;
 				case SDLK_ESCAPE: case SDLK_q:
 					return 0;
 				}
@@ -83,6 +86,9 @@ int realmain(int argc, char** argv) {
 				case SDLK_RIGHT:  heli->RemoveControlFlags(Heli::RIGHT); break;
 				case SDLK_UP:     heli->RemoveControlFlags(Heli::FORWARD); break;
 				case SDLK_DOWN:	  heli->RemoveControlFlags(Heli::BACKWARD); break;
+				case SDLK_z:	  heli->RemoveControlFlags(Heli::GUN); break;
+				case SDLK_x:	  heli->RemoveControlFlags(Heli::HYDRA); break;
+				case SDLK_c:	  heli->RemoveControlFlags(Heli::HELLFIRE); break;
 				}
 			}
 		}
