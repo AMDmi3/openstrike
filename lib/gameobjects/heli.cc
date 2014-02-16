@@ -26,7 +26,7 @@
 
 #include <gameobjects/heli.hh>
 
-const Vector3f Heli::gun_offset_;
+constexpr Vector3f Heli::gun_offset_;
 
 Heli::Heli(Game& game) : GameObject(game) {
 	rotor_phase_ = 0;
