@@ -82,7 +82,7 @@ protected:
 	// movement
 	unsigned int rotor_phase_;
 
-	float direction_;
+	Direction2f direction_;
 
 	Vector3f pos_;
 	Vector3f vel_;
@@ -113,8 +113,12 @@ public:
 	virtual void UpdatePhysics(unsigned int deltams);
 	virtual void UpdateWeapons(unsigned int deltams);
 
-	float GetDirection() const {
+	Direction2f GetDirection() const {
 		return direction_;
+	}
+
+	Vector3f GetPos() const {
+		return pos_;
 	}
 
 	unsigned int GetRotorPhase() const {
@@ -128,10 +132,6 @@ public:
 
 	void RemoveControlFlags(int flags) {
 		control_flags_ &= ~flags;
-	}
-
-	Vector3f GetPos() const {
-		return pos_;
 	}
 };
 

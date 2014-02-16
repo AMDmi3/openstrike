@@ -36,7 +36,7 @@ protected:
 	Vector3f vel_;
 
 public:
-	Bullet(Game& game, Vector3f pos, float direction, float pitch);
+	Bullet(Game& game, Vector3f pos, Direction3f direction);
 
 	virtual void Accept(Visitor& visitor) const;
 	virtual void Update(unsigned int deltams);

@@ -63,9 +63,7 @@ Renderer::Renderer(SDL2pp::Renderer& renderer, DatFile& datfile, SpriteManager& 
 }
 
 void Renderer::Visit(const Heli& heli) {
-	float direction = heli.GetDirection();
-
-	int phase = (int)((direction / pi * 12.0) + 0.5);
+	int phase = (int)((heli.GetDirection().yaw / pi * 12.0) + 0.5);
 
 	phase = phase % 24;
 

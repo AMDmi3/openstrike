@@ -23,9 +23,9 @@
 
 #include <gameobjects/bullet.hh>
 
-Bullet::Bullet(Game& game, Vector3f pos, float direction, float pitch) : GameObject(game) {
+Bullet::Bullet(Game& game, Vector3f pos, Direction3f direction) : GameObject(game) {
 	pos_ = pos;
-	vel_ = Vector3f::FromYawPitch(direction, pitch) * speed_;
+	vel_ = direction * speed_;
 }
 
 void Bullet::Accept(Visitor& visitor) const {

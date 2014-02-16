@@ -17,6 +17,8 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+
 #include <game/game.hh>
 #include <game/visitor.hh>
 
@@ -26,8 +28,6 @@
 
 Heli::Heli(Game& game) : GameObject(game) {
 	rotor_phase_ = 0;
-
-	direction_ = 0.0;
 
 	pos_.z = maxheight_;
 
@@ -66,14 +66,9 @@ void Heli::UpdatePhysics(unsigned int deltams) {
 	float turn_rate = (control_flags_ & FORWARD) ? accel_turn_rate_ : still_turn_rate_;
 
 	if (control_flags_ & LEFT)
-		direction_ -= turn_rate * delta_sec;
+		direction_.RotateCCW(turn_rate * delta_sec);
 	if (control_flags_ & RIGHT)
-		direction_ += turn_rate * delta_sec;
-
-	while (direction_ < 0.0f)
-		direction_ += 2.0 * pi;
-	while (direction_ > 2.0 * pi)
-		direction_ -= 2.0 * pi;
+		direction_.RotateCW(turn_rate * delta_sec);
 
 	// XXX: acceleration
 
@@ -96,7 +91,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	// Process gunfire
 	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
 		// XXX: spawn bullets at a heli's gun position
-		game_.Spawn<Bullet>(pos_ /* + gun_offset */, direction_, weapon_fire_pitch_);
+		game_.Spawn<Bullet>(pos_ /* + gun_offset_ */, Direction3f(direction_, weapon_fire_pitch_));
 
 		guns_--;
 		gun_reload_ = gun_cooldown_;
