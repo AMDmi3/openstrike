@@ -36,6 +36,19 @@ void usage(const char* progname) {
 	std::cerr << "Usage: " << progname << " <filename.dat>" << std::endl;
 }
 
+void SetupViewport(SDL2pp::Window& window, SDL2pp::Renderer& renderer) {
+	static int target_w = 320;
+	static int target_h = 200;
+
+	int w = window.GetWidth();
+	int h = window.GetHeight();
+
+	int scale = std::min(w / target_w, h / target_h);
+
+	renderer.SetViewport(SDL2pp::Rect((w - target_w * scale) / 2 / scale, (h - target_h * scale) / 2 / scale, 320, 200));
+	renderer.SetScale(scale, scale);
+}
+
 int realmain(int argc, char** argv) {
 	if (argc != 2) {
 		usage(argv[0]);
@@ -51,7 +64,7 @@ int realmain(int argc, char** argv) {
 	SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	renderer.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
-	renderer.SetLogicalSize(320, 200);
+	SetupViewport(window, renderer);
 
 	// Game stuff
 	SpriteManager spriteman(renderer);
@@ -68,6 +81,8 @@ int realmain(int argc, char** argv) {
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
 				return 0;
+			} else if (event.type == SDL_WINDOWEVENT) {
+				SetupViewport(window, renderer);
 			} else if (event.type == SDL_KEYDOWN) {
 				switch (event.key.keysym.sym) {
 				case SDLK_LEFT:   heli->AddControlFlags(Heli::LEFT); break;
