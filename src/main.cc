@@ -51,7 +51,7 @@ int realmain(int argc, char** argv) {
 	SDL2pp::Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 	renderer.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
-	renderer.SetLogicalSize(640, 480);
+	renderer.SetLogicalSize(320, 200);
 
 	// Game stuff
 	SpriteManager spriteman(renderer);
@@ -105,7 +105,7 @@ int realmain(int argc, char** argv) {
 		renderer.Clear();
 
 		renderer.SetDrawColor(32, 64, 0);
-		renderer.FillRect(SDL2pp::Rect(0, 0, 640, 480));
+		renderer.FillRect(SDL2pp::Rect(0, 0, 320, 200));
 
 		game.Accept(game_renderer);
 

@@ -78,15 +78,15 @@ void Renderer::Visit(const Heli& heli) {
 
 	int shadow_offset = 16 + heli.GetPos().z; // sprite offset from Desert Strike
 
-	spriteman_.Render(shadow_sprite_ids_ + phase, 320, 240, SpriteManager::PIVOT_FRAMECENTER | flipflags);
+	spriteman_.Render(shadow_sprite_ids_ + phase, 160, 100, SpriteManager::PIVOT_FRAMECENTER | flipflags);
 
 	// XXX: shadow should be transparent
-	spriteman_.Render(heli_sprite_ids_ + phase, 320, 240 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER | flipflags);
+	spriteman_.Render(heli_sprite_ids_ + phase, 160, 100 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER | flipflags);
 
-	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 320, 240 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER);
+	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 160, 100 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER);
 }
 
 void Renderer::Visit(const Bullet& bullet) {
 	Vector3f pos = bullet.GetPos();
-	spriteman_.Render(bullet_sprite_id_, 320 + pos.x, 240 - pos.y / 2 - pos.z, SpriteManager::PIVOT_FRAMECENTER);
+	spriteman_.Render(bullet_sprite_id_, 160 + pos.x, 100 - pos.y / 2 - pos.z, SpriteManager::PIVOT_FRAMECENTER);
 }
