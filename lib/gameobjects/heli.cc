@@ -26,6 +26,8 @@
 
 #include <gameobjects/heli.hh>
 
+const Vector3f Heli::gun_offset_;
+
 Heli::Heli(Game& game) : GameObject(game) {
 	rotor_phase_ = 0;
 
@@ -88,10 +90,12 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	if (hellfire_reload_ > 0)
 		hellfire_reload_ -= deltams;
 
+	Direction2f firedir((int)((direction_.yaw / pi * 12.0) + 0.5) * pi / 12.0);
+
 	// Process gunfire
 	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
 		// XXX: spawn bullets at a heli's gun position
-		game_.Spawn<Bullet>(pos_ /* + gun_offset_ */, Direction3f(direction_, weapon_fire_pitch_));
+		game_.Spawn<Bullet>(pos_ + gun_offset_ * firedir, Direction3f(firedir, weapon_fire_pitch_));
 
 		guns_--;
 		gun_reload_ = gun_cooldown_;

@@ -64,6 +64,7 @@ protected:
 	static constexpr int hydra_cooldown_ = 500; // Desert Strike (calculated 474 from video, rounded)
 	static constexpr int hellfire_cooldown_ = 1000; // Desert Strike (calculated 1150 from video - time to key press (no auto fire), rounded)
 
+	static constexpr Vector3f gun_offset_ = Vector3f(33, -1, 7); // Desert Strike
 	static constexpr float weapon_fire_pitch_ = -0.121941; // -atan(25/204), from Desert Strike
 
 public:
