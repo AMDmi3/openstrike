@@ -18,6 +18,7 @@
  */
 
 #include <cassert>
+#include <stdexcept>
 
 #include <dat/unpacker.hh>
 
