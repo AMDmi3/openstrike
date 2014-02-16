@@ -51,5 +51,8 @@ void Bullet::Update(unsigned int deltams) {
 		// XXX: cause damage
 	}
 
+	// g-force effect
+	vel_.z -= bullet_g_force_ * delta_sec;
+
 	// XXX: limit lifetime if it doesn't hit the ground
 }

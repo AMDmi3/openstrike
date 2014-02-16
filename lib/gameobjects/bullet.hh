@@ -29,7 +29,8 @@ class Visitor;
 
 class Bullet : public GameObject {
 protected:
-	static constexpr float speed_ = 400.0; // XXX: make this variable?
+	static constexpr float speed_ = 400.0; // XXX: make this variable, e.g. if enemy bullets may be faster/slower
+	static constexpr float bullet_g_force_ = 100.0; // XXX: does if affect enemy bullets?
 
 protected:
 	Vector3f pos_;
