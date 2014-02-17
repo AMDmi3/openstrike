@@ -18,12 +18,13 @@
  */
 
 #include <cassert>
+#include <algorithm>
 
 #include <math/pi.hh>
 
 #include <graphics/spritemanager.hh>
 
-SpriteManager::SingleSprite::SingleSprite(SpriteManager& manager, const std::string& name, int frame, int flags)
+SpriteManager::SingleSprite::SingleSprite(SpriteManager& manager, const std::string& name, unsigned int frame, int flags)
 	: manager_(manager),
 	  id_(manager.Add(name, frame)),
 	  flags_(flags) {
@@ -33,10 +34,10 @@ void SpriteManager::SingleSprite::Render(int x, int y) {
 	manager_.Render(id_, x, y, flags_);
 }
 
-SpriteManager::DirectionalSprite::DirectionalSprite(SpriteManager& manager, const std::string& name, int startframe, int nframes, int flags)
+SpriteManager::DirectionalSprite::DirectionalSprite(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, int flags)
 	: manager_(manager),
 	  flags_(flags) {
-	for(int i = 0; i < nframes; i++)
+	for (unsigned int i = 0; i < nframes; i++)
 		ids_.emplace_back(manager.Add(name, startframe + i));
 }
 
@@ -55,23 +56,49 @@ void SpriteManager::DirectionalSprite::Render(int x, int y, float angle) {
 	manager_.Render(ids_[phase], x, y, flags_ ^ flipflag);
 }
 
-SpriteManager::LoopAnimation::LoopAnimation(SpriteManager& manager, const std::string& name, int startframe, int nframes, float fps, int flags)
+SpriteManager::LoopAnimation::LoopAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags)
 	: manager_(manager),
 	  frame_time_ms_(1000.0/fps),
 	  own_time_(0),
 	  flags_(flags) {
 	if (frame_time_ms_ == 0)
 		frame_time_ms_ = 1;
-	for(int i = 0; i < nframes; i++)
+	for (unsigned int i = 0; i < nframes; i++)
 		ids_.emplace_back(manager.Add(name, startframe + i));
 }
 
 void SpriteManager::LoopAnimation::Render(int x, int y) {
-	int frame = own_time_ / frame_time_ms_;
+	unsigned int frame = own_time_ / frame_time_ms_;
 
 	manager_.Render(ids_[frame], x, y, flags_);
 }
 
 void SpriteManager::LoopAnimation::Update(unsigned int deltams) {
 	own_time_ = (own_time_ + deltams) % (frame_time_ms_ * ids_.size());
+}
+
+SpriteManager::OneShotAnimation::OneShotAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags)
+	: manager_(manager),
+	  frame_time_ms_(1000.0/fps),
+	  own_time_(0),
+	  flags_(flags) {
+	if (frame_time_ms_ == 0)
+		frame_time_ms_ = 1;
+	for (unsigned int i = 0; i < nframes; i++)
+		ids_.emplace_back(manager.Add(name, startframe + i));
+}
+
+void SpriteManager::OneShotAnimation::Render(int x, int y) {
+	unsigned int frame = std::min(own_time_ / frame_time_ms_, (unsigned int)ids_.size() - 1);
+
+	manager_.Render(ids_[frame], x, y, flags_);
+}
+
+void SpriteManager::OneShotAnimation::Update(unsigned int deltams) {
+	if (!IsFinished())
+		own_time_ = (own_time_ + deltams) % (frame_time_ms_ * ids_.size());
+}
+
+bool SpriteManager::OneShotAnimation::IsFinished() const {
+	return own_time_ >= frame_time_ms_ * ids_.size();
 }

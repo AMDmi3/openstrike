@@ -64,7 +64,7 @@ public:
 		int flags_;
 
 	public:
-		SingleSprite(SpriteManager& manager, const std::string& name, int frame, int flags = PIVOT_FRAMECENTER);
+		SingleSprite(SpriteManager& manager, const std::string& name, unsigned int frame, int flags = PIVOT_FRAMECENTER);
 
 		void Render(int x, int y);
 	};
@@ -76,7 +76,7 @@ public:
 		int flags_;
 
 	public:
-		DirectionalSprite(SpriteManager& manager, const std::string& name, int startframe = 0, int nframes = 13, int flags = PIVOT_FRAMECENTER);
+		DirectionalSprite(SpriteManager& manager, const std::string& name, unsigned int startframe = 0, unsigned int nframes = 13, int flags = PIVOT_FRAMECENTER);
 
 		void Render(int x, int y, float angle);
 	};
@@ -85,16 +85,33 @@ public:
 	protected:
 		SpriteManager& manager_;
 		std::vector<sprite_id_t> ids_;
-		int frame_time_ms_;
-		int own_time_;
+		unsigned int frame_time_ms_;
+		unsigned int own_time_;
 		int flags_;
 
 	public:
-		LoopAnimation(SpriteManager& manager, const std::string& name, int startframe, int nframes, float fps, int flags = PIVOT_FRAMECENTER);
+		LoopAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags = PIVOT_FRAMECENTER);
 
 		void Render(int x, int y);
 
 		void Update(unsigned int timems);
+	};
+
+	class OneShotAnimation {
+	protected:
+		SpriteManager& manager_;
+		std::vector<sprite_id_t> ids_;
+		unsigned int frame_time_ms_;
+		unsigned int own_time_;
+		int flags_;
+
+	public:
+		OneShotAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags = PIVOT_FRAMECENTER);
+
+		void Render(int x, int y);
+
+		void Update(unsigned int timems);
+		bool IsFinished() const;
 	};
 
 protected:
