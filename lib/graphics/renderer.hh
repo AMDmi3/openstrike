@@ -33,7 +33,7 @@ class Renderer : public Visitor {
 protected:
 	SpriteManager::DirectionalSprite sprite_heli_;
 	SpriteManager::DirectionalSprite sprite_shadow_;
-	SpriteManager::LoopAnimation sprite_rotor_;
+	SpriteManager::Animation sprite_rotor_;
 	SpriteManager::SingleSprite sprite_bullet_;
 	SpriteManager::DirectionalSprite sprite_hydra_;
 	SpriteManager::DirectionalSprite sprite_hellfire_;

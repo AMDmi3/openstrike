@@ -81,37 +81,18 @@ public:
 		void Render(int x, int y, float angle);
 	};
 
-	class LoopAnimation {
+	class Animation {
 	protected:
 		SpriteManager& manager_;
 		std::vector<sprite_id_t> ids_;
-		unsigned int frame_time_ms_;
-		unsigned int own_time_;
 		int flags_;
 
 	public:
-		LoopAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags = PIVOT_FRAMECENTER);
+		Animation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, int flags = PIVOT_FRAMECENTER);
 
-		void Render(int x, int y);
+		void Render(int x, int y, unsigned int nframe);
 
-		void Update(unsigned int timems);
-	};
-
-	class OneShotAnimation {
-	protected:
-		SpriteManager& manager_;
-		std::vector<sprite_id_t> ids_;
-		unsigned int frame_time_ms_;
-		unsigned int own_time_;
-		int flags_;
-
-	public:
-		OneShotAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags = PIVOT_FRAMECENTER);
-
-		void Render(int x, int y);
-
-		void Update(unsigned int timems);
-		bool IsFinished() const;
+		unsigned int GetNumFrames() const;
 	};
 
 protected:

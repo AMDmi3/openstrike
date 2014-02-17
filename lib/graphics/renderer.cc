@@ -33,7 +33,7 @@
 Renderer::Renderer(SpriteManager& spriteman)
 	: sprite_heli_(spriteman, "AP0000"), // XXX: only Desert Strike for now
 	  sprite_shadow_(spriteman, "SHADOWS"),
-	  sprite_rotor_(spriteman, "ROTOR", 0, 8, 30.0), // XXX: this means all rotors on screen will be synchorized for now
+	  sprite_rotor_(spriteman, "ROTOR", 0, 8),
 	  sprite_bullet_(spriteman, "WEAPONS", 0),
 	  sprite_hydra_(spriteman, "WEAPONS", 1),
 	  sprite_hellfire_(spriteman, "WEAPONS", 14) {
@@ -48,11 +48,9 @@ void Renderer::Render(Game& game) {
 }
 
 void Renderer::Update(unsigned int deltams) {
-	// process animations
-	sprite_rotor_.Update(deltams);
 }
 
-void Renderer::Visit(GameObject& obj) {
+void Renderer::Visit(GameObject&) {
 	static bool warning_displayed = false;
 	if (!warning_displayed)
 		std::cerr << "Warning: Renderer::Visit() not implemented for some objects" << std::endl;
@@ -65,7 +63,7 @@ void Renderer::Visit(Heli& heli) {
 	// XXX: shadow should be transparent
 	sprite_shadow_.Render(40, 100, heli.GetDirection().yaw);
 	sprite_heli_.Render(40, 100 - shadow_offset, heli.GetDirection().yaw);
-	sprite_rotor_.Render(40, 100 - shadow_offset);
+	sprite_rotor_.Render(40, 100 - shadow_offset, heli.GetAge() / 30);
 }
 
 void Renderer::Visit(Bullet& bullet) {

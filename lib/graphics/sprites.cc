@@ -56,49 +56,17 @@ void SpriteManager::DirectionalSprite::Render(int x, int y, float angle) {
 	manager_.Render(ids_[phase], x, y, flags_ ^ flipflag);
 }
 
-SpriteManager::LoopAnimation::LoopAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags)
+SpriteManager::Animation::Animation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, int flags)
 	: manager_(manager),
-	  frame_time_ms_(1000.0/fps),
-	  own_time_(0),
 	  flags_(flags) {
-	if (frame_time_ms_ == 0)
-		frame_time_ms_ = 1;
 	for (unsigned int i = 0; i < nframes; i++)
 		ids_.emplace_back(manager.Add(name, startframe + i));
 }
 
-void SpriteManager::LoopAnimation::Render(int x, int y) {
-	unsigned int frame = own_time_ / frame_time_ms_;
-
-	manager_.Render(ids_[frame], x, y, flags_);
+void SpriteManager::Animation::Render(int x, int y, unsigned int nframe) {
+	manager_.Render(ids_[nframe % ids_.size()], x, y, flags_);
 }
 
-void SpriteManager::LoopAnimation::Update(unsigned int deltams) {
-	own_time_ = (own_time_ + deltams) % (frame_time_ms_ * ids_.size());
-}
-
-SpriteManager::OneShotAnimation::OneShotAnimation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, float fps, int flags)
-	: manager_(manager),
-	  frame_time_ms_(1000.0/fps),
-	  own_time_(0),
-	  flags_(flags) {
-	if (frame_time_ms_ == 0)
-		frame_time_ms_ = 1;
-	for (unsigned int i = 0; i < nframes; i++)
-		ids_.emplace_back(manager.Add(name, startframe + i));
-}
-
-void SpriteManager::OneShotAnimation::Render(int x, int y) {
-	unsigned int frame = std::min(own_time_ / frame_time_ms_, (unsigned int)ids_.size() - 1);
-
-	manager_.Render(ids_[frame], x, y, flags_);
-}
-
-void SpriteManager::OneShotAnimation::Update(unsigned int deltams) {
-	if (!IsFinished())
-		own_time_ = (own_time_ + deltams) % (frame_time_ms_ * ids_.size());
-}
-
-bool SpriteManager::OneShotAnimation::IsFinished() const {
-	return own_time_ >= frame_time_ms_ * ids_.size();
+unsigned int SpriteManager::Animation::GetNumFrames() const {
+	return ids_.size();
 }

@@ -31,6 +31,8 @@
 constexpr Vector3f Heli::gun_offset_;
 
 Heli::Heli(Game& game) : GameObject(game) {
+	age_ = 0;
+
 	pos_.z = maxheight_;
 
 	guns_ = gun_capacity_;
@@ -56,6 +58,8 @@ void Heli::Update(unsigned int deltams) {
 
 	// Post-update
 	tick_control_flags_ = 0;
+
+	age_ += deltams;
 }
 
 void Heli::UpdatePhysics(unsigned int deltams) {

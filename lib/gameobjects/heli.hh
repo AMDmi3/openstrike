@@ -80,6 +80,8 @@ public:
 	};
 
 protected:
+	unsigned int age_;
+
 	// movement
 	Direction2f direction_;
 
@@ -111,6 +113,10 @@ public:
 
 	virtual void UpdatePhysics(unsigned int deltams);
 	virtual void UpdateWeapons(unsigned int deltams);
+
+	unsigned int GetAge() const {
+		return age_;
+	}
 
 	Direction2f GetDirection() const {
 		return direction_;
