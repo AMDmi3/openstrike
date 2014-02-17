@@ -21,23 +21,27 @@
 #define RENDERER_HH
 
 #include <game/visitor.hh>
+#include <graphics/spritemanager.hh>
 
 class Renderer;
 class SpriteManager;
 class DatFile;
 class Heli;
+class Game;
 
 class Renderer : public Visitor {
 protected:
-	SDL2pp::Renderer& renderer_;
-	SpriteManager& spriteman_;
-	unsigned int heli_sprite_ids_;
-	unsigned int shadow_sprite_ids_;
-	unsigned int rotor_sprite_ids_;
-	unsigned int bullet_sprite_id_;
+	SpriteManager::DirectionalSprite sprite_heli_;
+	SpriteManager::DirectionalSprite sprite_shadow_;
+	SpriteManager::LoopAnimation sprite_rotor_;
+	SpriteManager::SingleSprite sprite_bullet_;
 
 public:
-	Renderer(SDL2pp::Renderer& renderer, DatFile& datfile, SpriteManager& spriteman);
+	Renderer(SpriteManager& spriteman);
+
+	void Render(Game& game);
+
+	void Update(unsigned int deltams);
 
 	virtual void Visit(Heli& heli);
 	virtual void Visit(Bullet& bullet);

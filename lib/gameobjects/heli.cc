@@ -29,8 +29,6 @@
 constexpr Vector3f Heli::gun_offset_;
 
 Heli::Heli(Game& game) : GameObject(game) {
-	rotor_phase_ = 0;
-
 	pos_.z = maxheight_;
 
 	guns_ = gun_capacity_;
@@ -60,9 +58,6 @@ void Heli::Update(unsigned int deltams) {
 
 void Heli::UpdatePhysics(unsigned int deltams) {
 	float delta_sec = deltams / 1000.0f;
-
-	// Rotor (TODO: implement properly)
-	rotor_phase_ += deltams;
 
 	// Turning
 	float turn_rate = (control_flags_ & FORWARD) ? accel_turn_rate_ : still_turn_rate_;

@@ -19,74 +19,44 @@
 
 #include <cassert>
 
-#include <SDL2pp/Renderer.hh>
-
+#include <game/game.hh>
 #include <graphics/spritemanager.hh>
-#include <dat/datfile.hh>
-#include <dat/datgraphics.hh>
-#include <math/pi.hh>
 
 #include <gameobjects/heli.hh>
 #include <gameobjects/bullet.hh>
 
 #include <graphics/renderer.hh>
 
-Renderer::Renderer(SDL2pp::Renderer& renderer, DatFile& datfile, SpriteManager& spriteman) : renderer_(renderer), spriteman_(spriteman) {
-	{
-		Buffer data;
-		if (datfile.Exists("CM0000"))
-			data = datfile.GetData("CM0000"); // Jungle Strike
-		else
-			data = datfile.GetData("AP0000"); // Desert Strike
+Renderer::Renderer(SpriteManager& spriteman)
+	: sprite_heli_(spriteman, "AP0000"), // XXX: only Desert Strike for now
+	  sprite_shadow_(spriteman, "SHADOWS"),
+	  sprite_rotor_(spriteman, "ROTOR", 0, 8, 30.0), // XXX: this means all rotors on screen will be synchorized for now
+	  sprite_bullet_(spriteman, "WEAPONS", 0) {
+}
 
-		DatGraphics gfx(data);
-		heli_sprite_ids_ = spriteman.Add(gfx, 0, 13);
-	}
+void Renderer::Render(Game& game) {
+	// XXX: this should be split into two phases:
+	// - get all (renderable? visible?) objects from game
+	// - sort them
+	// - render each
+	game.Accept(*this);
+}
 
-	{
-		Buffer data = datfile.GetData("SHADOWS");
-		DatGraphics gfx(data);
-		shadow_sprite_ids_ = spriteman.Add(gfx, 0, 13);
-	}
-
-	{
-		Buffer data = datfile.GetData("ROTOR");
-		DatGraphics gfx(data);
-		rotor_sprite_ids_ = spriteman.Add(gfx, 0, 8);
-	}
-
-	{
-		Buffer data = datfile.GetData("WEAPONS");
-		DatGraphics gfx(data);
-		bullet_sprite_id_ = spriteman.Add(gfx, 0, 1);
-	}
+void Renderer::Update(unsigned int deltams) {
+	// process animations
+	sprite_rotor_.Update(deltams);
 }
 
 void Renderer::Visit(Heli& heli) {
-	int phase = (int)((heli.GetDirection().yaw / pi * 12.0) + 0.5);
-
-	phase = phase % 24;
-
-	int flipflags = 0;
-
-	if (phase >= 13) {
-		phase = 24 - phase;
-		flipflags = SpriteManager::HFLIP;
-	}
-
-	assert(phase >= 0 && phase <= 12);
-
 	int shadow_offset = 16 + heli.GetPos().z; // sprite offset from Desert Strike
 
-	spriteman_.Render(shadow_sprite_ids_ + phase, 40, 100, SpriteManager::PIVOT_FRAMECENTER | flipflags);
-
 	// XXX: shadow should be transparent
-	spriteman_.Render(heli_sprite_ids_ + phase, 40, 100 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER | flipflags);
-
-	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 40, 100 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER);
+	sprite_shadow_.Render(40, 100, heli.GetDirection().yaw);
+	sprite_heli_.Render(40, 100 - shadow_offset, heli.GetDirection().yaw);
+	sprite_rotor_.Render(40, 100 - shadow_offset);
 }
 
 void Renderer::Visit(Bullet& bullet) {
 	Vector3f pos = bullet.GetPos();
-	spriteman_.Render(bullet_sprite_id_, 40 + pos.x, 100 - pos.y / 2 - pos.z, SpriteManager::PIVOT_FRAMECENTER);
+	sprite_bullet_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z);
 }

@@ -21,6 +21,9 @@
 #define SPRITEMANAGER_HH
 
 #include <vector>
+#include <map>
+#include <functional>
+#include <string>
 
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Renderer.hh>
@@ -28,32 +31,9 @@
 #include <graphics/rectpacker.hh>
 
 class DatGraphics;
+class DatFile;
 
 class SpriteManager {
-protected:
-	static const int atlas_page_width_;
-	static const int atlas_page_height_;
-
-protected:
-	struct SpriteInfo {
-		unsigned int width;
-		unsigned int height;
-		unsigned int xoffset;
-		unsigned int yoffset;
-		unsigned int framewidth;
-		unsigned int frameheight;
-
-		unsigned int atlaspage;
-		unsigned int atlasx;
-		unsigned int atlasy;
-	};
-
-	std::vector<SDL2pp::Texture> atlas_pages_;
-	std::vector<SpriteInfo> sprites_;
-
-	SDL2pp::Renderer& renderer_;
-	RectPacker rect_packer_;
-
 public:
 	enum Flags {
 		PIVOT_USEFRAME     = 0x01, // use frame rect instead of sprite rect for pivot
@@ -73,11 +53,103 @@ public:
 	};
 
 public:
-	SpriteManager(SDL2pp::Renderer& renderer);
+	typedef unsigned int sprite_id_t;
+	typedef std::function<void(int,int)> LoadingStatusCallback;
+
+public:
+	class SingleSprite {
+	protected:
+		SpriteManager& manager_;
+		sprite_id_t id_;
+		int flags_;
+
+	public:
+		SingleSprite(SpriteManager& manager, const std::string& name, int frame, int flags = PIVOT_FRAMECENTER);
+
+		void Render(int x, int y);
+	};
+
+	class DirectionalSprite {
+	protected:
+		SpriteManager& manager_;
+		std::vector<sprite_id_t> ids_;
+		int flags_;
+
+	public:
+		DirectionalSprite(SpriteManager& manager, const std::string& name, int startframe = 0, int nframes = 13, int flags = PIVOT_FRAMECENTER);
+
+		void Render(int x, int y, float angle);
+	};
+
+	class LoopAnimation {
+	protected:
+		SpriteManager& manager_;
+		std::vector<sprite_id_t> ids_;
+		int frame_time_ms_;
+		int own_time_;
+		int flags_;
+
+	public:
+		LoopAnimation(SpriteManager& manager, const std::string& name, int startframe, int nframes, float fps, int flags = PIVOT_FRAMECENTER);
+
+		void Render(int x, int y);
+
+		void Update(unsigned int timems);
+	};
+
+protected:
+	static const int atlas_page_width_;
+	static const int atlas_page_height_;
+
+protected:
+	struct SpriteInfo {
+		unsigned int width;
+		unsigned int height;
+		unsigned int xoffset;
+		unsigned int yoffset;
+		unsigned int framewidth;
+		unsigned int frameheight;
+
+		unsigned int atlaspage;
+		unsigned int atlasx;
+		unsigned int atlasy;
+
+		bool loaded;
+
+		std::string resource;
+		unsigned int frame;
+
+		SpriteInfo(const std::string& r, unsigned int f) : loaded(false), resource(r), frame(f) {
+		}
+	};
+
+	typedef std::vector<SDL2pp::Texture> AtlasPageVector;
+	typedef std::vector<SpriteInfo> SpriteInfoVector;
+	typedef std::pair<std::string, int> SpriteLocation;
+	typedef std::map<SpriteLocation, sprite_id_t> SpriteMap;
+
+protected:
+	SDL2pp::Renderer& renderer_;
+	DatFile& datfile_;
+
+	AtlasPageVector atlas_pages_;
+	SpriteInfoVector sprites_;
+	SpriteMap known_sprites_;
+
+	RectPacker rect_packer_;
+
+protected:
+	sprite_id_t Add(const std::string& resource, unsigned int frame, bool load_immediately = false);
+	void Render(sprite_id_t id, int x, int y, int flags);
+
+	void Load(sprite_id_t id, const DatGraphics& graphics);
+	void Load(sprite_id_t id);
+
+public:
+	SpriteManager(SDL2pp::Renderer& renderer, DatFile& datfile);
 	~SpriteManager();
 
-	unsigned int Add(const DatGraphics& graphics, unsigned int first, unsigned int count = 1);
-	void Render(unsigned int id, int x, int y, int flags);
+	void LoadAll(const LoadingStatusCallback& statuscb = nullptr);
 };
 
 #endif // SPRITEMANAGER_HH

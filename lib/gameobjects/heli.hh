@@ -81,8 +81,6 @@ public:
 
 protected:
 	// movement
-	unsigned int rotor_phase_;
-
 	Direction2f direction_;
 
 	Vector3f pos_;
@@ -120,10 +118,6 @@ public:
 
 	Vector3f GetPos() const {
 		return pos_;
-	}
-
-	unsigned int GetRotorPhase() const {
-		return rotor_phase_;
 	}
 
 	void AddControlFlags(int flags) {

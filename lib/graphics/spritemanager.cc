@@ -18,66 +18,78 @@
  */
 
 #include <cassert>
+#include <set>
 
 #include <SDL2/SDL_stdinc.h> // XXX <- this should be in SDL_pixels.h
 #include <SDL2/SDL_pixels.h>
 #include <SDL2/SDL_render.h>
 
 #include <dat/datgraphics.hh>
+#include <dat/datfile.hh>
 
 #include <graphics/spritemanager.hh>
 
 const int SpriteManager::atlas_page_width_ = 512;
 const int SpriteManager::atlas_page_height_ = 512;
 
-SpriteManager::SpriteManager(SDL2pp::Renderer& renderer) : renderer_(renderer), rect_packer_(atlas_page_width_, atlas_page_width_) {
+SpriteManager::SpriteManager(SDL2pp::Renderer& renderer, DatFile& datfile) : renderer_(renderer), datfile_(datfile), rect_packer_(atlas_page_width_, atlas_page_width_) {
 }
 
 SpriteManager::~SpriteManager() {
 }
 
-unsigned int SpriteManager::Add(const DatGraphics& graphics, unsigned int first, unsigned int count) {
-	assert(first + count <= graphics.GetNumSprites());
-	int retid = sprites_.size();
+void SpriteManager::LoadAll(const LoadingStatusCallback& statuscb) {
+	int numloaded = 0, numtoload = 0;
 
-	// XXX: not exception-safe
-	for (unsigned int i = 0; i < count; i++) {
-		SpriteInfo sprite;
-
-		sprite.width = graphics.GetWidth(first + i);
-		sprite.height = graphics.GetHeight(first + i);
-		sprite.xoffset = graphics.GetXOffset(first + i);
-		sprite.yoffset = graphics.GetYOffset(first + i);
-		sprite.framewidth = graphics.GetFrameWidth(first + i);
-		sprite.frameheight = graphics.GetFrameHeight(first + i);
-
-		// place sprite in atlas
-		// XXX: padding is required when SDL_RenderSetLogicalSize is used
-		// XXX: otherwise parts of adjacent sprites are occasionally shown; investigate
-		const RectPacker::Rect& placed = rect_packer_.Place(sprite.width, sprite.height, 1);
-		sprite.atlaspage = placed.page;
-		sprite.atlasx = placed.x;
-		sprite.atlasy = placed.y;
-
-		// Create missing atlas textures
-		while (sprite.atlaspage >= atlas_pages_.size()) {
-			atlas_pages_.emplace_back(renderer_, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, atlas_page_width_, atlas_page_height_);
-			atlas_pages_.back().SetBlendMode(SDL_BLENDMODE_BLEND);
+	// gather sprites to load, grouped by resource
+	std::map<std::string, std::set<sprite_id_t>> toload;
+	sprite_id_t current_id = 0;
+	for (auto& sprite : sprites_) {
+		if (!sprite.loaded) {
+			numtoload++;
+			toload[sprite.resource].insert(current_id);
 		}
-
-		// Write pixels to texture
-		std::vector<unsigned char> pixels = graphics.GetPixels(first + i);
-		atlas_pages_[sprite.atlaspage].Update(SDL2pp::Rect(sprite.atlasx, sprite.atlasy, sprite.width, sprite.height), pixels.data(), sprite.width * 4);
-
-		// Done
-		sprites_.emplace_back(sprite);
+		current_id++;
 	}
 
-	return retid;
+	if (statuscb)
+		statuscb(0, numtoload);
+
+	// load
+	for (auto& resource : toload) {
+		Buffer data = datfile_.GetData(resource.first);
+		DatGraphics gfx(data);
+
+		for (auto& sprite : resource.second) {
+			Load(sprite, gfx);
+			if (statuscb)
+				statuscb(++numloaded, numtoload);
+		}
+	}
 }
 
-void SpriteManager::Render(unsigned int id, int x, int y, int flags) {
+SpriteManager::sprite_id_t SpriteManager::Add(const std::string& resource, unsigned int frame, bool load_immediately) {
+	SpriteMap::iterator known_sprite = known_sprites_.find(std::make_pair(resource, frame));
+
+	sprite_id_t id;
+
+	if (known_sprite == known_sprites_.end()) {
+		id = sprites_.size();
+		sprites_.emplace_back(resource, frame);
+		known_sprites_[std::make_pair(resource, frame)] = id;
+	} else {
+		id = known_sprite->second;
+	}
+
+	if (load_immediately && !sprites_[id].loaded)
+		Load(id);
+
+	return id;
+}
+
+void SpriteManager::Render(sprite_id_t id, int x, int y, int flags) {
 	const SpriteInfo& sprite = sprites_[id];
+	assert(sprite.loaded);
 
 	int xoffset = 0, yoffset = 0;
 
@@ -115,4 +127,53 @@ void SpriteManager::Render(unsigned int id, int x, int y, int flags) {
 				SDL2pp::Rect(x + xoffset, y + yoffset, sprite.width, sprite.height)
 			);
 	}
+}
+
+void SpriteManager::Load(SpriteManager::sprite_id_t id, const DatGraphics& graphics) {
+	SpriteInfo& sprite = sprites_[id];
+
+	if (sprite.loaded)
+		return;
+
+	unsigned int nframe = sprite.frame;
+
+	sprite.width = graphics.GetWidth(nframe);
+	sprite.height = graphics.GetHeight(nframe);
+	sprite.xoffset = graphics.GetXOffset(nframe);
+	sprite.yoffset = graphics.GetYOffset(nframe);
+	sprite.framewidth = graphics.GetFrameWidth(nframe);
+	sprite.frameheight = graphics.GetFrameHeight(nframe);
+
+	// place sprite in atlas
+	// XXX: padding is required when SDL_RenderSetLogicalSize is used
+	// XXX: otherwise parts of adjacent sprites are occasionally shown; investigate
+	const RectPacker::Rect& placed = rect_packer_.Place(sprite.width, sprite.height, 1);
+	sprite.atlaspage = placed.page;
+	sprite.atlasx = placed.x;
+	sprite.atlasy = placed.y;
+
+	// Create missing atlas textures
+	while (sprite.atlaspage >= atlas_pages_.size()) {
+		atlas_pages_.emplace_back(renderer_, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, atlas_page_width_, atlas_page_height_);
+		atlas_pages_.back().SetBlendMode(SDL_BLENDMODE_BLEND);
+	}
+
+	// Write pixels to texture
+	std::vector<unsigned char> pixels = graphics.GetPixels(nframe);
+	atlas_pages_[sprite.atlaspage].Update(SDL2pp::Rect(sprite.atlasx, sprite.atlasy, sprite.width, sprite.height), pixels.data(), sprite.width * 4);
+
+	// Done
+	sprite.loaded = true;
+}
+
+void SpriteManager::Load(SpriteManager::sprite_id_t id) {
+	SpriteInfo& sprite = sprites_[id];
+
+	if (sprite.loaded)
+		return;
+
+	Buffer data = datfile_.GetData(sprite.resource);
+	DatGraphics gfx(data);
+
+	Load(id, gfx);
 }

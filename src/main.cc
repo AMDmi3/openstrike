@@ -67,11 +67,19 @@ int realmain(int argc, char** argv) {
 	SetupViewport(window, renderer);
 
 	// Game stuff
-	SpriteManager spriteman(renderer);
+	SpriteManager spriteman(renderer, datfile);
+
+	Renderer game_renderer(spriteman);
+
+	// game_renderer has notified sprite manager of needed sprites,
+	// now it will load them
+	spriteman.LoadAll(
+			[](int loaded, int total) {
+				std::cerr << "Loading: " << loaded << "/" << total << std::endl;
+			}
+		);
 
 	Game game;
-	Renderer game_renderer(renderer, datfile, spriteman);
-
 	Heli* heli = game.Spawn<Heli>();
 
 	unsigned int delta_ms, prev_ms, this_ms = SDL_GetTicks();
@@ -114,6 +122,7 @@ int realmain(int argc, char** argv) {
 		delta_ms = (prev_ms <= this_ms) ? (this_ms - prev_ms) : (std::numeric_limits<unsigned int>::max() - prev_ms + this_ms);
 
 		game.Update(delta_ms);
+		game_renderer.Update(delta_ms);
 
 		// Render
 		renderer.SetDrawColor(0, 0, 0);
@@ -122,7 +131,7 @@ int realmain(int argc, char** argv) {
 		renderer.SetDrawColor(32, 64, 0);
 		renderer.FillRect(SDL2pp::Rect(0, 0, 320, 200));
 
-		game.Accept(game_renderer);
+		game_renderer.Render(game);
 
 		renderer.Present();
 
