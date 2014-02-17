@@ -23,10 +23,8 @@
 #include <game/visitor.hh>
 #include <graphics/spritemanager.hh>
 
-class Renderer;
 class SpriteManager;
 class DatFile;
-class Heli;
 class Game;
 
 class Renderer : public Visitor {
