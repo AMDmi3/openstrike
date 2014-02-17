@@ -122,6 +122,10 @@ public:
 		return direction_;
 	}
 
+	Direction2f GetSectorDirection() const {
+		return Direction2f((int)((direction_.yaw / pi * 12.0) + 0.5) * pi / 12.0);
+	}
+
 	Vector3f GetPos() const {
 		return pos_;
 	}
@@ -133,6 +137,10 @@ public:
 
 	void RemoveControlFlags(int flags) {
 		control_flags_ &= ~flags;
+	}
+
+	int GetControlFlags() const {
+		return control_flags_;
 	}
 };
 

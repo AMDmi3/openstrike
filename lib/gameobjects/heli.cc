@@ -90,11 +90,9 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	if (hellfire_reload_ > 0)
 		hellfire_reload_ -= deltams;
 
-	Direction2f firedir((int)((direction_.yaw / pi * 12.0) + 0.5) * pi / 12.0);
-
 	// Process gunfire
 	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
-		game_.Spawn<Bullet>(pos_ + gun_offset_ * firedir, Direction3f(firedir, weapon_fire_pitch_));
+		game_.Spawn<Bullet>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_));
 
 		guns_--;
 		gun_reload_ = gun_cooldown_;
@@ -102,7 +100,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 
 	if (combiled_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
 		// XXX: swapn at sides of helicopter
-		game_.Spawn<Rocket>(pos_ + gun_offset_ * firedir, Direction3f(firedir, weapon_fire_pitch_), Rocket::HYDRA);
+		game_.Spawn<Rocket>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HYDRA);
 
 		hydras_--;
 		hydra_reload_ = hydra_cooldown_;
@@ -110,7 +108,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 
 	if (tick_control_flags_ /* hellfires have no autofire */ & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
 		// XXX: swapn at sides of helicopter
-		game_.Spawn<Rocket>(pos_ + gun_offset_ * firedir, Direction3f(firedir, weapon_fire_pitch_), Rocket::HELLFIRE);
+		game_.Spawn<Rocket>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HELLFIRE);
 
 		hellfires_--;
 		hellfire_reload_ = hellfire_cooldown_;
