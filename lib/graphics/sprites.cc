@@ -51,7 +51,7 @@ void SpriteManager::DirectionalSprite::Render(int x, int y, float angle) {
 		flipflag = SpriteManager::HFLIP;
 	}
 
-	assert(phase >= 0 && phase < ids_.size());
+	assert(phase < ids_.size());
 
 	manager_.Render(ids_[phase], x, y, flags_ ^ flipflag);
 }
