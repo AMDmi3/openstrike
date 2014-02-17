@@ -17,20 +17,37 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#ifndef HYDRA_HH
+#define HYDRA_HH
 
-class Bullet;
-class Heli;
-class Hellfire;
-class Hydra;
+#include <math/geom.hh>
 
-class Visitor {
+#include <game/gameobject.hh>
+
+class Game;
+class Visitor;
+
+class Hydra : public GameObject {
+protected:
+	static constexpr float speed_ = 400.0; // XXX: from bullet, fix
+
+protected:
+	Vector3f pos_;
+	Direction3f dir_;
+
 public:
-	virtual void Visit(Bullet&) {}
-	virtual void Visit(Heli&) {}
-	virtual void Visit(Hellfire&) {}
-	virtual void Visit(Hydra&) {}
+	Hydra(Game& game, Vector3f pos, Direction3f direction);
+
+	virtual void Accept(Visitor& visitor);
+	virtual void Update(unsigned int deltams);
+
+	Vector3f GetPos() const {
+		return pos_;
+	}
+
+	Direction3f GetDirection() const {
+		return dir_;
+	}
 };
 
-#endif // VISITOR_HH
+#endif // HYDRA_HH

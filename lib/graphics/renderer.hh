@@ -35,6 +35,8 @@ protected:
 	SpriteManager::DirectionalSprite sprite_shadow_;
 	SpriteManager::LoopAnimation sprite_rotor_;
 	SpriteManager::SingleSprite sprite_bullet_;
+	SpriteManager::DirectionalSprite sprite_hydra_;
+	SpriteManager::DirectionalSprite sprite_hellfire_;
 
 public:
 	Renderer(SpriteManager& spriteman);
@@ -45,6 +47,8 @@ public:
 
 	virtual void Visit(Heli& heli);
 	virtual void Visit(Bullet& bullet);
+	virtual void Visit(Hydra& hydra);
+	virtual void Visit(Hellfire& hellfire);
 };
 
 #endif

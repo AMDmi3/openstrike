@@ -1,6 +1,8 @@
 SET(SOURCES
-	heli.cc
 	bullet.cc
+	heli.cc
+	hellfire.cc
+	hydra.cc
 )
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)

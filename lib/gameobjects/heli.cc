@@ -23,6 +23,8 @@
 #include <game/visitor.hh>
 
 #include <gameobjects/bullet.hh>
+#include <gameobjects/hydra.hh>
+#include <gameobjects/hellfire.hh>
 
 #include <gameobjects/heli.hh>
 
@@ -89,7 +91,6 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 
 	// Process gunfire
 	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
-		// XXX: spawn bullets at a heli's gun position
 		game_.Spawn<Bullet>(pos_ + gun_offset_ * firedir, Direction3f(firedir, weapon_fire_pitch_));
 
 		guns_--;
@@ -97,14 +98,16 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	}
 
 	if (combiled_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
-		// TODO: fire hydra
+		// XXX: swapn at sides of helicopter
+		game_.Spawn<Hydra>(pos_ + gun_offset_ * firedir, Direction3f(firedir, weapon_fire_pitch_));
 
 		hydras_--;
 		hydra_reload_ = hydra_cooldown_;
 	}
 
 	if (tick_control_flags_ /* hellfires have no autofire */ & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
-		// TODO: fire hellfire
+		// XXX: swapn at sides of helicopter
+		game_.Spawn<Hellfire>(pos_ + gun_offset_ * firedir, Direction3f(firedir, weapon_fire_pitch_));
 
 		hellfires_--;
 		hellfire_reload_ = hellfire_cooldown_;

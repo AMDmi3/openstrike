@@ -24,6 +24,8 @@
 
 #include <gameobjects/heli.hh>
 #include <gameobjects/bullet.hh>
+#include <gameobjects/hydra.hh>
+#include <gameobjects/hellfire.hh>
 
 #include <graphics/renderer.hh>
 
@@ -31,7 +33,9 @@ Renderer::Renderer(SpriteManager& spriteman)
 	: sprite_heli_(spriteman, "AP0000"), // XXX: only Desert Strike for now
 	  sprite_shadow_(spriteman, "SHADOWS"),
 	  sprite_rotor_(spriteman, "ROTOR", 0, 8, 30.0), // XXX: this means all rotors on screen will be synchorized for now
-	  sprite_bullet_(spriteman, "WEAPONS", 0) {
+	  sprite_bullet_(spriteman, "WEAPONS", 0),
+	  sprite_hydra_(spriteman, "WEAPONS", 1),
+	  sprite_hellfire_(spriteman, "WEAPONS", 14) {
 }
 
 void Renderer::Render(Game& game) {
@@ -59,4 +63,14 @@ void Renderer::Visit(Heli& heli) {
 void Renderer::Visit(Bullet& bullet) {
 	Vector3f pos = bullet.GetPos();
 	sprite_bullet_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z);
+}
+
+void Renderer::Visit(Hydra& hydra) {
+	Vector3f pos = hydra.GetPos();
+	sprite_hydra_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, hydra.GetDirection().yaw);
+}
+
+void Renderer::Visit(Hellfire& hellfire) {
+	Vector3f pos = hellfire.GetPos();
+	sprite_hellfire_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, hellfire.GetDirection().yaw);
 }

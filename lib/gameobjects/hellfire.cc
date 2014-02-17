@@ -17,20 +17,39 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#include <cmath>
 
-class Bullet;
-class Heli;
-class Hellfire;
-class Hydra;
+#include <game/visitor.hh>
 
-class Visitor {
-public:
-	virtual void Visit(Bullet&) {}
-	virtual void Visit(Heli&) {}
-	virtual void Visit(Hellfire&) {}
-	virtual void Visit(Hydra&) {}
-};
+#include <gameobjects/hellfire.hh>
 
-#endif // VISITOR_HH
+Hellfire::Hellfire(Game& game, Vector3f pos, Direction3f direction) : GameObject(game) {
+	pos_ = pos;
+	dir_ = direction;
+}
+
+void Hellfire::Accept(Visitor& visitor) {
+	visitor.Visit(*this);
+}
+
+void Hellfire::Update(unsigned int deltams) {
+	float delta_sec = deltams / 1000.0f;
+
+	Vector3f vel = dir_ * speed_;
+
+	pos_ += vel * delta_sec;
+
+	if (pos_.z <= 0) {
+		// calculate exact collision point
+		float penetration = pos_.z / vel.z;
+
+		pos_ -= vel * delta_sec * penetration;
+
+		RemoveLater();
+
+		// XXX: spawn explosion object
+		// XXX: cause damage
+	}
+
+	// XXX: limit lifetime if it doesn't hit the ground
+}
