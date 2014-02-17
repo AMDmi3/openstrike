@@ -28,6 +28,7 @@
 #include <gameobjects/heli.hh>
 
 constexpr Vector3f Heli::gun_offset_;
+constexpr Vector3f Heli::rocket_mount_offset_;
 
 Heli::Heli(Game& game) : GameObject(game) {
 	age_ = 0;
@@ -37,6 +38,9 @@ Heli::Heli(Game& game) : GameObject(game) {
 	guns_ = gun_capacity_;
 	hydras_ = hydra_capacity_;
 	hellfires_ = hellfire_capacity_;
+
+	hydra_at_left_ = true;
+	hellfire_at_left_ = true;
 
 	armor_ = armor_capacity_;
 	fuel_ = fuel_capacity_;
@@ -99,19 +103,27 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	}
 
 	if (combined_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
-		// XXX: spawn at sides of helicopter
-		game_.Spawn<Rocket>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HYDRA);
+		Vector3f mount_offset = rocket_mount_offset_;
+		if (hydra_at_left_)
+			mount_offset.y = -mount_offset.y;
+
+		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HYDRA);
 
 		hydras_--;
 		hydra_reload_ = hydra_cooldown_;
+		hydra_at_left_ = !hydra_at_left_;
 	}
 
 	if (tick_control_flags_ /* hellfires have no autofire */ & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
-		// XXX: spawn at sides of helicopter
-		game_.Spawn<Rocket>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HELLFIRE);
+		Vector3f mount_offset = rocket_mount_offset_;
+		if (hydra_at_left_)
+			mount_offset.y = -mount_offset.y;
+
+		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HELLFIRE);
 
 		hellfires_--;
 		hellfire_reload_ = hellfire_cooldown_;
+		hellfire_at_left_ = !hellfire_at_left_;
 	}
 
 	// XXX: no-ammo case should emit clicking sound; this

@@ -67,6 +67,8 @@ protected:
 	static constexpr Vector3f gun_offset_ = Vector3f(33, -1, 7); // Desert Strike
 	static constexpr float weapon_fire_pitch_ = -0.121941; // -atan(25/204), from Desert Strike
 
+	static constexpr Vector3f rocket_mount_offset_ = Vector3f(0, 10, 7); // XXX: approx, check game
+
 public:
 	enum ControlFlags {
 		LEFT     = 0x01,
@@ -88,18 +90,21 @@ protected:
 	Vector3f pos_;
 	Vector3f vel_;
 
-	// resources
-	int guns_;
-	int hydras_;
-	int hellfires_;
-
+	// payload
 	int armor_;
 	int fuel_;
 	int load_;
 
+	int guns_;
+	int hydras_;
+	int hellfires_;
+
 	int gun_reload_; // ms
 	int hydra_reload_; // ms
 	int hellfire_reload_; // ms
+
+	int hydra_at_left_;
+	int hellfire_at_left_;
 
 	// control
 	int control_flags_;
