@@ -31,8 +31,7 @@
 #include <graphics/renderer.hh>
 
 Renderer::Renderer(SpriteManager& spriteman)
-	: sprite_heli_(spriteman, "AP0000"), // XXX: only Desert Strike for now
-	  sprite_shadow_(spriteman, "SHADOWS"),
+	: sprite_shadow_(spriteman, "SHADOWS"),
 	  sprite_rotor_(spriteman, "ROTOR", 0, 8),
 	  sprite_bullet_(spriteman, "WEAPONS", 0),
 	  sprite_hydra_(spriteman, "WEAPONS", 1),
@@ -40,6 +39,15 @@ Renderer::Renderer(SpriteManager& spriteman)
 	  sprite_explo_gun_(spriteman, "SMALLARM", 6, 6),
 	  sprite_explo_small_(spriteman, "EXPLODE", 14, 8),
 	  sprite_explo_large_(spriteman, "EXPLODE", 0, 14) {
+
+	// Load all heli sprite sets
+	std::string heli_letters = "AP"; // XXX: only Desert Strike for now
+	std::string forward_letters[] = { "B1", "00", "F1", "F2" };
+	std::string side_letters[] = { "RL", "00", "RR" };
+
+	for (int forward = -1; forward <= 2; forward++)
+		for (int side = -1; side <= 1; side++)
+			GetHeliSprite(forward, side).reset(new SpriteManager::DirectionalSprite(spriteman, heli_letters + forward_letters[forward + 1] + side_letters[side + 1]));
 }
 
 void Renderer::Render(Game& game) {
@@ -60,12 +68,33 @@ void Renderer::Visit(GameObject&) {
 	warning_displayed = true;
 }
 
+std::unique_ptr<SpriteManager::DirectionalSprite>& Renderer::GetHeliSprite(int forward, int side) {
+	assert(forward >= -1 && forward <= 2 && forward >= -1 && forward <= 2);
+	return sprite_heli_[(forward + 1) * 3 + (side + 1)];
+}
+
 void Renderer::Visit(Heli& heli) {
 	int shadow_offset = 16 + heli.GetPos().z; // sprite offset from Desert Strike
 
+	int sprite_forward = 0;
+	int sprite_side = 0;
+
+	if (heli.GetControlFlags() & Heli::LEFT)
+		sprite_side = -1;
+	if (heli.GetControlFlags() & Heli::RIGHT)
+		sprite_side = 1;
+	if (heli.GetControlFlags() & Heli::BACKWARD)
+		sprite_forward = -1;
+	if (heli.GetControlFlags() & Heli::FORWARD)
+		sprite_forward = 2;
+
+	// take mirroring into account
+	if (heli.GetSectorDirection().yaw > pi * 1.01)
+		sprite_side = -sprite_side;
+
 	// XXX: shadow should be transparent
 	sprite_shadow_.Render(40, 100, heli.GetDirection().yaw);
-	sprite_heli_.Render(40, 100 - shadow_offset, heli.GetDirection().yaw);
+	GetHeliSprite(sprite_forward, sprite_side)->Render(40, 100 - shadow_offset, heli.GetDirection().yaw);
 	sprite_rotor_.Render(40, 100 - shadow_offset, heli.GetAge() / 30);
 }
 

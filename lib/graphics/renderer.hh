@@ -20,6 +20,8 @@
 #ifndef RENDERER_HH
 #define RENDERER_HH
 
+#include <memory>
+
 #include <game/visitor.hh>
 #include <graphics/spritemanager.hh>
 
@@ -29,7 +31,7 @@ class Game;
 
 class Renderer : public Visitor {
 protected:
-	SpriteManager::DirectionalSprite sprite_heli_;
+	std::unique_ptr<SpriteManager::DirectionalSprite> sprite_heli_[12];
 	SpriteManager::DirectionalSprite sprite_shadow_;
 	SpriteManager::Animation sprite_rotor_;
 	SpriteManager::SingleSprite sprite_bullet_;
@@ -38,6 +40,9 @@ protected:
 	SpriteManager::Animation sprite_explo_gun_;
 	SpriteManager::Animation sprite_explo_small_;
 	SpriteManager::Animation sprite_explo_large_;
+
+protected:
+	std::unique_ptr<SpriteManager::DirectionalSprite>& GetHeliSprite(int forward, int side);
 
 public:
 	Renderer(SpriteManager& spriteman);
