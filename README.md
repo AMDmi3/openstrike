@@ -10,7 +10,7 @@ is not yet playable. What it can offer right now:
 * An utility to unpack Desert/Jungle Strike .DAT files
 * SDL2 - based viewer for sprites in these files
 * A game skeleton which currently demonstrates an ability to load
-  and render some sprites
+  and render some sprites and animations
 
 ## Building
 
@@ -62,8 +62,8 @@ and Q or Escape to close the viewer.
 src/openstrike file.DAT
 ```
 
-Use left/right keys to rotate the chopper. That's all it does for
-now.
+Use arrow keys to control the chopper, Z/X/C to fire. That's all
+it actually does for now.
 
 ## Author
 

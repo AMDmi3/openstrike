@@ -10,7 +10,7 @@ the game itself.
   * ```lib/dat/unpacker.*``` - unpacker for compression used in .DAT file
   * ```lib/dat/datgraphics.*``` - handler for specific type of .DAT file content, graphic files. Enumerates individial sprites inside these, returns their properties and pixels data itself
 * ```lib/graphics``` - game painting code
-  * ```lib/graphics/spritemanager.*``` - a manager which packs separate small sprites onto larger textures, and provides methods to paint these sprites
+  * ```lib/graphics/spritemanager.*```, ```lib/graphics/sprites.cc``` - a manager which packs separate small sprites onto larger textures and provides methods to paint these sprites
   * ```lib/graphics/rectpacker.*``` - rectangle packer used in sprite manager
   * ```lib/graphics/renderer.*``` - renderer for all game objects
 * ```lib/game``` - game logic
@@ -18,3 +18,6 @@ the game itself.
   * ```lib/visitor.*``` - base class for visitor pattern which knows how to process each kind of game objects used, for example, to separate rendering logic from object logic. Used as base for renderer, for instance
   * ```lib/game.*``` - main game class which holds all objects in the current game and provides processing and interaction for them
 * ```lib/gameobjects``` - logic of all game objects
+* ```lib/math``` - math routines used in the game
+  * ```lib/math/pi.hh``` - pi number
+  * ```lib/math/geom.*``` - simple 2D/3D vector math
