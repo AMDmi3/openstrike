@@ -75,7 +75,7 @@ int realmain(int argc, char** argv) {
 	// now it will load them
 	spriteman.LoadAll(
 			[](int loaded, int total) {
-				std::cerr << "Loading: " << loaded << "/" << total << std::endl;
+				std::cerr << "Loading sprites: " << loaded << "/" << total << std::endl;
 			}
 		);
 
