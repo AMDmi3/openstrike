@@ -69,7 +69,7 @@ void Renderer::Visit(GameObject&) {
 }
 
 std::unique_ptr<SpriteManager::DirectionalSprite>& Renderer::GetHeliSprite(int forward, int side) {
-	assert(forward >= -1 && forward <= 2 && forward >= -1 && forward <= 2);
+	assert(forward >= -1 && forward <= 2 && side >= -1 && side <= 1);
 	return sprite_heli_[(forward + 1) * 3 + (side + 1)];
 }
 
