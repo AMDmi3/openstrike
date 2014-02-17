@@ -1,5 +1,6 @@
 SET(SOURCES
 	bullet.cc
+	explosion.cc
 	heli.cc
 	hellfire.cc
 	hydra.cc

@@ -17,26 +17,49 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#ifndef EXPLOSION_HH
+#define EXPLOSION_HH
 
-class GameObject;
+#include <math/geom.hh>
 
-class Bullet;
-class Heli;
-class Hellfire;
-class Hydra;
-class Explosion;
+#include <game/gameobject.hh>
 
-class Visitor {
+class Game;
+class Visitor;
+
+class Explosion : public GameObject {
 public:
-	virtual void Visit(GameObject&) {}
+	enum Type {
+		GUN,
+		SMALL,
+		LARGE,
+	};
 
-	virtual void Visit(Bullet& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Heli& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Hellfire& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Hydra& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Explosion& obj) { Visit((GameObject&)obj); }
+protected:
+	unsigned int age_;
+
+	Vector3f pos_;
+	Type type_;
+
+public:
+	Explosion(Game& game, Vector3f pos, Type type);
+
+	virtual void Accept(Visitor& visitor);
+	virtual void Update(unsigned int deltams);
+
+	unsigned int GetLifetime() const;
+
+	Vector3f GetPos() const {
+		return pos_;
+	}
+
+	Type GetType() const {
+		return type_;
+	}
+
+	float GetAge() const {
+		return (float)age_ / (float)GetLifetime();
+	}
 };
 
-#endif // VISITOR_HH
+#endif // EXPLOSION_HH

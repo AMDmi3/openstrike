@@ -17,26 +17,23 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#include <game/visitor.hh>
 
-class GameObject;
+#include <gameobjects/explosion.hh>
 
-class Bullet;
-class Heli;
-class Hellfire;
-class Hydra;
-class Explosion;
+Explosion::Explosion(Game& game, Vector3f pos, Explosion::Type type) : GameObject(game), pos_(pos), type_(type), age_(0) {
+}
 
-class Visitor {
-public:
-	virtual void Visit(GameObject&) {}
+void Explosion::Accept(Visitor& visitor) {
+	visitor.Visit(*this);
+}
 
-	virtual void Visit(Bullet& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Heli& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Hellfire& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Hydra& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Explosion& obj) { Visit((GameObject&)obj); }
-};
+unsigned int Explosion::GetLifetime() const {
+	return 1000; // XXX: tweak for different explosion types
+}
 
-#endif // VISITOR_HH
+void Explosion::Update(unsigned int deltams) {
+	age_ += deltams;
+	if (age_ > GetLifetime())
+		RemoveLater();
+}

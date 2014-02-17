@@ -27,6 +27,7 @@
 #include <gameobjects/bullet.hh>
 #include <gameobjects/hydra.hh>
 #include <gameobjects/hellfire.hh>
+#include <gameobjects/explosion.hh>
 
 #include <graphics/renderer.hh>
 
@@ -36,7 +37,10 @@ Renderer::Renderer(SpriteManager& spriteman)
 	  sprite_rotor_(spriteman, "ROTOR", 0, 8),
 	  sprite_bullet_(spriteman, "WEAPONS", 0),
 	  sprite_hydra_(spriteman, "WEAPONS", 1),
-	  sprite_hellfire_(spriteman, "WEAPONS", 14) {
+	  sprite_hellfire_(spriteman, "WEAPONS", 14),
+	  sprite_explo_gun_(spriteman, "SMALLARM", 6, 6),
+	  sprite_explo_small_(spriteman, "EXPLODE", 14, 8),
+	  sprite_explo_large_(spriteman, "EXPLODE", 0, 14) {
 }
 
 void Renderer::Render(Game& game) {
@@ -79,4 +83,19 @@ void Renderer::Visit(Hydra& hydra) {
 void Renderer::Visit(Hellfire& hellfire) {
 	Vector3f pos = hellfire.GetPos();
 	sprite_hellfire_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, hellfire.GetDirection().yaw);
+}
+
+void Renderer::Visit(Explosion& explosion) {
+	Vector3f pos = explosion.GetPos();
+
+	SpriteManager::Animation* anim;
+
+	switch (explosion.GetType()) {
+	case Explosion::GUN:   anim = &sprite_explo_gun_; break;
+	case Explosion::SMALL: anim = &sprite_explo_small_; break;
+	case Explosion::LARGE: anim = &sprite_explo_large_; break;
+	default: return;
+	}
+
+	anim->Render(40 + pos.x, 100 - pos.y / 2, std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
 }
