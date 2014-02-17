@@ -18,6 +18,7 @@
  */
 
 #include <cassert>
+#include <iostream>
 
 #include <game/game.hh>
 #include <graphics/spritemanager.hh>
@@ -49,6 +50,13 @@ void Renderer::Render(Game& game) {
 void Renderer::Update(unsigned int deltams) {
 	// process animations
 	sprite_rotor_.Update(deltams);
+}
+
+void Renderer::Visit(GameObject& obj) {
+	static bool warning_displayed = false;
+	if (!warning_displayed)
+		std::cerr << "Warning: Renderer::Visit() not implemented for some objects" << std::endl;
+	warning_displayed = true;
 }
 
 void Renderer::Visit(Heli& heli) {

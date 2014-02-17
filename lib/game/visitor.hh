@@ -20,6 +20,8 @@
 #ifndef VISITOR_HH
 #define VISITOR_HH
 
+class GameObject;
+
 class Bullet;
 class Heli;
 class Hellfire;
@@ -27,10 +29,12 @@ class Hydra;
 
 class Visitor {
 public:
-	virtual void Visit(Bullet&) {}
-	virtual void Visit(Heli&) {}
-	virtual void Visit(Hellfire&) {}
-	virtual void Visit(Hydra&) {}
+	virtual void Visit(GameObject&) {}
+
+	virtual void Visit(Bullet& obj) { Visit((GameObject&)obj); }
+	virtual void Visit(Heli& obj) { Visit((GameObject&)obj); }
+	virtual void Visit(Hellfire& obj) { Visit((GameObject&)obj); }
+	virtual void Visit(Hydra& obj) { Visit((GameObject&)obj); }
 };
 
 #endif // VISITOR_HH

@@ -45,6 +45,8 @@ public:
 
 	void Update(unsigned int deltams);
 
+	virtual void Visit(GameObject& obj);
+
 	virtual void Visit(Heli& heli);
 	virtual void Visit(Bullet& bullet);
 	virtual void Visit(Hydra& hydra);
