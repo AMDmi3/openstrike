@@ -30,44 +30,46 @@ class Visitor;
 
 class Heli : public GameObject {
 protected:
-	// Turn rate when the heli is not accelerating forward
-	static constexpr float still_turn_rate_ = 2.0 * pi / 2.25; // rad/sec
+	struct Constants {
+		// Turn rate when the heli is not accelerating forward
+		static constexpr float StillTurnRate() { return 2.0 * pi / 2.25; } // rad/sec
 
-	// Turn rate when the heli is accelerating forward
-	static constexpr float accel_turn_rate_ = 2.0 * pi / 4.5; // rad/sec
+		// Turn rate when the heli is accelerating forward
+		static constexpr float AccelTurnRate() { return 2.0 * pi / 4.5; } // rad/sec
 
-	// Forward acceleration rate
-	static constexpr float forward_accel_ = 0.0;
+		// Forward acceleration rate
+		static constexpr float ForwardAccel() { return 0.0; }
 
-	// Backward acceleration rate
-	static constexpr float backward_accel_ = 0.0;
+		// Backward acceleration rate
+		static constexpr float BackwardAccel() { return 0.0; }
 
-	// Turning acceleration rate
-	static constexpr float turn_accel_ = 0.0;
+		// Turning acceleration rate
+		static constexpr float TurnAccel() { return 0.0; }
 
-	// Jink acceleration rate
-	static constexpr float jink_accel_ = 0.0;
+		// Jink acceleration rate
+		static constexpr float JinkAccel() { return 0.0; }
 
-	// Drag force
-	static constexpr float drag_ = 0.0;
+		// Drag force
+		static constexpr float Drag() { return 0.0; }
 
-	// Max height
-	static constexpr float maxheight_ = 20.0;
+		// Max height
+		static constexpr float MaxHeight() { return 20.0; }
 
-	static constexpr int gun_capacity_ = 1178;
-	static constexpr int hydra_capacity_ = 38;
-	static constexpr int hellfire_capacity_ = 8;
-	static constexpr int armor_capacity_ = 600; // or just default?
-	static constexpr int fuel_capacity_ = 100;  // or just default?
+		static constexpr int GunCapacity() { return 1178; }
+		static constexpr int HydraCapacity() { return 38; }
+		static constexpr int HellfireCapacity() { return 8; }
+		static constexpr int ArmorCapacity() { return 600; } // or just default?
+		static constexpr int FuelCapacity() { return 100; }  // or just default?
 
-	static constexpr int gun_cooldown_ = 250; // Desert Strike (calculated 240 from video, rounded)
-	static constexpr int hydra_cooldown_ = 500; // Desert Strike (calculated 474 from video, rounded)
-	static constexpr int hellfire_cooldown_ = 1000; // Desert Strike (calculated 1150 from video - time to key press (no auto fire), rounded)
+		static constexpr int GunCooldown() { return 250; } // Desert Strike (calculated 240 from video, rounded)
+		static constexpr int HydraCooldown() { return 500; } // Desert Strike (calculated 474 from video, rounded)
+		static constexpr int HellfireCooldown() { return 1000; } // Desert Strike (calculated 1150 from video - time to key press (no auto fire), rounded)
 
-	static constexpr Vector3f gun_offset_ = Vector3f(33, -1, 7); // Desert Strike
-	static constexpr float weapon_fire_pitch_ = -0.121941; // -atan(25/204), from Desert Strike
+		static constexpr Vector3f GunOffset() { return Vector3f(33, -1, 7); }
+		static constexpr float WeaponFirePitch() { return -0.121941; } // -atan(25/204), from Desert Strike
 
-	static constexpr Vector3f rocket_mount_offset_ = Vector3f(0, 10, 7); // XXX: approx, check game
+		static constexpr Vector3f RocketMountOffset() { return Vector3f(0, 10, 7); } // XXX: approx, check game
+	};
 
 public:
 	enum ControlFlags {

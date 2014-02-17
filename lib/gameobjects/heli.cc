@@ -27,23 +27,20 @@
 
 #include <gameobjects/heli.hh>
 
-constexpr Vector3f Heli::gun_offset_;
-constexpr Vector3f Heli::rocket_mount_offset_;
-
 Heli::Heli(Game& game) : GameObject(game) {
 	age_ = 0;
 
-	pos_.z = maxheight_;
+	pos_.z = Constants::MaxHeight();
 
-	guns_ = gun_capacity_;
-	hydras_ = hydra_capacity_;
-	hellfires_ = hellfire_capacity_;
+	guns_ = Constants::GunCapacity();
+	hydras_ = Constants::HydraCapacity();;
+	hellfires_ = Constants::HellfireCapacity();;
 
 	hydra_at_left_ = true;
 	hellfire_at_left_ = true;
 
-	armor_ = armor_capacity_;
-	fuel_ = fuel_capacity_;
+	armor_ = Constants::ArmorCapacity();
+	fuel_ = Constants::FuelCapacity();
 	load_ = 0;
 
 	gun_reload_ = hydra_reload_ = hellfire_reload_ = 0; // ready to fire
@@ -69,7 +66,7 @@ void Heli::UpdatePhysics(unsigned int deltams) {
 	float delta_sec = deltams / 1000.0f;
 
 	// Turning
-	float turn_rate = (control_flags_ & FORWARD) ? accel_turn_rate_ : still_turn_rate_;
+	float turn_rate = (control_flags_ & FORWARD) ? Constants::AccelTurnRate() : Constants::StillTurnRate();
 
 	if (control_flags_ & LEFT)
 		direction_.RotateCCW(turn_rate * delta_sec);
@@ -96,33 +93,33 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 
 	// Process gunfire
 	if (combined_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
-		game_.Spawn<Bullet>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_));
+		game_.Spawn<Bullet>(pos_ + Constants::GunOffset() * GetSectorDirection(), Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()));
 
 		guns_--;
-		gun_reload_ = gun_cooldown_;
+		gun_reload_ = Constants::GunCooldown();
 	}
 
 	if (combined_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
-		Vector3f mount_offset = rocket_mount_offset_;
+		Vector3f mount_offset = Constants::RocketMountOffset();
 		if (hydra_at_left_)
 			mount_offset.y = -mount_offset.y;
 
-		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HYDRA);
+		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HYDRA);
 
 		hydras_--;
-		hydra_reload_ = hydra_cooldown_;
+		hydra_reload_ = Constants::HydraCooldown();
 		hydra_at_left_ = !hydra_at_left_;
 	}
 
 	if (tick_control_flags_ /* hellfires have no autofire */ & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
-		Vector3f mount_offset = rocket_mount_offset_;
+		Vector3f mount_offset = Constants::RocketMountOffset();
 		if (hydra_at_left_)
 			mount_offset.y = -mount_offset.y;
 
-		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HELLFIRE);
+		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HELLFIRE);
 
 		hellfires_--;
-		hellfire_reload_ = hellfire_cooldown_;
+		hellfire_reload_ = Constants::HellfireCooldown();
 		hellfire_at_left_ = !hellfire_at_left_;
 	}
 
