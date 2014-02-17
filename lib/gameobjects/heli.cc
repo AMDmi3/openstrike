@@ -80,7 +80,7 @@ void Heli::UpdatePhysics(unsigned int deltams) {
 
 void Heli::UpdateWeapons(unsigned int deltams) {
 	// take key taps into account
-	int combiled_control_flags = control_flags_ | tick_control_flags_;
+	int combined_control_flags = control_flags_ | tick_control_flags_;
 
 	// Cooldown
 	if (gun_reload_ > 0)
@@ -91,15 +91,15 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 		hellfire_reload_ -= deltams;
 
 	// Process gunfire
-	if (combiled_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
+	if (combined_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
 		game_.Spawn<Bullet>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_));
 
 		guns_--;
 		gun_reload_ = gun_cooldown_;
 	}
 
-	if (combiled_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
-		// XXX: swapn at sides of helicopter
+	if (combined_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
+		// XXX: spawn at sides of helicopter
 		game_.Spawn<Rocket>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HYDRA);
 
 		hydras_--;
@@ -107,7 +107,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	}
 
 	if (tick_control_flags_ /* hellfires have no autofire */ & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
-		// XXX: swapn at sides of helicopter
+		// XXX: spawn at sides of helicopter
 		game_.Spawn<Rocket>(pos_ + gun_offset_ * GetSectorDirection(), Direction3f(GetSectorDirection(), weapon_fire_pitch_), Rocket::HELLFIRE);
 
 		hellfires_--;
