@@ -25,8 +25,7 @@
 
 #include <gameobjects/heli.hh>
 #include <gameobjects/bullet.hh>
-#include <gameobjects/hydra.hh>
-#include <gameobjects/hellfire.hh>
+#include <gameobjects/rocket.hh>
 #include <gameobjects/explosion.hh>
 
 #include <graphics/renderer.hh>
@@ -51,7 +50,7 @@ void Renderer::Render(Game& game) {
 	game.Accept(*this);
 }
 
-void Renderer::Update(unsigned int deltams) {
+void Renderer::Update(unsigned int) {
 }
 
 void Renderer::Visit(GameObject&) {
@@ -75,14 +74,16 @@ void Renderer::Visit(Bullet& bullet) {
 	sprite_bullet_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z);
 }
 
-void Renderer::Visit(Hydra& hydra) {
-	Vector3f pos = hydra.GetPos();
-	sprite_hydra_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, hydra.GetDirection().yaw);
-}
-
-void Renderer::Visit(Hellfire& hellfire) {
-	Vector3f pos = hellfire.GetPos();
-	sprite_hellfire_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, hellfire.GetDirection().yaw);
+void Renderer::Visit(Rocket& rocket) {
+	Vector3f pos = rocket.GetPos();
+	switch (rocket.GetType()) {
+	case Rocket::HYDRA:
+		sprite_hydra_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, rocket.GetDirection().yaw);
+		break;
+	case Rocket::HELLFIRE:
+		sprite_hellfire_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, rocket.GetDirection().yaw);
+		break;
+	}
 }
 
 void Renderer::Visit(Explosion& explosion) {

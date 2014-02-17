@@ -2,8 +2,7 @@ SET(SOURCES
 	bullet.cc
 	explosion.cc
 	heli.cc
-	hellfire.cc
-	hydra.cc
+	rocket.cc
 )
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)

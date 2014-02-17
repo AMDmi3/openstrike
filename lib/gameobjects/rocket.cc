@@ -22,18 +22,20 @@
 
 #include <gameobjects/explosion.hh>
 
-#include <gameobjects/hydra.hh>
+#include <gameobjects/rocket.hh>
 
-Hydra::Hydra(Game& game, Vector3f pos, Direction3f direction) : GameObject(game) {
-	pos_ = pos;
-	dir_ = direction;
+Rocket::Rocket(Game& game, Vector3f pos, Direction3f direction, Rocket::Type type)
+	: GameObject(game),
+	  pos_(pos),
+	  dir_(direction),
+	  type_(type) {
 }
 
-void Hydra::Accept(Visitor& visitor) {
+void Rocket::Accept(Visitor& visitor) {
 	visitor.Visit(*this);
 }
 
-void Hydra::Update(unsigned int deltams) {
+void Rocket::Update(unsigned int deltams) {
 	float delta_sec = deltams / 1000.0f;
 
 	Vector3f vel = dir_ * speed_;
@@ -48,7 +50,10 @@ void Hydra::Update(unsigned int deltams) {
 
 		RemoveLater();
 
-		game_.Spawn<Explosion>(pos_, Explosion::SMALL);
+		switch (type_) {
+		case HYDRA:    game_.Spawn<Explosion>(pos_, Explosion::SMALL); break;
+		case HELLFIRE: game_.Spawn<Explosion>(pos_, Explosion::LARGE); break;
+		}
 		// XXX: cause damage
 	}
 

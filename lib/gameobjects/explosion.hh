@@ -36,10 +36,9 @@ public:
 	};
 
 protected:
-	unsigned int age_;
-
 	Vector3f pos_;
 	Type type_;
+	unsigned int age_;
 
 public:
 	Explosion(Game& game, Vector3f pos, Type type);

@@ -17,40 +17,48 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <game/visitor.hh>
-#include <game/game.hh>
+#ifndef ROCKET_HH
+#define ROCKET_HH
 
-#include <gameobjects/explosion.hh>
+#include <math/geom.hh>
 
-#include <gameobjects/hellfire.hh>
+#include <game/gameobject.hh>
 
-Hellfire::Hellfire(Game& game, Vector3f pos, Direction3f direction) : GameObject(game) {
-	pos_ = pos;
-	dir_ = direction;
-}
+class Game;
+class Visitor;
 
-void Hellfire::Accept(Visitor& visitor) {
-	visitor.Visit(*this);
-}
+class Rocket : public GameObject {
+public:
+	enum Type {
+		HYDRA,
+		HELLFIRE
+	};
 
-void Hellfire::Update(unsigned int deltams) {
-	float delta_sec = deltams / 1000.0f;
+protected:
+	static constexpr float speed_ = 400.0; // XXX: from bullet, fix
 
-	Vector3f vel = dir_ * speed_;
+protected:
+	Vector3f pos_;
+	Direction3f dir_;
+	Type type_;
 
-	pos_ += vel * delta_sec;
+public:
+	Rocket(Game& game, Vector3f pos, Direction3f direction, Type type);
 
-	if (pos_.z <= 0) {
-		// calculate exact collision point
-		float penetration = pos_.z / vel.z;
+	virtual void Accept(Visitor& visitor);
+	virtual void Update(unsigned int deltams);
 
-		pos_ -= vel * delta_sec * penetration;
-
-		RemoveLater();
-
-		game_.Spawn<Explosion>(pos_, Explosion::LARGE);
-		// XXX: cause damage
+	Vector3f GetPos() const {
+		return pos_;
 	}
 
-	// XXX: limit lifetime if it doesn't hit the ground
-}
+	Direction3f GetDirection() const {
+		return dir_;
+	}
+
+	Type GetType() const {
+		return type_;
+	}
+};
+
+#endif // HYDRA_HH
