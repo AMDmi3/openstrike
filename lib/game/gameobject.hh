@@ -31,7 +31,7 @@ public:
 	GameObject(Game& game);
 	virtual ~GameObject();
 
-	virtual void Accept(Visitor& visitor) const = 0;
+	virtual void Accept(Visitor& visitor) = 0;
 	virtual void Update(unsigned int deltams) = 0;
 
 	void RemoveLater();

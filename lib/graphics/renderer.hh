@@ -39,8 +39,8 @@ protected:
 public:
 	Renderer(SDL2pp::Renderer& renderer, DatFile& datfile, SpriteManager& spriteman);
 
-	virtual void Visit(const Heli& heli);
-	virtual void Visit(const Bullet& bullet);
+	virtual void Visit(Heli& heli);
+	virtual void Visit(Bullet& bullet);
 };
 
 #endif

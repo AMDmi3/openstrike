@@ -108,7 +108,7 @@ protected:
 public:
 	Heli(Game& game);
 
-	virtual void Accept(Visitor& visitor) const;
+	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);
 
 	virtual void UpdatePhysics(unsigned int deltams);

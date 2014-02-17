@@ -39,7 +39,7 @@ protected:
 public:
 	Bullet(Game& game, Vector3f pos, Direction3f direction);
 
-	virtual void Accept(Visitor& visitor) const;
+	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);
 
 	Vector3f GetPos() const {

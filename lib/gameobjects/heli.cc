@@ -46,7 +46,7 @@ Heli::Heli(Game& game) : GameObject(game) {
 	control_flags_ = tick_control_flags_ = 0;
 }
 
-void Heli::Accept(Visitor& visitor) const {
+void Heli::Accept(Visitor& visitor) {
 	visitor.Visit(*this);
 }
 

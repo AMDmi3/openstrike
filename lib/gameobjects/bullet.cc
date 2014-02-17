@@ -28,7 +28,7 @@ Bullet::Bullet(Game& game, Vector3f pos, Direction3f direction) : GameObject(gam
 	vel_ = direction * speed_;
 }
 
-void Bullet::Accept(Visitor& visitor) const {
+void Bullet::Accept(Visitor& visitor) {
 	visitor.Visit(*this);
 }
 

@@ -25,8 +25,8 @@ class Bullet;
 
 class Visitor {
 public:
-	virtual void Visit(const Heli&) {}
-	virtual void Visit(const Bullet&) {}
+	virtual void Visit(Heli&) {}
+	virtual void Visit(Bullet&) {}
 };
 
 #endif // VISITOR_HH

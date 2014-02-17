@@ -62,7 +62,7 @@ Renderer::Renderer(SDL2pp::Renderer& renderer, DatFile& datfile, SpriteManager& 
 	}
 }
 
-void Renderer::Visit(const Heli& heli) {
+void Renderer::Visit(Heli& heli) {
 	int phase = (int)((heli.GetDirection().yaw / pi * 12.0) + 0.5);
 
 	phase = phase % 24;
@@ -86,7 +86,7 @@ void Renderer::Visit(const Heli& heli) {
 	spriteman_.Render(rotor_sprite_ids_ + heli.GetRotorPhase() / 100 % 8, 40, 100 - shadow_offset, SpriteManager::PIVOT_FRAMECENTER);
 }
 
-void Renderer::Visit(const Bullet& bullet) {
+void Renderer::Visit(Bullet& bullet) {
 	Vector3f pos = bullet.GetPos();
 	spriteman_.Render(bullet_sprite_id_, 40 + pos.x, 100 - pos.y / 2 - pos.z, SpriteManager::PIVOT_FRAMECENTER);
 }
