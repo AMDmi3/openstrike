@@ -17,9 +17,10 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cmath>
-
 #include <game/visitor.hh>
+#include <game/game.hh>
+
+#include <gameobjects/explosion.hh>
 
 #include <gameobjects/bullet.hh>
 
@@ -47,7 +48,7 @@ void Bullet::Update(unsigned int deltams) {
 
 		RemoveLater();
 
-		// XXX: spawn explosion object
+		game_.Spawn<Explosion>(pos_, Explosion::GUN);
 		// XXX: cause damage
 	}
 
