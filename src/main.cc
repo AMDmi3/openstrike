@@ -128,7 +128,7 @@ int realmain(int argc, char** argv) {
 		renderer.SetDrawColor(0, 0, 0);
 		renderer.Clear();
 
-		renderer.SetDrawColor(32, 64, 0);
+		renderer.SetDrawColor(158, 126, 61);
 		renderer.FillRect(SDL2pp::Rect(0, 0, 320, 200));
 
 		game_renderer.Render(game);
