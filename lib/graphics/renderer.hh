@@ -24,6 +24,7 @@
 
 #include <game/visitor.hh>
 #include <graphics/spritemanager.hh>
+#include <graphics/objectsorter.hh>
 
 class SpriteManager;
 class DatFile;

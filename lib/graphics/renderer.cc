@@ -53,11 +53,9 @@ Renderer::Renderer(SpriteManager& spriteman)
 }
 
 void Renderer::Render(Game& game) {
-	// XXX: this should be split into two phases:
-	// - get all (renderable? visible?) objects from game
-	// - sort them
-	// - render each
-	game.Accept(*this);
+	ObjectSorter sorter;
+	game.Accept(sorter);
+	sorter.Accept(*this);
 }
 
 void Renderer::Update(unsigned int) {

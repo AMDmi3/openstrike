@@ -1,7 +1,8 @@
 SET(SOURCES
+	objectsorter.cc
 	rectpacker.cc
-	spritemanager.cc
 	renderer.cc
+	spritemanager.cc
 	sprites.cc
 )
 
