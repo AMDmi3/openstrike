@@ -31,8 +31,8 @@ class Explosion : public GameObject {
 public:
 	enum Type {
 		GUN,
-		SMALL,
-		LARGE,
+		HYDRA,
+		HELLFIRE,
 	};
 
 protected:

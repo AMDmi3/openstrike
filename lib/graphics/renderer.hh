@@ -38,8 +38,8 @@ protected:
 	SpriteManager::DirectionalSprite sprite_hydra_;
 	SpriteManager::DirectionalSprite sprite_hellfire_;
 	SpriteManager::Animation sprite_explo_gun_;
-	SpriteManager::Animation sprite_explo_small_;
-	SpriteManager::Animation sprite_explo_large_;
+	SpriteManager::Animation sprite_explo_hydra_;
+	SpriteManager::Animation sprite_explo_hellfire_;
 
 protected:
 	std::unique_ptr<SpriteManager::DirectionalSprite>& GetHeliSprite(int forward, int side);

@@ -51,8 +51,8 @@ void Rocket::Update(unsigned int deltams) {
 		RemoveLater();
 
 		switch (type_) {
-		case HYDRA:    game_.Spawn<Explosion>(pos_, Explosion::SMALL); break;
-		case HELLFIRE: game_.Spawn<Explosion>(pos_, Explosion::LARGE); break;
+		case HYDRA:    game_.Spawn<Explosion>(pos_, Explosion::HYDRA); break;
+		case HELLFIRE: game_.Spawn<Explosion>(pos_, Explosion::HELLFIRE); break;
 		}
 		// XXX: cause damage
 	}

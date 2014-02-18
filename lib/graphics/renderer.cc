@@ -37,8 +37,8 @@ Renderer::Renderer(SpriteManager& spriteman)
 	  sprite_hydra_(spriteman, "WEAPONS", 1),
 	  sprite_hellfire_(spriteman, "WEAPONS", 14),
 	  sprite_explo_gun_(spriteman, "SMALLARM", 6, 6),
-	  sprite_explo_small_(spriteman, "EXPLODE", 14, 8),
-	  sprite_explo_large_(spriteman, "EXPLODE", 0, 14) {
+	  sprite_explo_hydra_(spriteman, "EXPLODE", {14, 15, 19, 20, 21}), // XXX: from Desert Strike; yes, explosion anims are non-contigous
+	  sprite_explo_hellfire_(spriteman, "EXPLODE", {14, 15, 0, 1, 2, 22, 1, 0, 19, 20, 21}) {
 
 	// Load all heli sprite sets
 	std::string heli_letters = "AP"; // XXX: only Desert Strike for now
@@ -122,8 +122,8 @@ void Renderer::Visit(Explosion& explosion) {
 
 	switch (explosion.GetType()) {
 	case Explosion::GUN:   anim = &sprite_explo_gun_; break;
-	case Explosion::SMALL: anim = &sprite_explo_small_; break;
-	case Explosion::LARGE: anim = &sprite_explo_large_; break;
+	case Explosion::HYDRA: anim = &sprite_explo_hydra_; break;
+	case Explosion::HELLFIRE: anim = &sprite_explo_hellfire_; break;
 	default: return;
 	}
 

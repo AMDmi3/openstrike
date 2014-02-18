@@ -29,7 +29,16 @@ void Explosion::Accept(Visitor& visitor) {
 }
 
 unsigned int Explosion::GetLifetime() const {
-	return 1000; // XXX: tweak for different explosion types
+	switch (type_) {
+	case GUN:
+		return 400; // from Desert Strike
+	case HYDRA:
+		return 900; // from Desert Strike
+	case HELLFIRE:
+		return 450; // from Desert Strike
+	default:
+		return 1000;
+	}
 }
 
 void Explosion::Update(unsigned int deltams) {
