@@ -35,7 +35,9 @@ public:
 	};
 
 protected:
-	static constexpr float speed_ = 400.0; // XXX: from bullet, fix
+	struct Constants {
+		static constexpr float Speed() { return 400.0; } // XXX: from bullet, fix
+	};
 
 protected:
 	Vector3f pos_;

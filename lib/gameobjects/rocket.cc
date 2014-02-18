@@ -38,7 +38,7 @@ void Rocket::Accept(Visitor& visitor) {
 void Rocket::Update(unsigned int deltams) {
 	float delta_sec = deltams / 1000.0f;
 
-	Vector3f vel = dir_ * speed_;
+	Vector3f vel = dir_ * Constants::Speed();
 
 	pos_ += vel * delta_sec;
 

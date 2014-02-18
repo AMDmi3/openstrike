@@ -26,7 +26,7 @@
 
 Bullet::Bullet(Game& game, Vector3f pos, Direction3f direction) : GameObject(game) {
 	pos_ = pos;
-	vel_ = direction * speed_;
+	vel_ = direction * Constants::Speed();
 }
 
 void Bullet::Accept(Visitor& visitor) {
@@ -53,7 +53,7 @@ void Bullet::Update(unsigned int deltams) {
 	}
 
 	// g-force effect
-	vel_.z -= bullet_g_force_ * delta_sec;
+	vel_.z -= Constants::GForce() * delta_sec;
 
 	// XXX: limit lifetime if it doesn't hit the ground
 }
