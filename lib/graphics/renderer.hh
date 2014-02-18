@@ -37,7 +37,8 @@ protected:
 	SpriteManager::SingleSprite sprite_bullet_;
 	SpriteManager::DirectionalSprite sprite_hydra_;
 	SpriteManager::DirectionalSprite sprite_hellfire_;
-	SpriteManager::Animation sprite_explo_gun_;
+	SpriteManager::Animation sprite_explo_gun_object_;
+	SpriteManager::Animation sprite_explo_gun_ground_;
 	SpriteManager::Animation sprite_explo_hydra_;
 	SpriteManager::Animation sprite_explo_hellfire_;
 

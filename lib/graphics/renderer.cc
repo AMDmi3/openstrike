@@ -36,7 +36,8 @@ Renderer::Renderer(SpriteManager& spriteman)
 	  sprite_bullet_(spriteman, "WEAPONS", 0),
 	  sprite_hydra_(spriteman, "WEAPONS", 1),
 	  sprite_hellfire_(spriteman, "WEAPONS", 14),
-	  sprite_explo_gun_(spriteman, "SMALLARM", 6, 6),
+	  sprite_explo_gun_object_(spriteman, "SMALLARM", 0, 6),
+	  sprite_explo_gun_ground_(spriteman, "SMALLARM", 6, 6),
 	  sprite_explo_hydra_(spriteman, "EXPLODE", {14, 15, 19, 20, 21}), // XXX: from Desert Strike; yes, explosion anims are non-contigous
 	  sprite_explo_hellfire_(spriteman, "EXPLODE", {14, 15, 0, 1, 2, 22, 1, 0, 19, 20, 21}) {
 
@@ -121,9 +122,10 @@ void Renderer::Visit(Explosion& explosion) {
 	SpriteManager::Animation* anim;
 
 	switch (explosion.GetType()) {
-	case Explosion::GUN:   anim = &sprite_explo_gun_; break;
-	case Explosion::HYDRA: anim = &sprite_explo_hydra_; break;
-	case Explosion::HELLFIRE: anim = &sprite_explo_hellfire_; break;
+	case Explosion::GUN_OBJECT: anim = &sprite_explo_gun_object_; break;
+	case Explosion::GUN_GROUND: anim = &sprite_explo_gun_ground_; break;
+	case Explosion::HYDRA:      anim = &sprite_explo_hydra_; break;
+	case Explosion::HELLFIRE:   anim = &sprite_explo_hellfire_; break;
 	default: return;
 	}
 

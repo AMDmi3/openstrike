@@ -32,7 +32,8 @@ void Explosion::Accept(Visitor& visitor) {
 
 unsigned int Explosion::GetLifetime() const {
 	switch (type_) {
-	case GUN:
+	case GUN_OBJECT:
+	case GUN_GROUND:
 		return 400; // from Desert Strike
 	case HYDRA:
 		return 900; // from Desert Strike

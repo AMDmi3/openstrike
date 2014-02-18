@@ -30,7 +30,8 @@ class Visitor;
 class Explosion : public GameObject {
 public:
 	enum Type {
-		GUN,
+		GUN_OBJECT,
+		GUN_GROUND,
 		HYDRA,
 		HELLFIRE,
 	};

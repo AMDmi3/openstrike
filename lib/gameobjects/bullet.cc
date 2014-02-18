@@ -48,7 +48,7 @@ void Bullet::Update(unsigned int deltams) {
 
 		RemoveLater();
 
-		game_.Spawn<Explosion>(pos_, Explosion::GUN);
+		game_.Spawn<Explosion>(pos_, Explosion::GUN_GROUND);
 		// XXX: cause damage
 	}
 
