@@ -75,6 +75,13 @@ protected:
 				static const int offs_data_offset = 12;
 			};
 		};
+		struct Picture {
+			struct Header {
+				static const int size = 16;
+				static const int offs_width = 12;
+				static const int offs_height = 14;
+			};
+		};
 		struct Palette {
 			struct Header {
 				static const int size = 32;

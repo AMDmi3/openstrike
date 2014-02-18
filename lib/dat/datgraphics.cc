@@ -38,37 +38,47 @@ DatGraphics::DatGraphics(const MemRange& data) : data_(data) {
 	Slice palette_section = data.GetSlice(FileStruct::Graphics::size + sprites_length);
 
 	// Parse SPRITES
-	if (sprites_section.GetString(0, 8) != "SPRITES ")
-		throw std::logic_error("bad graphics file (expected SPRITES section)");
+	if (sprites_section.GetString(0, 8) == "SPRITES ") {
+		if (sprites_section.GetDWord(FileStruct::Sprites::Header::offs_blocks_unk0) != 0)
+			throw std::logic_error("probably BLOCKS file, not supported yet");
 
-	if (sprites_section.GetDWord(FileStruct::Sprites::Header::offs_blocks_unk0) != 0)
-		throw std::logic_error("probably BLOCKS file, not supported yet");
+		int num_sprites = sprites_section.GetWord(FileStruct::Sprites::Header::offs_num_sprites);
 
-	int num_sprites = sprites_section.GetWord(FileStruct::Sprites::Header::offs_num_sprites);
+		for (int i = 0; i < num_sprites; i++) {
+			Slice sprite_entry(sprites_section.GetSlice(FileStruct::Sprites::Header::size + i * FileStruct::Sprites::Entry::size, FileStruct::Sprites::Entry::size));
 
-	for (int i = 0; i < num_sprites; i++) {
-		Slice sprite_entry(sprites_section.GetSlice(FileStruct::Sprites::Header::size + i * FileStruct::Sprites::Entry::size, FileStruct::Sprites::Entry::size));
+			Sprite sprite;
 
+			sprite.framewidth = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_frame_width);
+			sprite.frameheight = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_frame_height);
+			sprite.xoffset = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_x_offset);
+			sprite.yoffset = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_y_offset);
+			sprite.width = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_width);
+			sprite.height = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_height);
+
+			size_t this_data_offset = sprite_entry.GetDWord(FileStruct::Sprites::Entry::offs_data_offset);
+
+			if (i < num_sprites - 1) {
+				Slice next_sprite_entry(sprites_section.GetSlice(FileStruct::Sprites::Header::size + (i + 1) * FileStruct::Sprites::Entry::size, FileStruct::Sprites::Entry::size));
+				size_t next_data_offset = next_sprite_entry.GetDWord(FileStruct::Sprites::Entry::offs_data_offset);
+				sprite.data = sprites_section.GetSlice(this_data_offset, next_data_offset - this_data_offset);
+			} else {
+				sprite.data = sprites_section.GetSlice(this_data_offset); // till the end of sprites section
+			}
+
+			sprites_.push_back(sprite);
+		}
+	} else if (sprites_section.GetString(0, 8) == "PICTURE ") {
 		Sprite sprite;
 
-		sprite.framewidth = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_frame_width);
-		sprite.frameheight = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_frame_height);
-		sprite.xoffset = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_x_offset);
-		sprite.yoffset = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_y_offset);
-		sprite.width = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_width);
-		sprite.height = sprite_entry.GetWord(FileStruct::Sprites::Entry::offs_height);
-
-		size_t this_data_offset = sprite_entry.GetDWord(FileStruct::Sprites::Entry::offs_data_offset);
-
-		if (i < num_sprites - 1) {
-			Slice next_sprite_entry(sprites_section.GetSlice(FileStruct::Sprites::Header::size + (i + 1) * FileStruct::Sprites::Entry::size, FileStruct::Sprites::Entry::size));
-			size_t next_data_offset = next_sprite_entry.GetDWord(FileStruct::Sprites::Entry::offs_data_offset);
-			sprite.data = sprites_section.GetSlice(this_data_offset, next_data_offset - this_data_offset);
-		} else {
-			sprite.data = sprites_section.GetSlice(this_data_offset); // till the end of sprites section
-		}
+		sprite.framewidth = sprite.width = sprites_section.GetWord(FileStruct::Picture::Header::offs_width);
+		sprite.frameheight = sprite.height = sprites_section.GetWord(FileStruct::Picture::Header::offs_height);
+		sprite.xoffset = sprite.yoffset = 0;
+		sprite.data = sprites_section.GetSlice(FileStruct::Picture::Header::size, sprite.width * sprite.height);
 
 		sprites_.push_back(sprite);
+	} else {
+		throw std::logic_error("unknown graphics file");
 	}
 
 	// Parse PALETTE
