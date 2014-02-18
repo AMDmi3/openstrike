@@ -69,6 +69,8 @@ protected:
 		static constexpr float WeaponFirePitch() { return -0.121941; } // -atan(25/204), from Desert Strike
 
 		static constexpr Vector3f RocketMountOffset() { return Vector3f(0, 10, 7); } // XXX: approx, check game
+
+		static constexpr float GunDispersion() { return 0.5/180.0*pi; }
 	};
 
 public:

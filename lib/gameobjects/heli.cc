@@ -18,6 +18,7 @@
  */
 
 #include <cmath>
+#include <cstdlib>
 
 #include <game/game.hh>
 #include <game/visitor.hh>
@@ -93,7 +94,12 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 
 	// Process gunfire
 	if (combined_control_flags & GUN && guns_ > 0 && gun_reload_ <= 0) {
-		game_.Spawn<Bullet>(pos_ + Constants::GunOffset() * GetSectorDirection(), Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()));
+		float yawdispersion = (2.0 * std::rand() / RAND_MAX - 1.0) * Constants::GunDispersion();
+		float pitchdispersion = (2.0 * std::rand() / RAND_MAX - 1.0) * Constants::GunDispersion();
+		game_.Spawn<Bullet>(
+				pos_ + Constants::GunOffset() * GetSectorDirection(),
+				Direction3f(GetSectorDirection().yaw + yawdispersion, Constants::WeaponFirePitch() + pitchdispersion)
+			);
 
 		guns_--;
 		gun_reload_ = Constants::GunCooldown();
