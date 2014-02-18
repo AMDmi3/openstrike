@@ -17,6 +17,8 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cassert>
+
 #include <game/visitor.hh>
 
 #include <gameobjects/explosion.hh>
@@ -36,9 +38,9 @@ unsigned int Explosion::GetLifetime() const {
 		return 900; // from Desert Strike
 	case HELLFIRE:
 		return 450; // from Desert Strike
-	default:
-		return 1000;
 	}
+	assert(false);
+	return 1000;
 }
 
 void Explosion::Update(unsigned int deltams) {
