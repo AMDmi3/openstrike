@@ -133,5 +133,5 @@ void Renderer::Visit(Explosion& explosion) {
 		return;
 	}
 
-	anim->Render(40 + pos.x, 100 - pos.y / 2, std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
+	anim->Render(40 + pos.x, 100 - pos.y / 2 - pos.z, std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
 }
