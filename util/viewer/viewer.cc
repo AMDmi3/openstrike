@@ -72,6 +72,7 @@ int realmain(int argc, char** argv) {
 	render.SetDrawBlendMode(SDL_BLENDMODE_BLEND);
 
 	while (1) {
+		std::cerr << "Displaying " << datfile.GetName(current_graphics) << "..." << std::endl;
 		window.SetTitle(std::string("OpenStrike Sprite Viewer [") + datfile.GetName(current_graphics) + "]");
 
 		Buffer graphics_data = datfile.GetData(current_graphics);
