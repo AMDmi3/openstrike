@@ -56,11 +56,33 @@ void SpriteManager::DirectionalSprite::Render(int x, int y, float angle) {
 	manager_.Render(ids_[phase], x, y, flags_ ^ flipflag);
 }
 
+SpriteManager::Animation::Animation(SpriteManager& manager, int flags)
+	: manager_(manager),
+	  flags_(flags) {
+}
+
 SpriteManager::Animation::Animation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, int flags)
 	: manager_(manager),
 	  flags_(flags) {
 	for (unsigned int i = 0; i < nframes; i++)
 		ids_.emplace_back(manager.Add(name, startframe + i));
+}
+
+SpriteManager::Animation::Animation(SpriteManager& manager, const std::string& name, const std::vector<unsigned int>& frames, int flags)
+	: manager_(manager),
+	  flags_(flags) {
+	for (auto& frame : frames)
+		ids_.emplace_back(manager.Add(name, frame));
+}
+
+void SpriteManager::Animation::AddFrames(const std::string& name, unsigned int startframe, unsigned int nframes) {
+	for (unsigned int i = 0; i < nframes; i++)
+		ids_.emplace_back(manager_.Add(name, startframe + i));
+}
+
+void SpriteManager::Animation::AddFrames(const std::string& name, const std::vector<unsigned int>& frames) {
+	for (auto& frame : frames)
+		ids_.emplace_back(manager_.Add(name, frame));
 }
 
 void SpriteManager::Animation::Render(int x, int y, unsigned int nframe) {

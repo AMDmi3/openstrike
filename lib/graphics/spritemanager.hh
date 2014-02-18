@@ -88,7 +88,12 @@ public:
 		int flags_;
 
 	public:
+		Animation(SpriteManager& manager, int flags = PIVOT_FRAMECENTER);
 		Animation(SpriteManager& manager, const std::string& name, unsigned int startframe, unsigned int nframes, int flags = PIVOT_FRAMECENTER);
+		Animation(SpriteManager& manager, const std::string& name, const std::vector<unsigned int>& frames, int flags = PIVOT_FRAMECENTER);
+
+		void AddFrames(const std::string& name, unsigned int startframe, unsigned int nframes = 1);
+		void AddFrames(const std::string& name, const std::vector<unsigned int>& frames);
 
 		void Render(int x, int y, unsigned int nframe);
 
