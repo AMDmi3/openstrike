@@ -30,8 +30,7 @@ DatGraphics::DatGraphics(const MemRange& data) : data_(data) {
 	if (graphics_section.GetString(0, 8) != "GRAPHICS")
 		throw std::logic_error("bad graphics file (expected GRAPHICS section)");
 
-	if (graphics_section.GetDWord(FileStruct::Graphics::offs_blocks_unk0) != 0 || graphics_section.GetDWord(FileStruct::Graphics::offs_blocks_unk1) != 0)
-		throw std::logic_error("probably BLOCKS file, not supported yet");
+	transparency_ = graphics_section.GetByte(FileStruct::Graphics::offs_transparency_flag);
 
 	size_t sprites_length = graphics_section.GetDWord(FileStruct::Graphics::offs_sprites_length);
 
@@ -41,6 +40,9 @@ DatGraphics::DatGraphics(const MemRange& data) : data_(data) {
 	// Parse SPRITES
 	if (sprites_section.GetString(0, 8) != "SPRITES ")
 		throw std::logic_error("bad graphics file (expected SPRITES section)");
+
+	if (sprites_section.GetDWord(FileStruct::Sprites::Header::offs_blocks_unk0) != 0)
+		throw std::logic_error("probably BLOCKS file, not supported yet");
 
 	int num_sprites = sprites_section.GetWord(FileStruct::Sprites::Header::offs_num_sprites);
 
@@ -126,30 +128,43 @@ std::vector<unsigned char> DatGraphics::GetPixels(unsigned int num) const {
 	unsigned char mask;
 	size_t width = sprites_[num].width;
 
-	while (data_pos < data.GetSize() && out_pos + 4 <= pixels_size) {
-		mask = data[data_pos++];
+	if (transparency_) {
+		while (data_pos < data.GetSize() && out_pos + 4 <= pixels_size) {
+			mask = data[data_pos++];
 
-		// optimize by computing max. available number of iterations
-		for (int j = 0; j < 8 && pixel_in_line < width && data_pos < data.GetSize() && out_pos + 4 <= pixels_size; j++, pixel_in_line++) {
-			if (mask & (0x80 >> j)) {
-				unsigned char color = data[data_pos++];
-				if (color >= palette_.size())
-					throw std::logic_error("color not found in the palette");
+			// optimize by computing max. available number of iterations
+			for (int j = 0; j < 8 && pixel_in_line < width && data_pos < data.GetSize() && out_pos + 4 <= pixels_size; j++, pixel_in_line++) {
+				if (mask & (0x80 >> j)) {
+					unsigned char color = data[data_pos++];
+					if (color >= palette_.size())
+						throw std::logic_error("color not found in the palette");
 
-				pixels[out_pos++] = palette_[color].blue;
-				pixels[out_pos++] = palette_[color].green;
-				pixels[out_pos++] = palette_[color].red;
-				pixels[out_pos++] = 255;
-			} else {
-				pixels[out_pos++] = 0;
-				pixels[out_pos++] = 0;
-				pixels[out_pos++] = 0;
-				pixels[out_pos++] = 0;
+					pixels[out_pos++] = palette_[color].blue;
+					pixels[out_pos++] = palette_[color].green;
+					pixels[out_pos++] = palette_[color].red;
+					pixels[out_pos++] = 255;
+				} else {
+					pixels[out_pos++] = 0;
+					pixels[out_pos++] = 0;
+					pixels[out_pos++] = 0;
+					pixels[out_pos++] = 0;
+				}
 			}
-		}
 
-		if (pixel_in_line == width)
-			pixel_in_line = 0;
+			if (pixel_in_line == width)
+				pixel_in_line = 0;
+		}
+	} else {
+		for (; data_pos < data.GetSize() && out_pos + 4 <= pixels_size; ) {
+			unsigned char color = data[data_pos++];
+			if (color >= palette_.size())
+				throw std::logic_error("color not found in the palette");
+
+			pixels[out_pos++] = palette_[color].blue;
+			pixels[out_pos++] = palette_[color].green;
+			pixels[out_pos++] = palette_[color].red;
+			pixels[out_pos++] = 255;
+		}
 	}
 
 	return pixels;

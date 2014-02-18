@@ -47,6 +47,7 @@ protected:
 
 	std::vector<Sprite> sprites_;
 	std::vector<Color> palette_;
+	bool transparency_;
 
 protected:
 	struct FileStruct {
@@ -55,11 +56,13 @@ protected:
 			static const int offs_sprites_length = 12;
 			static const int offs_blocks_unk0 = 16;
 			static const int offs_blocks_unk1 = 20;
+			static const int offs_transparency_flag = 10;
 		};
 		struct Sprites {
 			struct Header {
 				static const int size = 16;
 				static const int offs_num_sprites = 8;
+				static const int offs_blocks_unk0 = 12;
 			};
 			struct Entry {
 				static const int size = 16;
