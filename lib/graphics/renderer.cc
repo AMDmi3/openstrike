@@ -128,7 +128,9 @@ void Renderer::Visit(Explosion& explosion) {
 	case Explosion::HYDRA:      anim = &sprite_explo_hydra_; break;
 	case Explosion::HELLFIRE:   anim = &sprite_explo_hellfire_; break;
 	case Explosion::BOOM:       anim = &sprite_explo_boom_; break;
-	default: return;
+	default:
+		assert(false);
+		return;
 	}
 
 	anim->Render(40 + pos.x, 100 - pos.y / 2, std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
