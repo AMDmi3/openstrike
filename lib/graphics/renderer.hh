@@ -41,6 +41,7 @@ protected:
 	SpriteManager::Animation sprite_explo_gun_ground_;
 	SpriteManager::Animation sprite_explo_hydra_;
 	SpriteManager::Animation sprite_explo_hellfire_;
+	SpriteManager::Animation sprite_explo_boom_;
 
 protected:
 	std::unique_ptr<SpriteManager::DirectionalSprite>& GetHeliSprite(int forward, int side);

@@ -39,6 +39,8 @@ unsigned int Explosion::GetLifetime() const {
 		return 900; // from Desert Strike
 	case HELLFIRE:
 		return 450; // from Desert Strike
+	case BOOM:
+		return 1600; // from Desert Strike
 	}
 	assert(false);
 	return 1000;

@@ -30,10 +30,11 @@ class Visitor;
 class Explosion : public GameObject {
 public:
 	enum Type {
-		GUN_OBJECT,
-		GUN_GROUND,
-		HYDRA,
-		HELLFIRE,
+		GUN_OBJECT, // bullet hits some object
+		GUN_GROUND, // bullet hits ground
+		HYDRA,      // hydra explosion
+		HELLFIRE,   // hellfire explosion
+		BOOM,       // enemy or building explodes
 	};
 
 protected:
