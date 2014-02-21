@@ -106,6 +106,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 		float pitchdispersion = (2.0 * std::rand() / RAND_MAX - 1.0) * Constants::GunDispersion();
 		game_.Spawn<Bullet>(
 				pos_ + Constants::GunOffset() * GetSectorDirection(),
+				vel_,
 				Direction3f(GetSectorDirection().yaw + yawdispersion, Constants::WeaponFirePitch() + pitchdispersion)
 			);
 
@@ -118,7 +119,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 		if (hydra_at_left_)
 			mount_offset.y = -mount_offset.y;
 
-		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HYDRA);
+		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), vel_, Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HYDRA);
 
 		hydras_--;
 		hydra_reload_ = Constants::HydraCooldown();
@@ -130,7 +131,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 		if (hellfire_at_left_)
 			mount_offset.y = -mount_offset.y;
 
-		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HELLFIRE);
+		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), vel_, Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HELLFIRE);
 
 		hellfires_--;
 		hellfire_reload_ = Constants::HellfireCooldown();

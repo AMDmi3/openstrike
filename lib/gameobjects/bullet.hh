@@ -39,7 +39,7 @@ protected:
 	Vector3f vel_;
 
 public:
-	Bullet(Game& game, Vector3f pos, Direction3f direction);
+	Bullet(Game& game, Vector3f pos, Vector3f vel, Direction3f direction);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);

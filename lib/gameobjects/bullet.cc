@@ -24,9 +24,10 @@
 
 #include <gameobjects/bullet.hh>
 
-Bullet::Bullet(Game& game, Vector3f pos, Direction3f direction) : GameObject(game) {
-	pos_ = pos;
-	vel_ = direction * Constants::Speed();
+Bullet::Bullet(Game& game, Vector3f pos, Vector3f vel, Direction3f direction)
+	: GameObject(game),
+	  pos_(pos),
+	  vel_(vel + direction * Constants::Speed()) {
 }
 
 void Bullet::Accept(Visitor& visitor) {

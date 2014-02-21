@@ -41,11 +41,12 @@ protected:
 
 protected:
 	Vector3f pos_;
+	Vector3f vel_;
 	Direction3f dir_;
 	Type type_;
 
 public:
-	Rocket(Game& game, Vector3f pos, Direction3f direction, Type type);
+	Rocket(Game& game, Vector3f pos, Vector3f vel, Direction3f direction, Type type);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);

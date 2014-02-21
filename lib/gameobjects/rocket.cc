@@ -24,9 +24,10 @@
 
 #include <gameobjects/rocket.hh>
 
-Rocket::Rocket(Game& game, Vector3f pos, Direction3f direction, Rocket::Type type)
+Rocket::Rocket(Game& game, Vector3f pos, Vector3f vel, Direction3f direction, Rocket::Type type)
 	: GameObject(game),
 	  pos_(pos),
+	  vel_(vel + direction * Constants::Speed()),
 	  dir_(direction),
 	  type_(type) {
 }
@@ -38,15 +39,13 @@ void Rocket::Accept(Visitor& visitor) {
 void Rocket::Update(unsigned int deltams) {
 	float delta_sec = deltams / 1000.0f;
 
-	Vector3f vel = dir_ * Constants::Speed();
-
-	pos_ += vel * delta_sec;
+	pos_ += vel_ * delta_sec;
 
 	if (pos_.z <= 0) {
 		// calculate exact collision point
-		float penetration = pos_.z / vel.z;
+		float penetration = pos_.z / vel_.z;
 
-		pos_ -= vel * delta_sec * penetration;
+		pos_ -= vel_ * delta_sec * penetration;
 
 		RemoveLater();
 
