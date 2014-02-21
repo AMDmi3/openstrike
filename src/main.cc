@@ -32,6 +32,7 @@
 #include <graphics/groundrenderer.hh>
 #include <graphics/renderer.hh>
 #include <game/game.hh>
+#include <game/levelloader.hh>
 #include <gameobjects/heli.hh>
 
 void usage(const char* progname) {
@@ -84,7 +85,7 @@ int realmain(int argc, char** argv) {
 			}
 		);
 
-	Game game(12 * 512, 6 * 512); // sizes correspond to first level of Desert Strike
+	Game game = LevelLoader::Load(datfile, "LEVEL0", 12, 6); // sizes correspond to first level of Desert Strike
 	Heli* heli = game.Spawn<Heli>();
 
 	unsigned int delta_ms, prev_ms, this_ms = SDL_GetTicks();
