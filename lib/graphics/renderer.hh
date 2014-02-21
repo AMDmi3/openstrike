@@ -32,6 +32,8 @@ class Camera;
 
 class Renderer {
 protected:
+	SDL2pp::Renderer& renderer_;
+
 	std::unique_ptr<SpriteManager::DirectionalSprite> sprite_heli_[12];
 	SpriteManager::DirectionalSprite sprite_shadow_;
 	SpriteManager::Animation sprite_rotor_;

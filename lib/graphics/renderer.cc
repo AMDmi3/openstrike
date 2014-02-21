@@ -33,7 +33,8 @@
 #include <graphics/renderer.hh>
 
 Renderer::Renderer(SpriteManager& spriteman)
-	: sprite_shadow_(spriteman, "SHADOWS"),
+	: renderer_(spriteman.GetRenderer()),
+	  sprite_shadow_(spriteman, "SHADOWS"),
 	  sprite_rotor_(spriteman, "ROTOR", 0, 8),
 	  sprite_bullet_(spriteman, "WEAPONS", 0),
 	  sprite_hydra_(spriteman, "WEAPONS", 1),
