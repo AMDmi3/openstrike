@@ -29,6 +29,7 @@
 #include <gameobjects/bullet.hh>
 #include <gameobjects/rocket.hh>
 #include <gameobjects/explosion.hh>
+#include <gameobjects/building.hh>
 
 #include <graphics/renderer.hh>
 
@@ -144,4 +145,11 @@ void Renderer::RenderVisitor::Visit(Explosion& explosion) {
 	}
 
 	anim->Render(pos.GetX(), pos.GetY(), std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
+}
+
+void Renderer::RenderVisitor::Visit(Building& building) {
+	SDL2pp::Point pos = camera_.GameToScreen(building.GetPos());
+
+	parent_.renderer_.SetDrawColor(0, 255, 0);
+	parent_.renderer_.FillRect(pos - SDL2pp::Point(20, 10), pos + SDL2pp::Point(20, 10));
 }

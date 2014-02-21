@@ -21,6 +21,7 @@
 #include <gameobjects/bullet.hh>
 #include <gameobjects/rocket.hh>
 #include <gameobjects/explosion.hh>
+#include <gameobjects/building.hh>
 
 #include <graphics/objectsorter.hh>
 
@@ -50,6 +51,10 @@ void ObjectSorter::Visit(Rocket& rocket) {
 
 void ObjectSorter::Visit(Explosion& explosion) {
 	AddSorted(explosion.GetPos(), explosion);
+}
+
+void ObjectSorter::Visit(Building& building) {
+	AddSorted(building.GetPos(), building);
 }
 
 void ObjectSorter::Accept(Visitor& visitor) {

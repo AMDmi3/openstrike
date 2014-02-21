@@ -1,4 +1,5 @@
 SET(SOURCES
+	building.cc
 	bullet.cc
 	explosion.cc
 	heli.cc
