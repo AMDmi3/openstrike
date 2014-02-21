@@ -153,6 +153,8 @@ public:
 	~SpriteManager();
 
 	void LoadAll(const LoadingStatusCallback& statuscb = nullptr);
+
+	SDL2pp::Renderer& GetRenderer();
 };
 
 #endif // SPRITEMANAGER_HH

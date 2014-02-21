@@ -177,3 +177,7 @@ void SpriteManager::Load(SpriteManager::sprite_id_t id) {
 
 	Load(id, gfx);
 }
+
+SDL2pp::Renderer& SpriteManager::GetRenderer() {
+	return renderer_;
+}
