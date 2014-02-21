@@ -135,7 +135,7 @@ int realmain(int argc, char** argv) {
 		renderer.Clear();
 
 		ground_renderer.Render(game, camera);
-		game_renderer.Render(game);
+		game_renderer.Render(game, camera);
 
 		renderer.Present();
 

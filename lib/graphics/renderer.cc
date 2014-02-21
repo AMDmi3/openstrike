@@ -22,6 +22,8 @@
 
 #include <game/game.hh>
 #include <graphics/spritemanager.hh>
+#include <graphics/objectsorter.hh>
+#include <graphics/camera.hh>
 
 #include <gameobjects/heli.hh>
 #include <gameobjects/bullet.hh>
@@ -52,17 +54,12 @@ Renderer::Renderer(SpriteManager& spriteman)
 			GetHeliSprite(forward, side).reset(new SpriteManager::DirectionalSprite(spriteman, heli_letters + forward_letters[forward + 1] + side_letters[side + 1]));
 }
 
-void Renderer::Render(Game& game) {
+void Renderer::Render(Game& game, const Camera& camera) {
 	ObjectSorter sorter;
 	game.Accept(sorter);
-	sorter.Accept(*this);
-}
 
-void Renderer::Visit(GameObject&) {
-	static bool warning_displayed = false;
-	if (!warning_displayed)
-		std::cerr << "Warning: Renderer::Visit() not implemented for some objects" << std::endl;
-	warning_displayed = true;
+	RenderVisitor renderer(*this, camera);
+	sorter.Accept(renderer);
 }
 
 std::unique_ptr<SpriteManager::DirectionalSprite>& Renderer::GetHeliSprite(int forward, int side) {
@@ -70,9 +67,17 @@ std::unique_ptr<SpriteManager::DirectionalSprite>& Renderer::GetHeliSprite(int f
 	return sprite_heli_[(forward + 1) * 3 + (side + 1)];
 }
 
-void Renderer::Visit(Heli& heli) {
-	int shadow_offset = 16 + heli.GetPos().z; // sprite offset from Desert Strike
+Renderer::RenderVisitor::RenderVisitor(Renderer& parent, const Camera& camera) : parent_(parent), camera_(camera) {
+}
 
+void Renderer::RenderVisitor::Visit(GameObject&) {
+	static bool warning_displayed = false;
+	if (!warning_displayed)
+		std::cerr << "Warning: Renderer::RenderVisitor::Visit() not implemented for some objects" << std::endl;
+	warning_displayed = true;
+}
+
+void Renderer::RenderVisitor::Visit(Heli& heli) {
 	int sprite_forward = 0;
 	int sprite_side = 0;
 
@@ -89,44 +94,53 @@ void Renderer::Visit(Heli& heli) {
 	if (heli.GetSectorDirection().yaw > pi * 1.01)
 		sprite_side = -sprite_side;
 
+	// heli sprite pivot is where it's rotor is attached, while
+	// heli position is position of it's lowest point below rotor
+	// axe; this is distance between these
+	static const int heli_pivot_height = 16;
+
+	SDL2pp::Point heli_pos = camera_.GameToScreen(heli.GetPos());
+	SDL2pp::Point shadow_pos = camera_.GameToScreen(heli.GetPos().Grounded());
+
 	// XXX: shadow should be transparent
-	sprite_shadow_.Render(40, 100, heli.GetDirection().yaw);
-	GetHeliSprite(sprite_forward, sprite_side)->Render(40, 100 - shadow_offset, heli.GetDirection().yaw);
-	sprite_rotor_.Render(40, 100 - shadow_offset, heli.GetAge() / 30);
+	parent_.sprite_shadow_.Render(shadow_pos.GetX(), shadow_pos.GetY(), heli.GetDirection().yaw);
+	parent_.GetHeliSprite(sprite_forward, sprite_side)->Render(heli_pos.GetX(), heli_pos.GetY() - heli_pivot_height, heli.GetDirection().yaw);
+	parent_.sprite_rotor_.Render(heli_pos.GetX(), heli_pos.GetY() - heli_pivot_height, heli.GetAge() / 30);
 }
 
-void Renderer::Visit(Bullet& bullet) {
-	Vector3f pos = bullet.GetPos();
-	sprite_bullet_.Render(40 + pos.x, 100 + pos.y / 2 - pos.z);
+void Renderer::RenderVisitor::Visit(Bullet& bullet) {
+	SDL2pp::Point pos = camera_.GameToScreen(bullet.GetPos());
+	parent_.sprite_bullet_.Render(pos.GetX(), pos.GetY());
 }
 
-void Renderer::Visit(Rocket& rocket) {
-	Vector3f pos = rocket.GetPos();
+void Renderer::RenderVisitor::Visit(Rocket& rocket) {
+	SDL2pp::Point pos = camera_.GameToScreen(rocket.GetPos());
+
 	switch (rocket.GetType()) {
 	case Rocket::HYDRA:
-		sprite_hydra_.Render(40 + pos.x, 100 + pos.y / 2 - pos.z, rocket.GetDirection().yaw);
+		parent_.sprite_hydra_.Render(pos.GetX(), pos.GetY(), rocket.GetDirection().yaw);
 		break;
 	case Rocket::HELLFIRE:
-		sprite_hellfire_.Render(40 + pos.x, 100 + pos.y / 2 - pos.z, rocket.GetDirection().yaw);
+		parent_.sprite_hellfire_.Render(pos.GetX(), pos.GetY(), rocket.GetDirection().yaw);
 		break;
 	}
 }
 
-void Renderer::Visit(Explosion& explosion) {
-	Vector3f pos = explosion.GetPos();
+void Renderer::RenderVisitor::Visit(Explosion& explosion) {
+	SDL2pp::Point pos = camera_.GameToScreen(explosion.GetPos());
 
 	SpriteManager::Animation* anim;
 
 	switch (explosion.GetType()) {
-	case Explosion::GUN_OBJECT: anim = &sprite_explo_gun_object_; break;
-	case Explosion::GUN_GROUND: anim = &sprite_explo_gun_ground_; break;
-	case Explosion::HYDRA:      anim = &sprite_explo_hydra_; break;
-	case Explosion::HELLFIRE:   anim = &sprite_explo_hellfire_; break;
-	case Explosion::BOOM:       anim = &sprite_explo_boom_; break;
+	case Explosion::GUN_OBJECT: anim = &parent_.sprite_explo_gun_object_; break;
+	case Explosion::GUN_GROUND: anim = &parent_.sprite_explo_gun_ground_; break;
+	case Explosion::HYDRA:      anim = &parent_.sprite_explo_hydra_; break;
+	case Explosion::HELLFIRE:   anim = &parent_.sprite_explo_hellfire_; break;
+	case Explosion::BOOM:       anim = &parent_.sprite_explo_boom_; break;
 	default:
 		assert(false);
 		return;
 	}
 
-	anim->Render(40 + pos.x, 100 + pos.y / 2 - pos.z, std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
+	anim->Render(pos.GetX(), pos.GetY(), std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
 }

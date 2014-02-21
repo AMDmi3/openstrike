@@ -24,13 +24,13 @@
 
 #include <game/visitor.hh>
 #include <graphics/spritemanager.hh>
-#include <graphics/objectsorter.hh>
 
 class SpriteManager;
 class DatFile;
 class Game;
+class Camera;
 
-class Renderer : public Visitor {
+class Renderer {
 protected:
 	std::unique_ptr<SpriteManager::DirectionalSprite> sprite_heli_[12];
 	SpriteManager::DirectionalSprite sprite_shadow_;
@@ -45,19 +45,29 @@ protected:
 	SpriteManager::Animation sprite_explo_boom_;
 
 protected:
+	class RenderVisitor : public Visitor {
+	protected:
+		Renderer& parent_;
+		const Camera& camera_;
+
+	public:
+		RenderVisitor(Renderer& parent, const Camera& camera);
+
+		virtual void Visit(GameObject& obj);
+
+		virtual void Visit(Heli& heli);
+		virtual void Visit(Bullet& bullet);
+		virtual void Visit(Rocket& rocket);
+		virtual void Visit(Explosion& explosion);
+	};
+
+protected:
 	std::unique_ptr<SpriteManager::DirectionalSprite>& GetHeliSprite(int forward, int side);
 
 public:
 	Renderer(SpriteManager& spriteman);
 
-	void Render(Game& game);
-
-	virtual void Visit(GameObject& obj);
-
-	virtual void Visit(Heli& heli);
-	virtual void Visit(Bullet& bullet);
-	virtual void Visit(Rocket& rocket);
-	virtual void Visit(Explosion& explosion);
+	void Render(Game& game, const Camera& camera);
 };
 
 #endif
