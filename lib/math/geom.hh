@@ -60,6 +60,8 @@ struct Direction3 {
 
 	constexpr Vector3<T> ToVector(T length = 1) const { return Vector3<T>(sin(yaw) * cos(pitch), -cos(yaw) * cos(pitch), sin(pitch)) * length; }
 
+	constexpr operator Direction2<T>() const { return Direction2<T>(yaw); }
+
 	constexpr Direction3<T> RotatedCW(T angle) const { return Direction3<T>(yaw + angle, pitch); }
 	constexpr Direction3<T> RotatedCCW(T angle) const { return Direction3<T>(yaw - angle, pitch); }
 	constexpr Direction3<T> RotatedUp(T angle) const { return Direction3<T>(yaw, pitch + angle); }
@@ -101,6 +103,8 @@ struct Vector3 {
 
 	constexpr Vector3(Vector2<T> xy, T zz = 0) : x(xy.x), y(xy.y), z(zz) {}
 	constexpr Vector3(T xx = 0, T yy = 0, T zz = 0) : x(xx), y(yy), z(zz) {}
+
+	constexpr operator Vector2<T>() const { return Vector2<T>(x, y); }
 
 	constexpr Vector3<T> operator+(const Vector3<T>& v) const { return Vector3<T>(x + v.x, y + v.y, z + v.z); }
 	constexpr Vector3<T> operator-(const Vector3<T>& v) const { return Vector3<T>(x - v.x, y - v.y, z - v.z); }
