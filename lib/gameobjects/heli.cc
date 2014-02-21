@@ -71,12 +71,20 @@ void Heli::UpdatePhysics(unsigned int deltams) {
 
 	if (control_flags_ & LEFT)
 		direction_.RotateCCW(turn_rate * delta_sec);
-	if (control_flags_ & RIGHT)
+	else if (control_flags_ & RIGHT)
 		direction_.RotateCW(turn_rate * delta_sec);
 
-	// XXX: acceleration
+	// Acceleration
+	Vector2f accel;
+	if (control_flags_ & FORWARD)
+		accel = direction_.ToVector(50);
+	else if (control_flags_ & BACKWARD)
+		accel = -direction_.ToVector(50);
 
-	// XXX: position
+	// Velocity
+	vel_ += accel * delta_sec;
+
+	// Position
 	pos_ += vel_ * delta_sec;
 }
 
