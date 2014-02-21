@@ -100,17 +100,17 @@ void Renderer::Visit(Heli& heli) {
 
 void Renderer::Visit(Bullet& bullet) {
 	Vector3f pos = bullet.GetPos();
-	sprite_bullet_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z);
+	sprite_bullet_.Render(40 + pos.x, 100 + pos.y / 2 - pos.z);
 }
 
 void Renderer::Visit(Rocket& rocket) {
 	Vector3f pos = rocket.GetPos();
 	switch (rocket.GetType()) {
 	case Rocket::HYDRA:
-		sprite_hydra_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, rocket.GetDirection().yaw);
+		sprite_hydra_.Render(40 + pos.x, 100 + pos.y / 2 - pos.z, rocket.GetDirection().yaw);
 		break;
 	case Rocket::HELLFIRE:
-		sprite_hellfire_.Render(40 + pos.x, 100 - pos.y / 2 - pos.z, rocket.GetDirection().yaw);
+		sprite_hellfire_.Render(40 + pos.x, 100 + pos.y / 2 - pos.z, rocket.GetDirection().yaw);
 		break;
 	}
 }
@@ -131,5 +131,5 @@ void Renderer::Visit(Explosion& explosion) {
 		return;
 	}
 
-	anim->Render(40 + pos.x, 100 - pos.y / 2 - pos.z, std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
+	anim->Render(40 + pos.x, 100 + pos.y / 2 - pos.z, std::min(anim->GetNumFrames() - 1, (unsigned int)(anim->GetNumFrames() * explosion.GetAge())));
 }

@@ -28,7 +28,7 @@ ObjectSorter::ObjectSorter() {
 }
 
 void ObjectSorter::AddSorted(const Vector3f& pos, GameObject& obj) {
-	float sortkey = pos.z - pos.y / 2;
+	float sortkey = pos.z + pos.y / 2;
 	sorted_objects_.insert(std::make_pair(sortkey, &obj));
 }
 

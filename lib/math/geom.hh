@@ -36,7 +36,7 @@ struct Direction2 {
 
 	constexpr Direction2(T y = 0) : yaw(NormalizeYaw(y)) {}
 
-	constexpr Vector2<T> ToVector(T length = 1) const { return Vector2<T>(sin(yaw), cos(yaw)) * length; }
+	constexpr Vector2<T> ToVector(T length = 1) const { return Vector2<T>(sin(yaw), -cos(yaw)) * length; }
 
 	constexpr Direction2<T> RotatedCW(T angle) const { return Direction2<T>(yaw + angle); }
 	constexpr Direction2<T> RotatedCCW(T angle) const { return Direction2<T>(yaw - angle); }
@@ -58,7 +58,7 @@ struct Direction3 {
 	constexpr Direction3(Direction2<T> dir, T p = 0) : yaw(NormalizeYaw(dir.yaw)), pitch(p) {}
 	constexpr Direction3(T y = 0, T p = 0) : yaw(NormalizeYaw(y)), pitch(p) {}
 
-	constexpr Vector3<T> ToVector(T length = 1) const { return Vector3<T>(sin(yaw) * cos(pitch), cos(yaw) * cos(pitch), sin(pitch)) * length; }
+	constexpr Vector3<T> ToVector(T length = 1) const { return Vector3<T>(sin(yaw) * cos(pitch), -cos(yaw) * cos(pitch), sin(pitch)) * length; }
 
 	constexpr Direction3<T> RotatedCW(T angle) const { return Direction3<T>(yaw + angle, pitch); }
 	constexpr Direction3<T> RotatedCCW(T angle) const { return Direction3<T>(yaw - angle, pitch); }
