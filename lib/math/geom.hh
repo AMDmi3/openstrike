@@ -89,6 +89,9 @@ struct Vector2 {
 	constexpr Vector2<T> operator-(const Vector2<T>& v) const { return Vector2<T>(x - v.x, y - v.y); }
 	constexpr Vector2<T> operator*(T m) const { return Vector2<T>(x * m, y * m); }
 	constexpr Vector2<T> operator/(T d) const { return Vector2<T>(x / d, y / d); }
+
+	constexpr Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
+
 	constexpr Vector2<T> operator*(const Direction2<T>& d) const { return d.ToVector(x) + d.RotatedCW(pi/2).ToVector(y); }
 
 	Vector2<T>& operator+=(const Vector2<T>& v) { x += v.x; y += v.y; return *this; }
@@ -110,7 +113,11 @@ struct Vector3 {
 	constexpr Vector3<T> operator-(const Vector3<T>& v) const { return Vector3<T>(x - v.x, y - v.y, z - v.z); }
 	constexpr Vector3<T> operator*(T m) const { return Vector3<T>(x * m, y * m, z * m); }
 	constexpr Vector3<T> operator/(T d) const { return Vector3<T>(x / d, y / d, z / d); }
+
+	constexpr Vector2<T> operator-() const { return Vector2<T>(-x, -y, -z); }
+
 	constexpr Vector3<T> operator*(const Direction2<T>& d) const { return Vector3(d.ToVector(x) + d.RotatedCW(pi/2).ToVector(y), z); }
+
 	constexpr Vector3<T> Grounded() const { return Vector3(x, y, 0); }
 
 	Vector3<T>& operator+=(const Vector3<T>& v) { x += v.x; y += v.y; z += v.z; return *this; }
