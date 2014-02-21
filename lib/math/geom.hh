@@ -111,11 +111,13 @@ struct Vector3 {
 	constexpr Vector3<T> operator*(T m) const { return Vector3<T>(x * m, y * m, z * m); }
 	constexpr Vector3<T> operator/(T d) const { return Vector3<T>(x / d, y / d, z / d); }
 	constexpr Vector3<T> operator*(const Direction2<T>& d) const { return Vector3(d.ToVector(x) + d.RotatedCW(pi/2).ToVector(y), z); }
+	constexpr Vector3<T> Grounded() const { return Vector3(x, y, 0); }
 
 	Vector3<T>& operator+=(const Vector3<T>& v) { x += v.x; y += v.y; z += v.z; return *this; }
 	Vector3<T>& operator-=(const Vector3<T>& v) { x -= v.x; y -= v.y; z -= v.z; return *this; }
 	Vector3<T>& operator*=(T m) { x *= m; y *= m; z *= m; return *this; }
 	Vector3<T>& operator/=(T d) { x /= d; y /= d; z /= d; return *this; }
+	Vector3<T>& Ground() { z = 0; return *this; }
 };
 
 typedef Direction2<float> Direction2f;

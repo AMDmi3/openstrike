@@ -128,7 +128,7 @@ int realmain(int argc, char** argv) {
 
 		game.Update(delta_ms);
 
-		camera.SetTarget(Vector3f((Vector2f)heli->GetPos(), 0));
+		camera.SetTarget(heli->GetPos().Grounded() + Vector3f(120, 0, 0));
 
 		// Render
 		renderer.SetDrawColor(0, 0, 0);
