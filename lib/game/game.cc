@@ -23,7 +23,7 @@
 
 #include <game/game.hh>
 
-Game::Game() {
+Game::Game(float width, float height) : width_(width), height_(height) {
 }
 
 void Game::Accept(Visitor& visitor) {
@@ -63,4 +63,12 @@ void Game::RemoveScheduledObjects() {
 		}
 	}
 	assert(for_removal_.empty());
+}
+
+float Game::GetWidth() const {
+	return width_;
+}
+
+float Game::GetHeight() const {
+	return width_;
 }

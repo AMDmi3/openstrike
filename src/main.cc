@@ -84,7 +84,7 @@ int realmain(int argc, char** argv) {
 			}
 		);
 
-	Game game;
+	Game game(12 * 512, 6 * 512); // sizes correspond to first level of Desert Strike
 	Heli* heli = game.Spawn<Heli>();
 
 	unsigned int delta_ms, prev_ms, this_ms = SDL_GetTicks();

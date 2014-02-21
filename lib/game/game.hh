@@ -34,6 +34,8 @@ protected:
 	typedef std::set<const GameObject*> RemovedObjectsSet;
 
 protected:
+	float width_;
+	float height_;
 	ObjectList objects_;
 	RemovedObjectsSet for_removal_;
 
@@ -41,7 +43,7 @@ protected:
 	void RemoveScheduledObjects();
 
 public:
-	Game();
+	Game(float width, float height);
 
 	template<class T, class... Args>
 	T* Spawn(Args... args) {
@@ -55,6 +57,9 @@ public:
 	void Update(unsigned int deltams);
 
 	void RemoveLater(const GameObject* victim);
+
+	float GetWidth() const;
+	float GetHeight() const;
 };
 
 #endif // GAME_HH
