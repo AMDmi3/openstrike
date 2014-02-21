@@ -127,7 +127,6 @@ int realmain(int argc, char** argv) {
 		delta_ms = (prev_ms <= this_ms) ? (this_ms - prev_ms) : (std::numeric_limits<unsigned int>::max() - prev_ms + this_ms);
 
 		game.Update(delta_ms);
-		game_renderer.Update(delta_ms);
 
 		camera.SetTarget(Vector3f((Vector2f)heli->GetPos(), 0));
 

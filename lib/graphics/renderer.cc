@@ -58,9 +58,6 @@ void Renderer::Render(Game& game) {
 	sorter.Accept(*this);
 }
 
-void Renderer::Update(unsigned int) {
-}
-
 void Renderer::Visit(GameObject&) {
 	static bool warning_displayed = false;
 	if (!warning_displayed)

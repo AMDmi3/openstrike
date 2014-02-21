@@ -52,8 +52,6 @@ public:
 
 	void Render(Game& game);
 
-	void Update(unsigned int deltams);
-
 	virtual void Visit(GameObject& obj);
 
 	virtual void Visit(Heli& heli);
