@@ -20,17 +20,25 @@
 #ifndef CAMERA_HH
 #define CAMERA_HH
 
+#include <SDL2pp/Point.hh>
+#include <SDL2pp/Rect.hh>
 #include <math/geom.hh>
 
 class Camera {
 protected:
 	Vector3f target_;
+	SDL2pp::Rect viewport_;
 
 public:
-	Camera(const Vector3f& target = Vector3f());
+	Camera(const Vector3f& target, const SDL2pp::Rect& viewport);
 
-	void MoveTo(const Vector3f& target);
+	void SetTarget(const Vector3f& target);
+	void SetViewport(const SDL2pp::Rect& viewport);
+
 	Vector3f GetTarget() const;
+	SDL2pp::Rect GetViewport() const;
+
+	SDL2pp::Point GameToScreen(const Vector3f& point) const;
 };
 
 #endif // CAMERA_HH

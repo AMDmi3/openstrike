@@ -17,6 +17,7 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <game/game.hh>
 #include <graphics/camera.hh>
 
 #include <graphics/groundrenderer.hh>
@@ -24,7 +25,7 @@
 GroundRenderer::GroundRenderer(SDL2pp::Renderer& renderer) : renderer_(renderer) {
 }
 
-void GroundRenderer::Render(const Camera& camera, const SDL2pp::Rect& viewport) {
+void GroundRenderer::Render(const Game& game, const Camera& camera) {
 	renderer_.SetDrawColor(158, 126, 61);
-	renderer_.FillRect(viewport);
+	renderer_.FillRect(camera.GetViewport());
 }

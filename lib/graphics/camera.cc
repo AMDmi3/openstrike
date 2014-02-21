@@ -19,13 +19,28 @@
 
 #include <graphics/camera.hh>
 
-Camera::Camera(const Vector3f& target) : target_(target) {
+Camera::Camera(const Vector3f& target, const SDL2pp::Rect& viewport) : target_(target), viewport_(viewport) {
 }
 
-void Camera::MoveTo(const Vector3f& target) {
+void Camera::SetTarget(const Vector3f& target) {
 	target_ = target;
+}
+
+void Camera::SetViewport(const SDL2pp::Rect& viewport) {
+	viewport_ = viewport;
 }
 
 Vector3f Camera::GetTarget() const {
 	return target_;
+}
+
+SDL2pp::Rect Camera::GetViewport() const {
+	return viewport_;
+}
+
+SDL2pp::Point Camera::GameToScreen(const Vector3f& point) const {
+	return SDL2pp::Point(
+			viewport_.GetX() + viewport_.GetW() / 2 + point.x - target_.x,
+			viewport_.GetY() + viewport_.GetH() / 2 + (point.y - target_.y) / 2 - (point.z - target_.z)
+		);
 }

@@ -20,10 +20,10 @@
 #ifndef GROUNDRENDERER_HH
 #define GROUNDRENDERER_HH
 
-#include <SDL2pp/Rect.hh>
 #include <SDL2pp/Renderer.hh>
 
 class Camera;
+class Game;
 
 class GroundRenderer {
 protected:
@@ -32,7 +32,7 @@ protected:
 public:
 	GroundRenderer(SDL2pp::Renderer& renderer);
 
-	void Render(const Camera& camera, const SDL2pp::Rect& viewport);
+	void Render(const Game& game, const Camera& camera);
 };
 
 #endif

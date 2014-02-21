@@ -74,7 +74,7 @@ int realmain(int argc, char** argv) {
 	Renderer game_renderer(spriteman);
 	GroundRenderer ground_renderer(renderer);
 
-	Camera camera;
+	Camera camera(Vector3f(0, 0, 0), SDL2pp::Rect(0, 0, 320, 200));
 
 	// game_renderer has notified sprite manager of needed sprites,
 	// now it will load them
@@ -129,13 +129,13 @@ int realmain(int argc, char** argv) {
 		game.Update(delta_ms);
 		game_renderer.Update(delta_ms);
 
-		camera.MoveTo(heli->GetPos());
+		camera.SetTarget(Vector3f((Vector2f)heli->GetPos(), 0));
 
 		// Render
 		renderer.SetDrawColor(0, 0, 0);
 		renderer.Clear();
 
-		ground_renderer.Render(camera, SDL2pp::Rect(0, 0, 320, 200));
+		ground_renderer.Render(game, camera);
 		game_renderer.Render(game);
 
 		renderer.Present();
