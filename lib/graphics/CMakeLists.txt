@@ -1,4 +1,5 @@
 SET(SOURCES
+	camera.cc
 	objectsorter.cc
 	rectpacker.cc
 	renderer.cc

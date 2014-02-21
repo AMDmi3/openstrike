@@ -28,6 +28,7 @@
 #include <dat/datgraphics.hh>
 #include <graphics/spritemanager.hh>
 
+#include <graphics/camera.hh>
 #include <graphics/renderer.hh>
 #include <game/game.hh>
 #include <gameobjects/heli.hh>
@@ -70,6 +71,8 @@ int realmain(int argc, char** argv) {
 	SpriteManager spriteman(renderer, datfile);
 
 	Renderer game_renderer(spriteman);
+
+	Camera camera;
 
 	// game_renderer has notified sprite manager of needed sprites,
 	// now it will load them
@@ -123,6 +126,8 @@ int realmain(int argc, char** argv) {
 
 		game.Update(delta_ms);
 		game_renderer.Update(delta_ms);
+
+		camera.MoveTo(heli->GetPos());
 
 		// Render
 		renderer.SetDrawColor(0, 0, 0);
