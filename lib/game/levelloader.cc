@@ -37,5 +37,5 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 		game.Spawn<Building>(Vector3f(bi.x, bi.y, 0), bi.type);
 	});
 
-	return std::move(game);
+	return game;
 }

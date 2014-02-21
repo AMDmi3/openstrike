@@ -45,6 +45,20 @@ protected:
 public:
 	Game(float width, float height);
 
+	/* It's better to have these explicit declarations, however
+	 * currently only gcc-4.9 and clang-3.4 are able to compile them
+	 *
+	 * Default are safe however, while we only basically want to
+	 * delete copy constructor (copying will invalidate pointers in
+	 * for_removal_ and externally stored pointes), hover no copy
+	 * constructor is possible anyway as we have list of non-copyable
+	 * std::unique_ptr
+	Game(const Game&) = delete;
+	Game& operator=(const Game&) = delete;
+	Game(Game&&) noexcept = default;
+	Game& operator=(Game&&) noexcept = default;
+	*/
+
 	template<class T, class... Args>
 	T* Spawn(Args... args) {
 		T* ptr;
