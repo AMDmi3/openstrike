@@ -115,7 +115,7 @@ protected:
 	int tick_control_flags_;
 
 public:
-	Heli(Game& game);
+	Heli(Game& game, const Vector2f& pos);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);

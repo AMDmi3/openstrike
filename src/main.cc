@@ -86,7 +86,7 @@ int realmain(int argc, char** argv) {
 		);
 
 	Game game = LevelLoader::Load(datfile, "LEVEL0", 12, 6); // sizes correspond to first level of Desert Strike
-	Heli* heli = game.Spawn<Heli>();
+	Heli* heli = game.Spawn<Heli>(Vector2f(512 * 3 + 256, 512 + 256));
 
 	unsigned int delta_ms, prev_ms, this_ms = SDL_GetTicks();
 	while (1) {

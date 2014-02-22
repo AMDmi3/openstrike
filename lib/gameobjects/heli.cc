@@ -28,9 +28,10 @@
 
 #include <gameobjects/heli.hh>
 
-Heli::Heli(Game& game) : GameObject(game) {
+Heli::Heli(Game& game, const Vector2f& pos) : GameObject(game) {
 	age_ = 0;
 
+	pos_ = pos;
 	pos_.z = Constants::MaxHeight();
 
 	guns_ = Constants::GunCapacity();
