@@ -17,6 +17,8 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+
 #include <graphics/camera.hh>
 
 Camera::Camera(const Vector3f& target, const SDL2pp::Rect& viewport) : target_(target), viewport_(viewport) {
@@ -40,7 +42,7 @@ SDL2pp::Rect Camera::GetViewport() const {
 
 SDL2pp::Point Camera::GameToScreen(const Vector3f& point) const {
 	return SDL2pp::Point(
-			viewport_.GetX() + viewport_.GetW() / 2 + point.x - target_.x + 0.5,
-			viewport_.GetY() + viewport_.GetH() / 2 + (point.y - target_.y) / 2 - (point.z - target_.z) + 0.5
+			viewport_.GetX() + viewport_.GetW() / 2 + (int)std::round(point.x - target_.x),
+			viewport_.GetY() + viewport_.GetH() / 2 + (int)std::round(point.y / 2) - (int)std::round(target_.y / 2) - (int)std::round(point.z - target_.z)
 		);
 }
