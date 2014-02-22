@@ -33,8 +33,9 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 
 	DatLevel level(level_data, things_data, width_blocks, height_blocks);
 
-	level.ForeachBuildingInstance([&game](const DatLevel::BuildingInstance& bi) {
-		game.Spawn<Building>(Vector3f(bi.x, bi.y, 0), bi.type);
+	level.ForeachBuildingInstance([&game, &level](const DatLevel::BuildingInstance& bi) {
+		const DatLevel::BuildingType& type = level.GetBuildingType(bi.type);
+		game.Spawn<Building>(Vector3f(bi.x, bi.y, 0), bi.type, type.width, type.height);
 	});
 
 	return game;

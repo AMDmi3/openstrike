@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <list>
+#include <map>
 #include <functional>
 
 #include <dat/buffer.hh>
@@ -45,12 +46,13 @@ public:
 
 protected:
 	std::list<BuildingInstance> building_instances_;
-	std::list<BuildingType> building_types_;
+	std::map<unsigned int, BuildingType> building_types_;
 
 public:
 	DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks);
 
 	void ForeachBuildingInstance(const std::function<void(const BuildingInstance&)>& f) const;
+	const BuildingType& GetBuildingType(unsigned short type) const;
 };
 
 #endif // DATLEVEL_HH

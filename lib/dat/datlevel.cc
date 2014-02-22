@@ -22,8 +22,6 @@
 #include <dat/datlevel.hh>
 
 DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks) {
-	std::set<int> known_building_types;
-
 	for (int nblock = 0; nblock < width_blocks * height_blocks; nblock++) {
 		int blockdata_offset = leveldata.GetWord(nblock * 2);
 		int data_count = leveldata.GetWord(blockdata_offset);
@@ -38,25 +36,29 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 
 			building_instances_.emplace_back(obj);
 
-			known_building_types.emplace(obj.type);
+			building_types_.emplace(std::make_pair(obj.type, BuildingType()));
 		}
 	}
 
-	for (auto& building_type_offset : known_building_types) {
-		BuildingType type;
-		type.width = thingsdata.GetWord(building_type_offset + 2);
-		type.height = thingsdata.GetWord(building_type_offset + 4);
+	for (auto& type : building_types_) {
+		type.second.width = thingsdata.GetWord(type.first + 2);
+		type.second.height = thingsdata.GetWord(type.first + 4);
 
-		int block_matrix_offset = thingsdata.GetWord(building_type_offset + 6);
+		int block_matrix_offset = thingsdata.GetWord(type.first + 6);
 
-		for (int nblock = 0; nblock < (type.width / 16) * (type.height / 16); nblock++)
-			type.blocks.push_back(thingsdata.GetWord(block_matrix_offset + nblock * 2));
-
-		building_types_.emplace_back(std::move(type));
+		for (int nblock = 0; nblock < (type.second.width / 16) * (type.second.height / 16); nblock++)
+			type.second.blocks.push_back(thingsdata.GetWord(block_matrix_offset + nblock * 2));
 	}
 }
 
 void DatLevel::ForeachBuildingInstance(const std::function<void(const BuildingInstance&)>& f) const {
 	for (auto& bi : building_instances_)
 		f(bi);
+}
+
+const DatLevel::BuildingType& DatLevel::GetBuildingType(unsigned short type) const {
+	auto it = building_types_.find(type);
+	if (it == building_types_.end())
+		throw std::runtime_error("unknown building type");
+	return it->second;
 }

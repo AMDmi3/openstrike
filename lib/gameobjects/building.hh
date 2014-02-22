@@ -31,9 +31,11 @@ class Building : public GameObject {
 protected:
 	Vector3f pos_;
 	unsigned short type_;
+	unsigned short width_;
+	unsigned short height_;
 
 public:
-	Building(Game& game, const Vector3f& pos, unsigned short type);
+	Building(Game& game, const Vector3f& pos, unsigned short type, unsigned short width, unsigned short height);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);
@@ -44,6 +46,14 @@ public:
 
 	unsigned short GetType() const {
 		return type_;
+	}
+
+	unsigned short GetWidth() const {
+		return width_;
+	}
+
+	unsigned short GetHeight() const {
+		return height_;
 	}
 };
 

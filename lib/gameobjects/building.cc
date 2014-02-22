@@ -22,7 +22,7 @@
 
 #include <gameobjects/building.hh>
 
-Building::Building(Game& game, const Vector3f& pos, unsigned short type) : GameObject(game), pos_(pos), type_(type) {
+Building::Building(Game& game, const Vector3f& pos, unsigned short type, unsigned short width, unsigned short height) : GameObject(game), pos_(pos), type_(type), width_(width), height_(height) {
 }
 
 void Building::Accept(Visitor& visitor) {

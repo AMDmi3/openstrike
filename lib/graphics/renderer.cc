@@ -151,5 +151,7 @@ void Renderer::RenderVisitor::Visit(Building& building) {
 	SDL2pp::Point pos = camera_.GameToScreen(building.GetPos());
 
 	parent_.renderer_.SetDrawColor(0, 255, 0);
-	parent_.renderer_.FillRect(pos - SDL2pp::Point(20, 10), pos + SDL2pp::Point(20, 10));
+	parent_.renderer_.DrawRect(
+			pos - SDL2pp::Point(0, building.GetHeight()/2), pos + SDL2pp::Point(building.GetWidth() - 1, building.GetHeight()/2 - 1)
+		);
 }
