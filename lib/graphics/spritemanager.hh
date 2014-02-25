@@ -105,6 +105,20 @@ public:
 		unsigned int GetNumFrames() const;
 	};
 
+	class BlockMap {
+	protected:
+		SpriteManager& manager_;
+		std::vector<sprite_id_t> ids_;
+		int flags_;
+		int width_;
+		int height_;
+
+	public:
+		BlockMap(SpriteManager& manager, const std::string& name, const std::vector<unsigned short>& blocks, int width, int height, int flags = PIVOT_FRAMECORNER);
+
+		void Render(int x, int y);
+	};
+
 protected:
 	static const int atlas_page_width_;
 	static const int atlas_page_height_;

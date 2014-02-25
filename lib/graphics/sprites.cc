@@ -92,3 +92,34 @@ void SpriteManager::Animation::Render(int x, int y, unsigned int nframe) {
 unsigned int SpriteManager::Animation::GetNumFrames() const {
 	return ids_.size();
 }
+
+SpriteManager::BlockMap::BlockMap(SpriteManager& manager, const std::string& name, const std::vector<unsigned short>& blockids, int width, int height, int flags)
+	: manager_(manager),
+	  flags_(flags),
+	  width_(width),
+	  height_(height) {
+	if (!name.empty()) {
+		// empty blocks are encoded as INVALID_SPRITE_ID
+		for (auto& blockid : blockids)
+			ids_.emplace_back(blockid == 0 ? INVALID_SPRITE_ID : manager_.Add(name, blockid));
+	}
+}
+
+void SpriteManager::BlockMap::Render(int x, int y) {
+	static const int blockwidth = 16, blockheight = 16;
+	int xpos = 0, ypos = 0;
+	for (auto& id : ids_) {
+		if (id != INVALID_SPRITE_ID)
+			manager_.Render(id, x + xpos, y + ypos, flags_);
+		if ((xpos += blockwidth) >= width_) {
+			xpos = 0;
+			ypos += blockheight;
+		}
+	}
+	// fallback if no resource was specified: just render a frame
+	//if (ids_.empty()) {
+		SDL2pp::Renderer& renderer = manager_.GetRenderer();
+		renderer.SetDrawColor(0, 255, 0);
+		renderer.DrawRect(SDL2pp::Rect(x, y, width_, height_));
+	//}
+}
