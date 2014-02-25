@@ -26,6 +26,37 @@
 Game::Game(float width, float height) : width_(width), height_(height) {
 }
 
+Game::~Game() {
+}
+
+/**
+ * these should be just:
+ *
+Game::Game(Game&& other) noexcept = default
+Game& Game::operator=(Game&& other) noexcept = default;
+ *
+ * however, modern compilers still lack full c++11 support and won't
+ * deduce default move constructor types correctly (usually missing
+ * noexcept specifier)
+ * only clang 3.4+ will compile this at the time of writing
+ * (gcc 4.9 still won't)
+**/
+
+Game::Game(Game&& other) noexcept
+	: width_(other.width_),
+	  height_(other.height_),
+	  objects_(std::move(other.objects_)),
+	  for_removal_(std::move(other.for_removal_)) {
+}
+
+Game& Game::operator=(Game&& other) noexcept {
+	width_ = other.width_;
+	height_ = other.height_;
+	objects_ = std::move(other.objects_);
+	for_removal_ = std::move(other.for_removal_);
+	return *this;
+}
+
 void Game::Accept(Visitor& visitor) {
 	// remove objects that were scheduled from outside
 	RemoveScheduledObjects();
@@ -70,5 +101,5 @@ float Game::GetWidth() const {
 }
 
 float Game::GetHeight() const {
-	return width_;
+	return height_;
 }
