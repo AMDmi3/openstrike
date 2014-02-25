@@ -77,6 +77,12 @@ int realmain(int argc, char** argv) {
 
 	Camera camera(Vector3f(0, 0, 0), SDL2pp::Rect(0, 0, 320, 200));
 
+	LevelLoader level_loader;
+	game_renderer.SubscribeToLoader(level_loader);
+
+	Game game = level_loader.Load(datfile, "LEVEL0", 12, 6); // sizes correspond to first level of Desert Strike
+	Heli* heli = game.Spawn<Heli>(Vector2f(512 * 3 + 256, 512 * 1 + 256));
+
 	// game_renderer has notified sprite manager of needed sprites,
 	// now it will load them
 	spriteman.LoadAll(
@@ -84,10 +90,6 @@ int realmain(int argc, char** argv) {
 				std::cerr << "Loading sprites: " << loaded << "/" << total << std::endl;
 			}
 		);
-
-	LevelLoader level_loader;
-	Game game = level_loader.Load(datfile, "LEVEL0", 12, 6); // sizes correspond to first level of Desert Strike
-	Heli* heli = game.Spawn<Heli>(Vector2f(512 * 3 + 256, 512 + 256));
 
 	unsigned int delta_ms, prev_ms, this_ms = SDL_GetTicks();
 	while (1) {

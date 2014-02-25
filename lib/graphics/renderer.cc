@@ -21,6 +21,7 @@
 #include <iostream>
 
 #include <game/game.hh>
+#include <game/levelloader.hh>
 #include <graphics/spritemanager.hh>
 #include <graphics/objectsorter.hh>
 #include <graphics/camera.hh>
@@ -34,7 +35,7 @@
 #include <graphics/renderer.hh>
 
 Renderer::Renderer(SpriteManager& spriteman)
-	: renderer_(spriteman.GetRenderer()),
+	: sprite_manager_(spriteman),
 	  sprite_shadow_(spriteman, "SHADOWS"),
 	  sprite_rotor_(spriteman, "ROTOR", 0, 8),
 	  sprite_bullet_(spriteman, "WEAPONS", 0),
@@ -62,6 +63,18 @@ void Renderer::Render(Game& game, const Camera& camera) {
 
 	RenderVisitor renderer(*this, camera);
 	sorter.Accept(renderer);
+}
+
+void Renderer::SubscribeToLoader(LevelLoader& loader) {
+	loader.AddBuildingTypeProcessor([this](unsigned short id, const DatLevel::BuildingType& type) {
+				block_maps_.emplace(
+					std::make_pair(
+						id,
+						SpriteManager::BlockMap(sprite_manager_, type.resource_name, type.blocks, type.width, type.height)
+					)
+				);
+			}
+		);
 }
 
 std::unique_ptr<SpriteManager::DirectionalSprite>& Renderer::GetHeliSprite(int forward, int side) {
@@ -150,8 +163,14 @@ void Renderer::RenderVisitor::Visit(Explosion& explosion) {
 void Renderer::RenderVisitor::Visit(Building& building) {
 	SDL2pp::Point pos = camera_.GameToScreen(building.GetPos());
 
-	parent_.renderer_.SetDrawColor(0, 255, 0);
-	parent_.renderer_.DrawRect(
-			pos - SDL2pp::Point(0, building.GetHeight()/2), pos + SDL2pp::Point(building.GetWidth() - 1, building.GetHeight()/2 - 1)
-		);
+	parent_.sprite_manager_.GetRenderer().SetDrawColor(255, 255, 0);
+	parent_.sprite_manager_.GetRenderer().DrawRect(
+		pos - SDL2pp::Point(0, building.GetHeight()/2), pos + SDL2pp::Point(building.GetWidth() - 1, building.GetHeight()/2 - 1)
+	);
+
+
+	auto blockmap = parent_.block_maps_.find(building.GetType());
+	assert(blockmap != parent_.block_maps_.end());
+
+	blockmap->second.Render(pos.GetX(), pos.GetY());
 }

@@ -21,18 +21,20 @@
 #define RENDERER_HH
 
 #include <memory>
+#include <map>
 
 #include <game/visitor.hh>
 #include <graphics/spritemanager.hh>
 
 class SpriteManager;
+class LevelLoader;
 class DatFile;
 class Game;
 class Camera;
 
 class Renderer {
 protected:
-	SDL2pp::Renderer& renderer_;
+	SpriteManager& sprite_manager_;
 
 	std::unique_ptr<SpriteManager::DirectionalSprite> sprite_heli_[12];
 	SpriteManager::DirectionalSprite sprite_shadow_;
@@ -45,6 +47,8 @@ protected:
 	SpriteManager::Animation sprite_explo_hydra_;
 	SpriteManager::Animation sprite_explo_hellfire_;
 	SpriteManager::Animation sprite_explo_boom_;
+
+	std::map<unsigned short, SpriteManager::BlockMap> block_maps_;
 
 protected:
 	class RenderVisitor : public Visitor {
@@ -70,6 +74,7 @@ protected:
 public:
 	Renderer(SpriteManager& spriteman);
 
+	void SubscribeToLoader(LevelLoader& loader);
 	void Render(Game& game, const Camera& camera);
 };
 
