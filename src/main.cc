@@ -81,7 +81,7 @@ int realmain(int argc, char** argv) {
 	game_renderer.SubscribeToLoader(level_loader);
 
 	Game game = level_loader.Load(datfile, "LEVEL0", 12, 6); // sizes correspond to first level of Desert Strike
-	Heli* heli = game.Spawn<Heli>(Vector2f(512 * 3 + 256, 512 * 1 + 256));
+	Heli* heli = game.Spawn<Heli>(Vector2f(512 * 3 + 256, 1024 * 1 + 256));
 
 	// game_renderer has notified sprite manager of needed sprites,
 	// now it will load them

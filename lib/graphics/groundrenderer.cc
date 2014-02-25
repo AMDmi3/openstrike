@@ -37,10 +37,10 @@ void GroundRenderer::Render(const Game& game, const Camera& camera) {
 				camera.GameToScreen(Vector3f(vline * 512.0, game.GetHeight(), 0))
 			);
 	}
-	for (int hline = 0; hline <= game.GetHeight() / 512.0; hline++) {
+	for (int hline = 0; hline <= game.GetHeight() / 1024.0; hline++) {
 		renderer_.DrawLine(
-				camera.GameToScreen(Vector3f(0, hline * 512.0, 0)),
-				camera.GameToScreen(Vector3f(game.GetWidth(), hline * 512.0, 0))
+				camera.GameToScreen(Vector3f(0, hline * 1024.0, 0)),
+				camera.GameToScreen(Vector3f(game.GetWidth(), hline * 1024.0, 0))
 			);
 	}
 }
