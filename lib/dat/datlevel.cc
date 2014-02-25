@@ -25,9 +25,14 @@
 // this is stored in the code; not sure if it'd be better to extract
 // if from there instead of just keeping this table here
 const std::map<unsigned short, std::string> DatLevel::gfx_resources_ = {
+	{ 0xb024, "HANGAR" },
+	{ 0xb024, "HANGAR" },
+	{ 0xb026, "COMMAND" },
+	{ 0xb028, "MIG23" },
 	{ 0xb02a, "FRIGATE" },
 	{ 0xb02c, "BARKS" },
 	{ 0xb032, "BLDGS23" },
+	{ 0xb038, "BUNKER" },
 	{ 0xb03c, "FENCE" },
 	{ 0xb03e, "GUARDS" },
 	{ 0xb042, "NOMADS" },
@@ -35,9 +40,10 @@ const std::map<unsigned short, std::string> DatLevel::gfx_resources_ = {
 	{ 0xb046, "PWPOLES" },
 	{ 0xb048, "RESCUEBO" },
 	{ 0xb04a, "ROADS" },
-	//{ 0xb04c, "ROCKS" },
+	//{ 0xb04c, "ROCKS" }, // XXX: won't load correctly
 	{ 0xb050, "SUBSTATI" },
 	{ 0xb052, "TENTS" },
+	{ 0xb054, "TOWER" },
 };
 
 DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks) {
