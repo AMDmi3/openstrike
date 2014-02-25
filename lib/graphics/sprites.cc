@@ -99,9 +99,8 @@ SpriteManager::BlockMap::BlockMap(SpriteManager& manager, const std::string& nam
 	  width_(width),
 	  height_(height) {
 	if (!name.empty()) {
-		// empty blocks are encoded as INVALID_SPRITE_ID
 		for (auto& blockid : blockids)
-			ids_.emplace_back(blockid == 0 ? INVALID_SPRITE_ID : manager_.Add(name, blockid));
+			ids_.emplace_back(manager_.Add(name, blockid));
 	}
 }
 
@@ -109,8 +108,7 @@ void SpriteManager::BlockMap::Render(int x, int y) {
 	static const int blockwidth = 16, blockheight = 16;
 	int xpos = 0, ypos = 0;
 	for (auto& id : ids_) {
-		if (id != INVALID_SPRITE_ID)
-			manager_.Render(id, x + xpos, y + ypos, flags_);
+		manager_.Render(id, x + xpos, y + ypos, flags_);
 		if ((xpos += blockwidth) >= width_) {
 			xpos = 0;
 			ypos += blockheight;
