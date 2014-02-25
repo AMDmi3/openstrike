@@ -91,6 +91,9 @@ void SpriteManager::Render(sprite_id_t id, int x, int y, int flags) {
 	const SpriteInfo& sprite = sprites_[id];
 	assert(sprite.loaded);
 
+	if (sprite.width == 0 && sprite.height == 0)
+		return;
+
 	int xoffset = 0, yoffset = 0;
 
 	if (flags & PIVOT_USEFRAME) {
@@ -143,6 +146,11 @@ void SpriteManager::Load(SpriteManager::sprite_id_t id, const DatGraphics& graph
 	sprite.yoffset = graphics.GetYOffset(nframe);
 	sprite.framewidth = graphics.GetFrameWidth(nframe);
 	sprite.frameheight = graphics.GetFrameHeight(nframe);
+
+	if (sprite.width == 0 && sprite.height == 0) {
+		sprite.loaded = true;
+		return;
+	}
 
 	// place sprite in atlas
 	// XXX: padding is required when SDL_RenderSetLogicalSize is used
