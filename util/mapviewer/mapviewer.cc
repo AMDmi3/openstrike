@@ -71,7 +71,7 @@ int realmain(int argc, char** argv) {
 	static const int y_scroll_speed = 64;
 
 	while (1) {
-		SDL2pp::Rect viewport(0, 0, window.GetWidth(), window.GetHeight());
+		SDL2pp::Rect viewport(0, 0, window.GetWidth()/zoom, window.GetHeight()/zoom);
 
 		camera.SetViewport(viewport);
 		renderer.SetViewport(viewport);
@@ -98,13 +98,13 @@ int realmain(int argc, char** argv) {
 				if (event.key.keysym.sym == SDLK_ESCAPE || event.key.keysym.sym == SDLK_q)
 					return 0;
 				if (event.key.keysym.sym == SDLK_LEFT)
-					camera.SetTarget(camera.GetTarget() + Vector3f(-x_scroll_speed * zoom, 0, 0));
+					camera.SetTarget(camera.GetTarget() + Vector3f(-x_scroll_speed / zoom, 0, 0));
 				if (event.key.keysym.sym == SDLK_RIGHT)
-					camera.SetTarget(camera.GetTarget() + Vector3f(x_scroll_speed * zoom, 0, 0));
+					camera.SetTarget(camera.GetTarget() + Vector3f(x_scroll_speed / zoom, 0, 0));
 				if (event.key.keysym.sym == SDLK_UP)
-					camera.SetTarget(camera.GetTarget() + Vector3f(0, -y_scroll_speed * zoom, 0));
+					camera.SetTarget(camera.GetTarget() + Vector3f(0, -y_scroll_speed / zoom, 0));
 				if (event.key.keysym.sym == SDLK_DOWN)
-					camera.SetTarget(camera.GetTarget() + Vector3f(0, y_scroll_speed * zoom, 0));
+					camera.SetTarget(camera.GetTarget() + Vector3f(0, y_scroll_speed / zoom, 0));
 				if (event.key.keysym.sym == SDLK_PLUS || event.key.keysym.sym == SDLK_EQUALS || event.key.keysym.sym == SDLK_KP_PLUS)
 					zoom++;
 				if (event.key.keysym.sym == SDLK_MINUS || event.key.keysym.sym == SDLK_KP_MINUS)
