@@ -1,2 +1,2 @@
 ADD_SUBDIRECTORY(unpacker)
-ADD_SUBDIRECTORY(viewer)
+ADD_SUBDIRECTORY(gfxviewer)
