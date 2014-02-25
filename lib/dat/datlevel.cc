@@ -18,8 +18,27 @@
  */
 
 #include <set>
+#include <iostream>
 
 #include <dat/datlevel.hh>
+
+// this is stored in the code; not sure if it'd be better to extract
+// if from there instead of just keeping this table here
+const std::map<unsigned short, std::string> DatLevel::gfx_resources_ = {
+	{ 0xb02a, "FRIGATE" },
+	{ 0xb02c, "BARKS" },
+	{ 0xb032, "BLDGS23" },
+	{ 0xb03c, "FENCE" },
+	{ 0xb03e, "GUARDS" },
+	{ 0xb042, "NOMADS" },
+	{ 0xb044, "PWIRES" },
+	{ 0xb046, "PWPOLES" },
+	{ 0xb048, "RESCUEBO" },
+	{ 0xb04a, "ROADS" },
+	//{ 0xb04c, "ROCKS" },
+	{ 0xb050, "SUBSTATI" },
+	{ 0xb052, "TENTS" },
+};
 
 DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks) {
 	for (int nblock = 0; nblock < width_blocks * height_blocks; nblock++) {
@@ -41,8 +60,17 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 	}
 
 	for (auto& type : building_types_) {
+		unsigned short blocks_identifier = thingsdata.GetWord(type.first);
+
 		type.second.width = thingsdata.GetWord(type.first + 2);
 		type.second.height = thingsdata.GetWord(type.first + 4);
+
+		auto resource = gfx_resources_.find(blocks_identifier);
+		type.second.resource_name = (resource == gfx_resources_.end()) ? "" : resource->second;
+
+		if (resource == gfx_resources_.end()) {
+			std::cerr << "Warning: no resource name for object type " << blocks_identifier << std::endl;
+		}
 
 		int block_matrix_offset = thingsdata.GetWord(type.first + 6);
 
@@ -51,9 +79,14 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 	}
 }
 
-void DatLevel::ForeachBuildingInstance(const std::function<void(const BuildingInstance&)>& f) const {
+void DatLevel::ForeachBuildingInstance(const BuildingInstanceProcessor& fn) const {
 	for (auto& bi : building_instances_)
-		f(bi);
+		fn(bi);
+}
+
+void DatLevel::ForeachBuildingType(const BuildingTypeProcessor& fn) const {
+	for (auto& bt : building_types_)
+		fn(bt.first, bt.second);
 }
 
 const DatLevel::BuildingType& DatLevel::GetBuildingType(unsigned short type) const {

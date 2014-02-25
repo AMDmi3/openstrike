@@ -41,8 +41,16 @@ public:
 		unsigned short width;
 		unsigned short height;
 
+		std::string resource_name;
+
 		std::vector<unsigned short> blocks;
 	};
+
+	typedef std::function<void(const BuildingInstance&)> BuildingInstanceProcessor;
+	typedef std::function<void(unsigned short, const BuildingType&)> BuildingTypeProcessor;
+
+protected:
+	const static std::map<unsigned short, std::string> gfx_resources_;
 
 protected:
 	std::list<BuildingInstance> building_instances_;
@@ -51,7 +59,9 @@ protected:
 public:
 	DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks);
 
-	void ForeachBuildingInstance(const std::function<void(const BuildingInstance&)>& f) const;
+	void ForeachBuildingInstance(const BuildingInstanceProcessor& fn) const;
+	void ForeachBuildingType(const BuildingTypeProcessor& fn) const;
+
 	const BuildingType& GetBuildingType(unsigned short type) const;
 };
 
