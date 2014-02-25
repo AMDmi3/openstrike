@@ -24,6 +24,7 @@
 #include <map>
 #include <functional>
 #include <string>
+#include <limits>
 
 #include <SDL2pp/Texture.hh>
 #include <SDL2pp/Renderer.hh>
@@ -55,6 +56,10 @@ public:
 public:
 	typedef unsigned int sprite_id_t;
 	typedef std::function<void(int,int)> LoadingStatusCallback;
+
+	enum {
+		INVALID_SPRITE_ID = std::numeric_limits<sprite_id_t>::max()
+	};
 
 public:
 	class SingleSprite {
