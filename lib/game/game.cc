@@ -101,5 +101,5 @@ float Game::GetWidth() const {
 }
 
 float Game::GetHeight() const {
-	return width_;
+	return height_;
 }
