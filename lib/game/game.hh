@@ -44,6 +44,7 @@ protected:
 
 public:
 	Game(float width, float height);
+	~Game();
 
 	/* It's better to have these explicit declarations, however
 	 * currently only gcc-4.9 and clang-3.4 are able to compile them
@@ -58,6 +59,11 @@ public:
 	Game(Game&&) noexcept = default;
 	Game& operator=(Game&&) noexcept = default;
 	*/
+
+	Game(const Game&) = delete;
+	Game& operator=(const Game&) = delete;
+	Game(Game&&) noexcept;
+	Game& operator=(Game&&) noexcept;
 
 	template<class T, class... Args>
 	T* Spawn(Args... args) {
