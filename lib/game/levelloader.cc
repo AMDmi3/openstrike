@@ -25,6 +25,9 @@
 
 #include <game/levelloader.hh>
 
+LevelLoader::LevelLoader() {
+}
+
 Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int width_blocks, int height_blocks) {
 	Game game(width_blocks * 512, height_blocks * 512);
 
@@ -38,5 +41,19 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 		game.Spawn<Building>(Vector3f(bi.x, bi.y, 0), bi.type, type.width, type.height);
 	});
 
+	for (auto& fn : building_instance_processors_)
+		level.ForeachBuildingInstance(fn);
+
+	for (auto& fn : building_type_processors_)
+		level.ForeachBuildingType(fn);
+
 	return game;
+}
+
+void LevelLoader::AddBuildingInstanceProcessor(const DatLevel::BuildingInstanceProcessor& fn) {
+	building_instance_processors_.push_back(fn);
+}
+
+void LevelLoader::AddBuildingTypeProcessor(const DatLevel::BuildingTypeProcessor& fn) {
+	building_type_processors_.push_back(fn);
 }

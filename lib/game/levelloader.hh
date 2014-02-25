@@ -21,14 +21,25 @@
 #define LEVELLOADER_HH
 
 #include <string>
+#include <vector>
+
+#include <dat/datlevel.hh>
 
 #include <game/game.hh>
 
 class DatFile;
 
 class LevelLoader {
+private:
+	std::vector<DatLevel::BuildingInstanceProcessor> building_instance_processors_;
+	std::vector<DatLevel::BuildingTypeProcessor> building_type_processors_;
+
 public:
-	static Game Load(const DatFile& datfile, const std::string& levelname, int width_blocks, int height_blocks);
+	LevelLoader();
+
+	void AddBuildingInstanceProcessor(const DatLevel::BuildingInstanceProcessor& fn);
+	void AddBuildingTypeProcessor(const DatLevel::BuildingTypeProcessor& fn);
+	Game Load(const DatFile& datfile, const std::string& levelname, int width_blocks, int height_blocks);
 };
 
 #endif // LEVELLOADER_HH
