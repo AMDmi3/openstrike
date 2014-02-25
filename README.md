@@ -8,7 +8,8 @@ The project is currently on the early stages of development, and
 is not yet playable. What it can offer right now:
 
 * An utility to unpack Desert/Jungle Strike .DAT files
-* SDL2 - based viewer for sprites in these files
+* Game graphics viewer
+* Viewer for complete game levels
 * A game skeleton which currently demonstrates an ability to load
   and render some sprites and animations
 
@@ -47,14 +48,23 @@ To extract them into current directory:
 % util/unpacker/unpacker -x file.DAT
 ```
 
-### Viewer
+### Graphics viewer
 
 ```
-util/viewer/viewer file.DAT
+util/gfxviewer/gfxviewer file.DAT
 ```
 
 Use arrow keys or Page Up/Page Down to navigate through graphics
 and Q or Escape to close the viewer.
+
+### Map viewer
+
+```
+util/mapviewer/mapviewer file.DAT
+```
+
+Use arrow keys to scroll the map, +/- to zoom and Q or Escape to
+close the viewer.
 
 ### Game
 
