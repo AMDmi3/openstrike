@@ -61,8 +61,8 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 
 			BuildingInstance obj;
 			obj.type = leveldata.GetWord(data_offset);
-			obj.x = leveldata.GetWord(data_offset + 8);
-			obj.y = leveldata.GetWord(data_offset + 6);
+			obj.x = leveldata.GetWord(data_offset + 4) * 8;
+			obj.y = leveldata.GetWord(data_offset + 2) * 8;
 
 			building_instances_.emplace_back(obj);
 
