@@ -27,7 +27,10 @@ GroundRenderer::GroundRenderer(SDL2pp::Renderer& renderer) : renderer_(renderer)
 
 void GroundRenderer::Render(const Game& game, const Camera& camera) {
 	renderer_.SetDrawColor(158, 126, 61);
-	renderer_.FillRect(camera.GetViewport());
+	renderer_.FillRect( // XXX: intersect this with screen
+			camera.GameToScreen(Vector2f(0, 0)),
+			camera.GameToScreen(Vector2f(game.GetWidth(), game.GetHeight()))
+		);
 
 	// Draw sector grid
 	renderer_.SetDrawColor(255, 0, 0);
