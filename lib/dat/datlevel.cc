@@ -40,7 +40,7 @@ const std::map<unsigned short, std::string> DatLevel::gfx_resources_ = {
 	{ 0xb046, "PWPOLES" },
 	{ 0xb048, "RESCUEBO" },
 	{ 0xb04a, "ROADS" },
-	//{ 0xb04c, "ROCKS" }, // XXX: won't load correctly
+	{ 0xb04c, "ROCKS" },
 	{ 0xb050, "SUBSTATI" },
 	{ 0xb052, "TENTS" },
 	{ 0xb054, "TOWER" },

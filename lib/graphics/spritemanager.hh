@@ -103,7 +103,7 @@ public:
 	class BlockMap {
 	protected:
 		SpriteManager& manager_;
-		std::vector<sprite_id_t> ids_;
+		std::vector<std::pair<sprite_id_t, bool>> ids_;
 		int flags_;
 		int width_;
 		int height_;

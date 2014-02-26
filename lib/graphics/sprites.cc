@@ -99,8 +99,9 @@ SpriteManager::BlockMap::BlockMap(SpriteManager& manager, const std::string& nam
 	  width_(width),
 	  height_(height) {
 	if (!name.empty()) {
+		// a horizontal flip flag is encoded in higher byte of block id
 		for (auto& blockid : blockids)
-			ids_.emplace_back(manager_.Add(name, blockid));
+			ids_.emplace_back(std::make_pair(manager_.Add(name, blockid & 0xff), blockid >> 8));
 	}
 }
 
@@ -108,7 +109,8 @@ void SpriteManager::BlockMap::Render(int x, int y) {
 	static const int blockwidth = 16, blockheight = 16;
 	int xpos = 0, ypos = 0;
 	for (auto& id : ids_) {
-		manager_.Render(id, x + xpos, y + ypos, flags_);
+		int flipflag = id.second ? SpriteManager::HFLIP : 0;
+		manager_.Render(id.first, x + xpos, y + ypos, flags_ ^ flipflag);
 		if ((xpos += blockwidth) >= width_) {
 			xpos = 0;
 			ypos += blockheight;
