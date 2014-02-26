@@ -102,30 +102,45 @@ unsigned int DatGraphics::GetNumSprites() const {
 }
 
 unsigned short DatGraphics::GetWidth(unsigned int num) const {
+	if (num >= sprites_.size())
+		throw std::out_of_range("frame number out of range");
 	return sprites_[num].width;
 }
 
 unsigned short DatGraphics::GetHeight(unsigned int num) const {
+	if (num >= sprites_.size())
+		throw std::out_of_range("frame number out of range");
 	return sprites_[num].height;
 }
 
 unsigned short DatGraphics::GetFrameWidth(unsigned int num) const {
+	if (num >= sprites_.size())
+		throw std::out_of_range("frame number out of range");
 	return sprites_[num].framewidth;
 }
 
 unsigned short DatGraphics::GetFrameHeight(unsigned int num) const {
+	if (num >= sprites_.size())
+		throw std::out_of_range("frame number out of range");
 	return sprites_[num].frameheight;
 }
 
 unsigned short DatGraphics::GetXOffset(unsigned int num) const {
+	if (num >= sprites_.size())
+		throw std::out_of_range("frame number out of range");
 	return sprites_[num].xoffset;
 }
 
 unsigned short DatGraphics::GetYOffset(unsigned int num) const {
+	if (num >= sprites_.size())
+		throw std::out_of_range("frame number out of range");
 	return sprites_[num].yoffset;
 }
 
 std::vector<unsigned char> DatGraphics::GetPixels(unsigned int num) const {
+	if (num >= sprites_.size())
+		throw std::out_of_range("frame number out of range");
+
 	size_t pixels_size = sprites_[num].width * sprites_[num].height * 4;
 
 	std::vector<unsigned char> pixels(pixels_size, 0);
