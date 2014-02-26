@@ -106,6 +106,18 @@ SpriteManager::BlockMap::BlockMap(SpriteManager& manager, const std::string& nam
 }
 
 void SpriteManager::BlockMap::Render(int x, int y) {
+#if !defined DEBUG_RENDERING
+	if (ids_.empty()) {
+#endif
+		// fallback if no resource was specified: just render a frame
+		SDL2pp::Renderer& renderer = manager_.GetRenderer();
+		renderer.SetDrawColor(0, 255, 0, 64);
+		renderer.DrawRect(SDL2pp::Rect(x, y, width_, height_));
+#if !defined DEBUG_RENDERING
+		return;
+	}
+#endif
+
 	static const int blockwidth = 16, blockheight = 16;
 	int xpos = 0, ypos = 0;
 	for (auto& id : ids_) {
@@ -116,10 +128,4 @@ void SpriteManager::BlockMap::Render(int x, int y) {
 			ypos += blockheight;
 		}
 	}
-	// fallback if no resource was specified: just render a frame
-	//if (ids_.empty()) {
-		SDL2pp::Renderer& renderer = manager_.GetRenderer();
-		renderer.SetDrawColor(0, 255, 0);
-		renderer.DrawRect(SDL2pp::Rect(x, y, width_, height_));
-	//}
 }

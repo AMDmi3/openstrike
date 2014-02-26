@@ -163,12 +163,6 @@ void Renderer::RenderVisitor::Visit(Explosion& explosion) {
 void Renderer::RenderVisitor::Visit(Building& building) {
 	SDL2pp::Point pos = camera_.GameToScreen(building.GetPos());
 
-	parent_.sprite_manager_.GetRenderer().SetDrawColor(255, 255, 0);
-	parent_.sprite_manager_.GetRenderer().DrawRect(
-		pos - SDL2pp::Point(0, building.GetHeight()/2), pos + SDL2pp::Point(building.GetWidth() - 1, building.GetHeight()/2 - 1)
-	);
-
-
 	auto blockmap = parent_.block_maps_.find(building.GetType());
 	assert(blockmap != parent_.block_maps_.end());
 

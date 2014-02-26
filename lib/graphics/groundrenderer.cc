@@ -32,6 +32,7 @@ void GroundRenderer::Render(const Game& game, const Camera& camera) {
 			camera.GameToScreen(Vector2f(game.GetWidth(), game.GetHeight()))
 		);
 
+#if defined DEBUG_RENDERING
 	// Draw sector grid
 	renderer_.SetDrawColor(255, 0, 0);
 	for (int vline = 0; vline <= game.GetWidth() / 512.0; vline++) {
@@ -46,4 +47,5 @@ void GroundRenderer::Render(const Game& game, const Camera& camera) {
 				camera.GameToScreen(Vector3f(game.GetWidth(), hline * 1024.0, 0))
 			);
 	}
+#endif
 }
