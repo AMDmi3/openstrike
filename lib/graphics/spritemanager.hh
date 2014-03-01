@@ -114,6 +114,44 @@ public:
 		void Render(int x, int y);
 	};
 
+	class TextMap {
+	public:
+		enum Align {
+			HALIGN_LEFT = 0x01,
+			HALIGN_CENTER = 0x02,
+			HALIGN_RIGHT = 0x04,
+
+			VALIGN_TOP = 0x10,
+			VALIGN_MEDIAN = 0x20,
+			VALIGN_BASELINE = 0x40,
+			VALIGN_BOTTOM = 0x80,
+		};
+
+	protected:
+		SpriteManager& manager_;
+		std::vector<sprite_id_t> ids_;
+		int first_char_;
+
+		mutable int space_width_;
+
+		mutable int ascent_;
+		mutable int median_;
+		mutable int baseline_;
+		mutable int descent_;
+
+	protected:
+		bool HasChar(char ch) const;
+		sprite_id_t GetChar(char ch) const;
+
+		void UpdateDimensions() const;
+
+	public:
+		TextMap(SpriteManager& manager, const std::string& name, char firshchar, int firstframe, int nframes);
+
+		int GetWidth(const std::string& text) const;
+		void Render(int x, int y, const std::string& text, int align = HALIGN_LEFT | VALIGN_TOP);
+	};
+
 protected:
 	static const int atlas_page_width_;
 	static const int atlas_page_height_;

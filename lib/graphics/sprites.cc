@@ -129,3 +129,106 @@ void SpriteManager::BlockMap::Render(int x, int y) {
 		}
 	}
 }
+
+SpriteManager::TextMap::TextMap(SpriteManager& manager, const std::string& name, char firstchar, int firstframe, int nframes)
+	: manager_(manager),
+	  first_char_(firstchar),
+	  space_width_(-1),
+	  ascent_(-1),
+	  median_(-1),
+	  baseline_(-1),
+	  descent_(-1) {
+	for (int nframe = firstframe; nframe < firstchar + nframes; nframe++)
+		ids_.emplace_back(manager_.Add(name, nframe));
+}
+
+bool SpriteManager::TextMap::HasChar(char ch) const {
+	return ch >= first_char_ && ch < (int)(first_char_ + ids_.size());
+}
+
+SpriteManager::sprite_id_t SpriteManager::TextMap::GetChar(char ch) const {
+	return ids_[ch - first_char_];
+}
+
+void SpriteManager::TextMap::UpdateDimensions() const {
+	if (space_width_ != -1)
+		return;
+
+	if (HasChar('r'))
+		space_width_ = manager_.GetSpriteInfo(GetChar('r')).width;
+
+	if (HasChar('W'))
+		ascent_ = manager_.GetSpriteInfo(GetChar('W')).yoffset;
+
+	if (HasChar('x')) {
+		median_ = manager_.GetSpriteInfo(GetChar('x')).yoffset;
+		baseline_ = manager_.GetSpriteInfo(GetChar('x')).yoffset + manager_.GetSpriteInfo(GetChar('x')).height;
+	}
+
+	if (HasChar('p'))
+		descent_ = manager_.GetSpriteInfo(GetChar('p')).yoffset + manager_.GetSpriteInfo(GetChar('p')).height;
+}
+
+int SpriteManager::TextMap::GetWidth(const std::string& text) const {
+	UpdateDimensions();
+
+	int width = 0, pos = 0;
+	for (auto ch : text) {
+		if (pos++)
+			width++;
+		if (ch == ' ') {
+			width += space_width_;
+			continue;
+		}
+		if (!HasChar(ch))
+			ch = '?';
+		if (!HasChar(ch)) {
+			width += space_width_;
+			continue;
+		}
+
+		width += manager_.GetSpriteInfo(GetChar(ch)).width;
+	}
+	return width;
+}
+
+void SpriteManager::TextMap::Render(int x, int y, const std::string& text, int align) {
+	UpdateDimensions();
+
+	int xpos = x, ypos = y;
+
+	if (align & (HALIGN_CENTER|HALIGN_RIGHT)) {
+		if (align & HALIGN_CENTER)
+			xpos -= GetWidth(text)/2;
+		else if (align & HALIGN_RIGHT)
+			xpos -= GetWidth(text) - 1;
+	}
+
+	if (align & VALIGN_TOP)
+		ypos -= ascent_;
+	else if (align & VALIGN_MEDIAN)
+		ypos -= median_;
+	else if (align & VALIGN_BASELINE)
+		ypos -= baseline_ - 1;
+	else if (align & VALIGN_BOTTOM)
+		ypos -= descent_ - 1;
+
+	int pos = 0;
+	for (auto ch : text) {
+		if (pos++)
+			xpos++;
+		if (ch == ' ') {
+			xpos += space_width_;
+			continue;
+		}
+		if (!HasChar(ch))
+			ch = '?';
+		if (!HasChar(ch)) {
+			xpos += space_width_;
+			continue;
+		}
+
+		manager_.Render(GetChar(ch), xpos, ypos, PIVOT_FRAMECORNER);
+		xpos += manager_.GetSpriteInfo(GetChar(ch)).width;
+	}
+}
