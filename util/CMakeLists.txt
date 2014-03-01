@@ -1,3 +1,4 @@
-ADD_SUBDIRECTORY(unpacker)
+ADD_SUBDIRECTORY(fonttest)
 ADD_SUBDIRECTORY(gfxviewer)
 ADD_SUBDIRECTORY(mapviewer)
+ADD_SUBDIRECTORY(unpacker)
