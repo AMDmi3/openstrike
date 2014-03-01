@@ -158,6 +158,7 @@ protected:
 protected:
 	sprite_id_t Add(const std::string& resource, unsigned int frame, bool load_immediately = false);
 	void Render(sprite_id_t id, int x, int y, int flags);
+	const SpriteInfo& GetSpriteInfo(sprite_id_t id) const;
 
 	void Load(sprite_id_t id, const DatGraphics& graphics);
 	void Load(sprite_id_t id);

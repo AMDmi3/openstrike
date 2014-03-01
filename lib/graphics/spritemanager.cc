@@ -132,6 +132,10 @@ void SpriteManager::Render(sprite_id_t id, int x, int y, int flags) {
 	}
 }
 
+const SpriteManager::SpriteInfo& SpriteManager::GetSpriteInfo(sprite_id_t id) const {
+	return sprites_[id];
+}
+
 void SpriteManager::Load(SpriteManager::sprite_id_t id, const DatGraphics& graphics) {
 	SpriteInfo& sprite = sprites_[id];
 
