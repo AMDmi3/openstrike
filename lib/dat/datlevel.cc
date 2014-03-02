@@ -138,7 +138,7 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 		}
 	}
 
-	assert(last_offset == leveldata.GetSize());
+	assert((size_t)last_offset == leveldata.GetSize());
 
 	for (auto& type : building_types_) {
 		unsigned short blocks_identifier = thingsdata.GetWord(type.first);
