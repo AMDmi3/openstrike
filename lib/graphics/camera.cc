@@ -42,7 +42,7 @@ SDL2pp::Rect Camera::GetViewport() const {
 
 SDL2pp::Point Camera::GameToScreen(const Vector3f& point) const {
 	return SDL2pp::Point(
-			viewport_.GetX() + viewport_.GetW() / 2 + (int)std::round(point.x - target_.x),
-			viewport_.GetY() + viewport_.GetH() / 2 + (int)std::round(point.y / 2) - (int)std::round(target_.y / 2) - (int)std::round(point.z - target_.z)
+			viewport_.GetX() + viewport_.GetW() / 2 + (int)std::round(point.x) - (int)std::round(target_.x),
+			viewport_.GetY() + viewport_.GetH() / 2 + (int)std::round(point.y / 2) - (int)std::round(target_.y / 2) - (int)std::round(point.z) + (int)std::round(target_.z)
 		);
 }
