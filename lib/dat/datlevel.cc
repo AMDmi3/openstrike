@@ -61,8 +61,10 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 
 			BuildingInstance obj;
 			obj.type = leveldata.GetWord(data_offset);
-			obj.x = leveldata.GetWord(data_offset + 4) * 8;
 			obj.y = leveldata.GetWord(data_offset + 2) * 8;
+			obj.x = leveldata.GetWord(data_offset + 4) * 8;
+			obj.bbox_y = leveldata.GetWord(data_offset + 6);
+			obj.bbox_x = leveldata.GetWord(data_offset + 8);
 
 			building_instances_.emplace_back(obj);
 
@@ -87,6 +89,21 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 
 		for (int nblock = 0; nblock < (type.second.width / 16) * (type.second.height / 16); nblock++)
 			type.second.blocks.push_back(thingsdata.GetWord(block_matrix_offset + nblock * 2));
+
+		int nbboxes = thingsdata.GetWord(type.first + 20);
+
+		for (int nbbox = 0; nbbox < nbboxes; nbbox++) {
+			int bbox_offset = type.first + 22 + nbbox * 12;
+			BuildingType::BBox bbox;
+			bbox.y1 = thingsdata.GetWord(bbox_offset + 0);
+			bbox.x1 = thingsdata.GetWord(bbox_offset + 2);
+			bbox.y2 = thingsdata.GetWord(bbox_offset + 4);
+			bbox.x2 = thingsdata.GetWord(bbox_offset + 6);
+			bbox.z1 = thingsdata.GetWord(bbox_offset + 8);
+			bbox.z2 = thingsdata.GetWord(bbox_offset + 10);
+
+			type.second.bboxes.emplace_back(bbox);
+		}
 	}
 }
 

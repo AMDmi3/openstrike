@@ -35,15 +35,24 @@ public:
 		unsigned short type;
 		unsigned short x;
 		unsigned short y;
+		unsigned short bbox_x;
+		unsigned short bbox_y;
 	};
 
 	struct BuildingType {
+		struct BBox {
+			signed short x1, y1;
+			signed short x2, y2;
+			signed short z1, z2;
+		};
+
 		unsigned short width;
 		unsigned short height;
 
 		std::string resource_name;
 
 		std::vector<unsigned short> blocks;
+		std::vector<BBox> bboxes;
 	};
 
 	typedef std::function<void(const BuildingInstance&)> BuildingInstanceProcessor;
