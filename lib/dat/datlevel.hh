@@ -37,6 +37,13 @@ public:
 		unsigned short y;
 		unsigned short bbox_x;
 		unsigned short bbox_y;
+
+		unsigned short dead_type;
+		unsigned short dead_x;
+		unsigned short dead_y;
+
+		BuildingInstance() : dead_type(0) {
+		}
 	};
 
 	struct BuildingType {

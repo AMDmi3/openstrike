@@ -18,6 +18,7 @@
  */
 
 #include <set>
+#include <cassert>
 #include <iostream>
 
 #include <dat/datlevel.hh>
@@ -52,10 +53,16 @@ const std::map<unsigned short, std::string> DatLevel::gfx_resources_ = {
 };
 
 DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks) {
+	int last_offset = 0;
+	int table_offset = last_offset;
 	for (int nblock = 0; nblock < width_blocks * height_blocks; nblock++) {
-		int blockdata_offset = leveldata.GetWord(nblock * 2);
+		int blockdata_offset = leveldata.GetWord(table_offset + nblock * 2);
 		int data_count = leveldata.GetWord(blockdata_offset);
 
+		if (blockdata_offset == 0)
+			continue;
+
+		last_offset = blockdata_offset + 2 + data_count * 2;
 		for (int ndata = 0; ndata < data_count; ndata++) {
 			int data_offset = leveldata.GetWord(blockdata_offset + 2 + 2 * ndata);
 
@@ -66,11 +73,72 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 			obj.bbox_y = leveldata.GetWord(data_offset + 6);
 			obj.bbox_x = leveldata.GetWord(data_offset + 8);
 
+			if (data_offset != last_offset) {
+				assert(data_offset == last_offset + 6);
+				obj.dead_type = leveldata.GetWord(last_offset);
+				obj.dead_y = leveldata.GetWord(data_offset + 2) * 8;
+				obj.dead_x = leveldata.GetWord(data_offset + 4) * 8;
+			}
+
+			// 18 bytes of mandatory data is followed
+			// by chunks which presumably encode what
+			// happens when the building is destroyed
+			// (e.g. fuel pickup or enemy appears nearby)
+			int effect_offset = data_offset + 18;
+			while (1) {
+				//int effect_type = leveldata.GetByte(effect_offset);
+				int effect_data_len = leveldata.GetByte(effect_offset+1);
+
+				if (effect_data_len == 0)
+					break;
+
+				effect_offset += effect_data_len + 2;
+			}
+			last_offset = effect_offset + 2;
+
 			building_instances_.emplace_back(obj);
 
 			building_types_.emplace(std::make_pair(obj.type, BuildingType()));
+			if (obj.dead_type)
+				building_types_.emplace(std::make_pair(obj.dead_type, BuildingType()));
 		}
 	}
+
+	table_offset = last_offset;
+	for (int nblock = 0; nblock < width_blocks * height_blocks; nblock++) {
+		int blockdata_offset = leveldata.GetWord(table_offset + nblock * 2);
+		int data_count = leveldata.GetWord(blockdata_offset);
+
+		if (blockdata_offset == 0)
+			continue;
+
+		last_offset = blockdata_offset + 2 + data_count * 2;
+		for (int ndata = 0; ndata < data_count; ndata++) {
+			int data_offset = leveldata.GetWord(blockdata_offset + 2 + 2 * ndata);
+
+			// TODO: create unit instance
+
+			// 20 bytes of mandatory data is followed
+			// by chunks which presumably encode what
+			// happens when the building is destroyed
+			// (e.g. fuel pickup or enemy appears nearby)
+			int effect_offset = data_offset + 20;
+			while (1) {
+				//int effect_type = leveldata.GetByte(effect_offset);
+				int effect_data_len = leveldata.GetByte(effect_offset+1);
+
+				if (effect_data_len == 0)
+					break;
+
+				effect_offset += effect_data_len + 2;
+			}
+			last_offset = effect_offset + 2;
+
+			// TODO: create unit type
+		}
+	}
+
+	assert(last_offset == leveldata.GetSize());
 
 	for (auto& type : building_types_) {
 		unsigned short blocks_identifier = thingsdata.GetWord(type.first);
