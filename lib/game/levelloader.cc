@@ -39,14 +39,43 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 	DatLevel level(level_data, things_data, width_blocks, height_blocks);
 
 	level.ForeachBuildingInstance([&game, &level](const DatLevel::BuildingInstance& bi) {
-		const DatLevel::BuildingType& type = level.GetBuildingType(bi.type);
-		Building* building = game.Spawn<Building>(Vector3f(bi.x, bi.y * 2, 0), bi.type);
-
 		// this should have some geometrical meaning,
 		// which I haven't grasped yet; however with
 		// this bboxes seem to be most well aligned
 		// with buildings
 		const static float mul = std::sqrt(6.0)/2.0;
+
+		const DatLevel::BuildingType& type = level.GetBuildingType(bi.type);
+
+		Building* building;
+		if (bi.dead_type) {
+			const DatLevel::BuildingType& dead_type = level.GetBuildingType(bi.dead_type);
+
+			building = game.Spawn<Building>(
+					Vector3f(bi.x, bi.y * 2, 0),
+					bi.type,
+					Vector3f(bi.dead_x, bi.dead_y * 2, 0),
+					bi.dead_type
+				);
+
+			for (auto& bbox : dead_type.bboxes) {
+				building->AddDeadBBox(
+						BBoxf(
+								Vector3f(bi.bbox_x, bi.bbox_y * 2, 0),
+								bbox.x1 * mul, bbox.y1 * mul,
+								bbox.x2 * mul, bbox.y2 * mul,
+								bbox.z1, bbox.z2,
+								-pi/4
+							)
+					);
+		}
+		} else {
+			building = game.Spawn<Building>(
+					Vector3f(bi.x, bi.y * 2, 0),
+					bi.type
+				);
+		}
+
 		for (auto& bbox : type.bboxes) {
 			building->AddBBox(
 					BBoxf(
