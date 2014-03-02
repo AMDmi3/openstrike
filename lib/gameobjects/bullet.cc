@@ -26,25 +26,21 @@
 #include <gameobjects/bullet.hh>
 
 class CollisionVisitor : public Visitor {
+public:
+	typedef std::function<void(Building&)> CollisionHandler;
+
 private:
 	Vector3f pos_;
-	bool had_collision_;
+	const CollisionHandler& collision_handler_;
 
 public:
-	CollisionVisitor(const Vector3f& pos) : pos_(pos), had_collision_(false) {
+	CollisionVisitor(const Vector3f& pos, const CollisionHandler& collision_handler) : pos_(pos), collision_handler_(collision_handler) {
 	}
 
 	void Visit(Building& building) {
-		for (auto& bbox : building.GetBBoxes()) {
-			if (bbox.Contains(pos_)) {
-				had_collision_ = true;
-				break;
-			}
-		}
-	}
-
-	bool HadCollision() const {
-		return had_collision_;
+		for (auto& bbox : building.GetBBoxes())
+			if (bbox.Contains(pos_))
+				collision_handler_(building);
 	}
 };
 
@@ -65,12 +61,16 @@ void Bullet::Update(unsigned int deltams) {
 	// rockets, otoh, move  along a straight line
 	pos_ += vel_ * delta_sec;
 
-	CollisionVisitor cv(pos_);
+	bool had_collision = false;
+	CollisionVisitor cv(pos_, [&had_collision](Building& building){
+			building.Damage(1); // XXX: implement real damage
+			had_collision = true;
+		});
 	game_.Accept(cv);
 
 	// object hit
-	if (cv.HadCollision()) {
-		// XXX: calculate exact collision?
+	if (had_collision) {
+		// XXX: calculate exact collision point?
 
 		RemoveLater();
 		game_.Spawn<Explosion>(pos_, Explosion::GUN_OBJECT);
@@ -87,7 +87,6 @@ void Bullet::Update(unsigned int deltams) {
 		RemoveLater();
 
 		game_.Spawn<Explosion>(pos_, Explosion::GUN_GROUND);
-		// XXX: cause damage
 		return;
 	}
 
