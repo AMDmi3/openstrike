@@ -167,4 +167,22 @@ void Renderer::RenderVisitor::Visit(Building& building) {
 	assert(blockmap != parent_.block_maps_.end());
 
 	blockmap->second.Render(pos.GetX(), pos.GetY());
+
+#ifdef DEBUG_RENDERING
+	parent_.sprite_manager_.GetRenderer().SetDrawColor(255, 255, 0);
+	for (auto& bbox : building.GetBBoxes()) {
+		bbox.ForEachEdge([this](const Vector3f& a, const Vector3f& b){
+			parent_.sprite_manager_.GetRenderer().DrawLine(camera_.GameToScreen(a), camera_.GameToScreen(b));
+		});
+
+		parent_.sprite_manager_.GetRenderer().DrawLine(
+				camera_.GameToScreen(bbox.pos + Vector3f(-10, 0, 0)),
+				camera_.GameToScreen(bbox.pos + Vector3f(10, 0, 0))
+			);
+		parent_.sprite_manager_.GetRenderer().DrawLine(
+				camera_.GameToScreen(bbox.pos + Vector3f(0, -10, 0)),
+				camera_.GameToScreen(bbox.pos + Vector3f(0, 10, 0))
+			);
+	}
+#endif
 }

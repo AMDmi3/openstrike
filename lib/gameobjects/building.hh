@@ -20,9 +20,14 @@
 #ifndef BUILDING_HH
 #define BUILDING_HH
 
+#include <vector>
+
 #include <math/geom.hh>
+#include <math/bbox.hh>
 
 #include <game/gameobject.hh>
+
+#include <dat/datlevel.hh>
 
 class Game;
 class Visitor;
@@ -31,11 +36,11 @@ class Building : public GameObject {
 protected:
 	Vector3f pos_;
 	unsigned short type_;
-	unsigned short width_;
-	unsigned short height_;
+
+	std::vector<BBoxf> bboxes_;
 
 public:
-	Building(Game& game, const Vector3f& pos, unsigned short type, unsigned short width, unsigned short height);
+	Building(Game& game, const Vector3f& pos, unsigned short type);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);
@@ -48,12 +53,12 @@ public:
 		return type_;
 	}
 
-	unsigned short GetWidth() const {
-		return width_;
+	void AddBBox(const BBoxf& bbox) {
+		bboxes_.emplace_back(bbox);
 	}
 
-	unsigned short GetHeight() const {
-		return height_;
+	const std::vector<BBoxf>& GetBBoxes() const {
+		return bboxes_;
 	}
 };
 

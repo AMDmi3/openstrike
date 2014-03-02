@@ -17,6 +17,8 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
+
 #include <dat/buffer.hh>
 #include <dat/datfile.hh>
 #include <dat/datlevel.hh>
@@ -38,7 +40,24 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 
 	level.ForeachBuildingInstance([&game, &level](const DatLevel::BuildingInstance& bi) {
 		const DatLevel::BuildingType& type = level.GetBuildingType(bi.type);
-		game.Spawn<Building>(Vector3f(bi.x, bi.y * 2, 0), bi.type, type.width, type.height);
+		Building* building = game.Spawn<Building>(Vector3f(bi.x, bi.y * 2, 0), bi.type);
+
+		// this should have some geometrical meaning,
+		// which I haven't grasped yet; however with
+		// this bboxes seem to be most well aligned
+		// with buildings
+		const static float mul = std::sqrt(6.0)/2.0;
+		for (auto& bbox : type.bboxes) {
+			building->AddBBox(
+					BBoxf(
+							Vector3f(bi.bbox_x, bi.bbox_y * 2, 0),
+							bbox.x1 * mul, bbox.y1 * mul,
+							bbox.x2 * mul, bbox.y2 * mul,
+							bbox.z1, bbox.z2,
+							-pi/4
+						)
+				);
+		}
 	});
 
 	for (auto& fn : building_instance_processors_)

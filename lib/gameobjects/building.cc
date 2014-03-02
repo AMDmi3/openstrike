@@ -20,9 +20,11 @@
 #include <game/visitor.hh>
 #include <game/game.hh>
 
+#include <game/game.hh>
+
 #include <gameobjects/building.hh>
 
-Building::Building(Game& game, const Vector3f& pos, unsigned short type, unsigned short width, unsigned short height) : GameObject(game), pos_(pos), type_(type), width_(width), height_(height) {
+Building::Building(Game& game, const Vector3f& pos, unsigned short type) : GameObject(game), pos_(pos), type_(type) {
 }
 
 void Building::Accept(Visitor& visitor) {
