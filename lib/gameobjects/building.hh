@@ -36,14 +36,22 @@ class Building : public GameObject {
 protected:
 	Vector3f pos_;
 	unsigned short type_;
+	Vector3f dead_pos_;
+	unsigned short dead_type_;
 
 	std::vector<BBoxf> bboxes_;
+	std::vector<BBoxf> dead_bboxes_;
+
+	int health_;
 
 public:
 	Building(Game& game, const Vector3f& pos, unsigned short type);
+	Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& dead_pos, unsigned short dead_type);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);
+
+	void Damage(int amount);
 
 	Vector3f GetPos() const {
 		return pos_;
@@ -55,6 +63,10 @@ public:
 
 	void AddBBox(const BBoxf& bbox) {
 		bboxes_.emplace_back(bbox);
+	}
+
+	void AddDeadBBox(const BBoxf& bbox) {
+		dead_bboxes_.emplace_back(bbox);
 	}
 
 	const std::vector<BBoxf>& GetBBoxes() const {

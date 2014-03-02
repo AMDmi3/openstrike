@@ -24,7 +24,22 @@
 
 #include <gameobjects/building.hh>
 
-Building::Building(Game& game, const Vector3f& pos, unsigned short type) : GameObject(game), pos_(pos), type_(type) {
+Building::Building(Game& game, const Vector3f& pos, unsigned short type)
+	: GameObject(game),
+	  pos_(pos),
+	  type_(type),
+	  dead_pos_(pos),
+	  dead_type_(type),
+	  health_(1) { // XXX: implement real health
+}
+
+Building::Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& dead_pos, unsigned short dead_type)
+	: GameObject(game),
+	  pos_(pos),
+	  type_(type),
+	  dead_pos_(dead_pos),
+	  dead_type_(dead_type),
+	  health_(1) { // XXX: implement real health
 }
 
 void Building::Accept(Visitor& visitor) {
@@ -33,4 +48,16 @@ void Building::Accept(Visitor& visitor) {
 
 void Building::Update(unsigned int) {
 	// does nothing
+}
+
+void Building::Damage(int amount) {
+	if (type_ == dead_type_)
+		return;
+
+	health_ -= amount;
+	if (health_ <= 0) {
+		type_ = dead_type_;
+		pos_ = dead_pos_;
+		bboxes_.swap(dead_bboxes_);
+	}
 }
