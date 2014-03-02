@@ -21,8 +21,32 @@
 #include <game/game.hh>
 
 #include <gameobjects/explosion.hh>
+#include <gameobjects/building.hh>
 
 #include <gameobjects/bullet.hh>
+
+class CollisionVisitor : public Visitor {
+private:
+	Vector3f pos_;
+	bool had_collision_;
+
+public:
+	CollisionVisitor(const Vector3f& pos) : pos_(pos), had_collision_(false) {
+	}
+
+	void Visit(Building& building) {
+		for (auto& bbox : building.GetBBoxes()) {
+			if (bbox.Contains(pos_)) {
+				had_collision_ = true;
+				break;
+			}
+		}
+	}
+
+	bool HadCollision() const {
+		return had_collision_;
+	}
+};
 
 Bullet::Bullet(Game& game, Vector3f pos, Vector3f vel, Direction3f direction)
 	: GameObject(game),
@@ -41,6 +65,19 @@ void Bullet::Update(unsigned int deltams) {
 	// rockets, otoh, move  along a straight line
 	pos_ += vel_ * delta_sec;
 
+	CollisionVisitor cv(pos_);
+	game_.Accept(cv);
+
+	// object hit
+	if (cv.HadCollision()) {
+		// XXX: calculate exact collision?
+
+		RemoveLater();
+		game_.Spawn<Explosion>(pos_, Explosion::GUN_OBJECT);
+		return;
+	}
+
+	// ground hit
 	if (pos_.z <= 0) {
 		// calculate exact collision point
 		float penetration = pos_.z / vel_.z;
@@ -51,6 +88,7 @@ void Bullet::Update(unsigned int deltams) {
 
 		game_.Spawn<Explosion>(pos_, Explosion::GUN_GROUND);
 		// XXX: cause damage
+		return;
 	}
 
 	// g-force effect
