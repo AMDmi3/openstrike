@@ -47,9 +47,9 @@ struct BBox {
 		if (point.z < pos.z + bottom || point.z > pos.z + top)
 			return false;
 
-		Vector2<T> toPoint = (Vector2<T>(point) - pos) * (-direction);
+		Vector3<T> toPoint = (point - pos) * Direction2<T>(-direction.yaw);
 
-		return !(toPoint.x < left || toPoint.x > right || toPoint.y < back || toPoint.y > front);
+		return !(toPoint.x < left || toPoint.x > right || toPoint.y < front || toPoint.y > back);
 	}
 
 	template<class Fn>
