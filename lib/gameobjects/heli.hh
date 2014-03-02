@@ -65,10 +65,10 @@ protected:
 		static constexpr int HydraCooldown() { return 500; } // Desert Strike (calculated 474 from video, rounded)
 		static constexpr int HellfireCooldown() { return 1000; } // Desert Strike (calculated 1150 from video - time to key press (no auto fire), rounded)
 
-		static constexpr Vector3f GunOffset() { return Vector3f(33, -1, 7); }
+		static constexpr Vector3f GunOffset() { return Vector3f(-1, -33, 7); }
 		static constexpr float WeaponFirePitch() { return -0.121941; } // -atan(25/204), from Desert Strike
 
-		static constexpr Vector3f RocketMountOffset() { return Vector3f(0, 10, 7); } // XXX: approx, check game
+		static constexpr Vector3f RocketMountOffset() { return Vector3f(10, 0, 7); } // XXX: approx, check game
 
 		static constexpr float GunDispersion() { return 0.5/180.0*pi; }
 	};

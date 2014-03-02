@@ -118,7 +118,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	if (combined_control_flags & HYDRA && hydras_ > 0 && hydra_reload_ <= 0) {
 		Vector3f mount_offset = Constants::RocketMountOffset();
 		if (hydra_at_left_)
-			mount_offset.y = -mount_offset.y;
+			mount_offset.x = -mount_offset.x;
 
 		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), vel_, Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HYDRA);
 
@@ -130,7 +130,7 @@ void Heli::UpdateWeapons(unsigned int deltams) {
 	if (tick_control_flags_ /* hellfires have no autofire */ & HELLFIRE && hellfires_ > 0 && hellfire_reload_ <= 0) {
 		Vector3f mount_offset = Constants::RocketMountOffset();
 		if (hellfire_at_left_)
-			mount_offset.y = -mount_offset.y;
+			mount_offset.x = -mount_offset.x;
 
 		game_.Spawn<Rocket>(pos_ + mount_offset * GetSectorDirection(), vel_, Direction3f(GetSectorDirection(), Constants::WeaponFirePitch()), Rocket::HELLFIRE);
 
