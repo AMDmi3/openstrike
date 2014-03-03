@@ -10,4 +10,4 @@ before_install:
   - sudo apt-get install -qq cmake libsdl2-dev g++-4.8 # clang-3.4
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 # - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.4" CC="clang-3.4"; fi
-script: cmake . && make
+script: cmake . && make && make test
