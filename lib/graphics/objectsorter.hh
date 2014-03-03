@@ -40,11 +40,10 @@ public:
 
 	virtual void Visit(GameObject& obj);
 
-	virtual void Visit(Heli& heli);
-	virtual void Visit(Bullet& bullet);
-	virtual void Visit(Rocket& rocket);
-	virtual void Visit(Explosion& explosion);
 	virtual void Visit(Building& building);
+	virtual void Visit(Explosion& explosion);
+	virtual void Visit(Heli& heli);
+	virtual void Visit(Projectile& projectile);
 
 	void Accept(Visitor& visitor);
 };

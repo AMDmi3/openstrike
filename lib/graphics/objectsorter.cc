@@ -17,11 +17,10 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <gameobjects/heli.hh>
-#include <gameobjects/bullet.hh>
-#include <gameobjects/rocket.hh>
-#include <gameobjects/explosion.hh>
 #include <gameobjects/building.hh>
+#include <gameobjects/explosion.hh>
+#include <gameobjects/heli.hh>
+#include <gameobjects/projectile.hh>
 
 #include <graphics/objectsorter.hh>
 
@@ -37,24 +36,20 @@ void ObjectSorter::Visit(GameObject& obj) {
 	other_objects_.push_back(&obj);
 }
 
-void ObjectSorter::Visit(Heli& heli) {
-	AddSorted(heli.GetPos(), heli);
-}
-
-void ObjectSorter::Visit(Bullet& bullet) {
-	AddSorted(bullet.GetPos(), bullet);
-}
-
-void ObjectSorter::Visit(Rocket& rocket) {
-	AddSorted(rocket.GetPos(), rocket);
+void ObjectSorter::Visit(Building& building) {
+	AddSorted(building.GetPos(), building);
 }
 
 void ObjectSorter::Visit(Explosion& explosion) {
 	AddSorted(explosion.GetPos(), explosion);
 }
 
-void ObjectSorter::Visit(Building& building) {
-	AddSorted(building.GetPos(), building);
+void ObjectSorter::Visit(Heli& heli) {
+	AddSorted(heli.GetPos(), heli);
+}
+
+void ObjectSorter::Visit(Projectile& projectile) {
+	AddSorted(projectile.GetPos(), projectile);
 }
 
 void ObjectSorter::Accept(Visitor& visitor) {

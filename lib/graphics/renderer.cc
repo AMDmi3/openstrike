@@ -26,11 +26,10 @@
 #include <graphics/objectsorter.hh>
 #include <graphics/camera.hh>
 
-#include <gameobjects/heli.hh>
-#include <gameobjects/bullet.hh>
-#include <gameobjects/rocket.hh>
-#include <gameobjects/explosion.hh>
 #include <gameobjects/building.hh>
+#include <gameobjects/explosion.hh>
+#include <gameobjects/heli.hh>
+#include <gameobjects/projectile.hh>
 
 #include <graphics/renderer.hh>
 
@@ -123,20 +122,18 @@ void Renderer::RenderVisitor::Visit(Heli& heli) {
 	parent_.sprite_rotor_.Render(heli_pos.GetX(), heli_pos.GetY() - heli_pivot_height, heli.GetAge() / 30);
 }
 
-void Renderer::RenderVisitor::Visit(Bullet& bullet) {
-	SDL2pp::Point pos = camera_.GameToScreen(bullet.GetPos());
-	parent_.sprite_bullet_.Render(pos.GetX(), pos.GetY());
-}
+void Renderer::RenderVisitor::Visit(Projectile& projectile) {
+	SDL2pp::Point pos = camera_.GameToScreen(projectile.GetPos());
 
-void Renderer::RenderVisitor::Visit(Rocket& rocket) {
-	SDL2pp::Point pos = camera_.GameToScreen(rocket.GetPos());
-
-	switch (rocket.GetType()) {
-	case Rocket::HYDRA:
-		parent_.sprite_hydra_.Render(pos.GetX(), pos.GetY(), rocket.GetDirection().yaw);
+	switch (projectile.GetType()) {
+	case Projectile::BULLET:
+		parent_.sprite_bullet_.Render(pos.GetX(), pos.GetY());
 		break;
-	case Rocket::HELLFIRE:
-		parent_.sprite_hellfire_.Render(pos.GetX(), pos.GetY(), rocket.GetDirection().yaw);
+	case Projectile::HYDRA:
+		parent_.sprite_hydra_.Render(pos.GetX(), pos.GetY(), projectile.GetDirection().yaw);
+		break;
+	case Projectile::HELLFIRE:
+		parent_.sprite_hellfire_.Render(pos.GetX(), pos.GetY(), projectile.GetDirection().yaw);
 		break;
 	}
 }

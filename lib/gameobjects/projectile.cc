@@ -23,7 +23,7 @@
 #include <gameobjects/explosion.hh>
 #include <gameobjects/building.hh>
 
-#include <gameobjects/bullet.hh>
+#include <gameobjects/projectile.hh>
 
 class CollisionVisitor : public Visitor {
 public:
@@ -44,17 +44,19 @@ public:
 	}
 };
 
-Bullet::Bullet(Game& game, Vector3f pos, Vector3f vel, Direction3f direction)
+Projectile::Projectile(Game& game, const Vector3f& pos, const Vector3f& vel, const Direction3f& direction, Type type)
 	: GameObject(game),
 	  pos_(pos),
-	  vel_(vel + direction * Constants::Speed()) {
+	  vel_(vel + direction * Constants::Speed()),
+	  dir_(direction),
+	  type_(type) {
 }
 
-void Bullet::Accept(Visitor& visitor) {
+void Projectile::Accept(Visitor& visitor) {
 	visitor.Visit(*this);
 }
 
-void Bullet::Update(unsigned int deltams) {
+void Projectile::Update(unsigned int deltams) {
 	float delta_sec = deltams / 1000.0f;
 
 	// XXX: bullet actually moves along a parabola, should take into account
@@ -73,7 +75,13 @@ void Bullet::Update(unsigned int deltams) {
 		// XXX: calculate exact collision point?
 
 		RemoveLater();
-		game_.Spawn<Explosion>(pos_, Explosion::GUN_OBJECT);
+
+		switch (type_) {
+		case BULLET:   game_.Spawn<Explosion>(pos_, Explosion::GUN_OBJECT); break;
+		case HYDRA:    game_.Spawn<Explosion>(pos_, Explosion::HYDRA); break;
+		case HELLFIRE: game_.Spawn<Explosion>(pos_, Explosion::HELLFIRE); break;
+		}
+
 		return;
 	}
 
@@ -86,12 +94,18 @@ void Bullet::Update(unsigned int deltams) {
 
 		RemoveLater();
 
-		game_.Spawn<Explosion>(pos_, Explosion::GUN_GROUND);
+		switch (type_) {
+		case BULLET:   game_.Spawn<Explosion>(pos_, Explosion::GUN_GROUND); break;
+		case HYDRA:    game_.Spawn<Explosion>(pos_, Explosion::HYDRA); break;
+		case HELLFIRE: game_.Spawn<Explosion>(pos_, Explosion::HELLFIRE); break;
+		}
+
 		return;
 	}
 
 	// g-force effect
-	vel_.z -= Constants::GForce() * delta_sec;
+	if (type_ == BULLET)
+		vel_.z -= Constants::GForce() * delta_sec;
 
 	// XXX: limit lifetime if it doesn't hit the ground
 }

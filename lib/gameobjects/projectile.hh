@@ -17,8 +17,8 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ROCKET_HH
-#define ROCKET_HH
+#ifndef PROJECTILE_HH
+#define PROJECTILE_HH
 
 #include <math/geom.hh>
 
@@ -27,16 +27,18 @@
 class Game;
 class Visitor;
 
-class Rocket : public GameObject {
+class Projectile : public GameObject {
 public:
 	enum Type {
+		BULLET,
 		HYDRA,
 		HELLFIRE
 	};
 
 protected:
 	struct Constants {
-		static constexpr float Speed() { return 400.0; } // XXX: from bullet, fix
+		static constexpr float Speed() { return 400.0; } // XXX: make this variable, e.g. if enemy bullets may be faster/slower
+		static constexpr float GForce() { return 100.0; } // XXX: does if affect enemy bullets?
 	};
 
 protected:
@@ -46,7 +48,7 @@ protected:
 	Type type_;
 
 public:
-	Rocket(Game& game, Vector3f pos, Vector3f vel, Direction3f direction, Type type);
+	Projectile(Game& game, const Vector3f& pos, const Vector3f& vel, const Direction3f& direction, Type type);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);
@@ -64,4 +66,4 @@ public:
 	}
 };
 
-#endif // HYDRA_HH
+#endif // PROJECTILE_HH

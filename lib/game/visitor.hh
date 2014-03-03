@@ -23,20 +23,18 @@
 class GameObject;
 
 class Building;
-class Bullet;
 class Explosion;
 class Heli;
-class Rocket;
+class Projectile;
 
 class Visitor {
 public:
 	virtual void Visit(GameObject&) {}
 
 	virtual void Visit(Building& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Bullet& obj) { Visit((GameObject&)obj); }
 	virtual void Visit(Explosion& obj) { Visit((GameObject&)obj); }
 	virtual void Visit(Heli& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Rocket& obj) { Visit((GameObject&)obj); }
+	virtual void Visit(Projectile& obj) { Visit((GameObject&)obj); }
 };
 
 #endif // VISITOR_HH
