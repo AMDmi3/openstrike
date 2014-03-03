@@ -22,6 +22,8 @@
 
 #include <game/game.hh>
 
+#include <gameobjects/explosion.hh>
+
 #include <gameobjects/building.hh>
 
 Building::Building(Game& game, const Vector3f& pos, unsigned short type)
@@ -56,6 +58,7 @@ void Building::Damage(int amount) {
 
 	health_ -= amount;
 	if (health_ <= 0) {
+		game_.Spawn<Explosion>(pos_, Explosion::BOOM);
 		type_ = dead_type_;
 		pos_ = dead_pos_;
 		bboxes_.swap(dead_bboxes_);
