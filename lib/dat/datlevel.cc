@@ -35,6 +35,7 @@ const std::map<unsigned short, std::string> DatLevel::gfx_resources_ = {
 	{ 0xb032, "BLDGS23" },
 	{ 0xb034, "BRADLEY" },
 	{ 0xb038, "BUNKER" },
+	{ 0xb03a, "CRATERS" },
 	{ 0xb03c, "FENCE" },
 	{ 0xb03e, "GUARDS" },
 	{ 0xb042, "NOMADS" },
