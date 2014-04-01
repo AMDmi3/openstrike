@@ -52,6 +52,7 @@ public:
 	virtual void Update(unsigned int deltams);
 
 	void Damage(int amount);
+	void Die();
 
 	Vector3f GetPos() const {
 		return pos_;

@@ -57,10 +57,13 @@ void Building::Damage(int amount) {
 		return;
 
 	health_ -= amount;
-	if (health_ <= 0) {
-		game_.Spawn<Explosion>(pos_, Explosion::BOOM);
-		type_ = dead_type_;
-		pos_ = dead_pos_;
-		bboxes_.swap(dead_bboxes_);
-	}
+	if (health_ <= 0)
+		Die();
+}
+
+void Building::Die() {
+	game_.Spawn<Explosion>(pos_, Explosion::BOOM);
+	type_ = dead_type_;
+	pos_ = dead_pos_;
+	bboxes_.swap(dead_bboxes_);
 }
