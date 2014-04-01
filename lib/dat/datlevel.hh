@@ -56,6 +56,8 @@ public:
 		unsigned short width;
 		unsigned short height;
 
+		unsigned short health;
+
 		std::string resource_name;
 
 		std::vector<unsigned short> blocks;

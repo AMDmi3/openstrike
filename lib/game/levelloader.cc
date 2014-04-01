@@ -53,6 +53,7 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 
 			building = game.Spawn<Building>(
 					Vector3f(bi.x, bi.y * 2, 0),
+					type.health,
 					bi.type,
 					Vector3f(bi.sprite_x, bi.sprite_y * 2, 0) - Vector3f(bi.x, bi.y * 2, 0),
 					bi.dead_type,
@@ -73,6 +74,7 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 		} else {
 			building = game.Spawn<Building>(
 					Vector3f(bi.x, bi.y * 2, 0),
+					type.health,
 					bi.type,
 					Vector3f(bi.sprite_x, bi.sprite_y * 2, 0) - Vector3f(bi.x, bi.y * 2, 0)
 				);

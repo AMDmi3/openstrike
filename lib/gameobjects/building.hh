@@ -46,8 +46,8 @@ protected:
 	int health_;
 
 public:
-	Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& sprite_offset);
-	Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& sprite_offset, unsigned short dead_type, const Vector3f& dead_sprite_offset);
+	Building(Game& game, const Vector3f& pos, int health, unsigned short type, const Vector3f& sprite_offset);
+	Building(Game& game, const Vector3f& pos, int health, unsigned short type, const Vector3f& sprite_offset, unsigned short dead_type, const Vector3f& dead_sprite_offset);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);

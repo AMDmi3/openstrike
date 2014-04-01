@@ -146,6 +146,7 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 
 		type.second.width = thingsdata.GetWord(type.first + 2);
 		type.second.height = thingsdata.GetWord(type.first + 4);
+		type.second.health = thingsdata.GetWord(type.first + 12);
 
 		auto resource = gfx_resources_.find(blocks_identifier);
 		type.second.resource_name = (resource == gfx_resources_.end()) ? "" : resource->second;

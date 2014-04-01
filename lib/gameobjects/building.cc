@@ -26,24 +26,24 @@
 
 #include <gameobjects/building.hh>
 
-Building::Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& sprite_offset)
+Building::Building(Game& game, const Vector3f& pos, int health, unsigned short type, const Vector3f& sprite_offset)
 	: GameObject(game),
 	  pos_(pos),
+	  health_(health),
 	  type_(type),
 	  sprite_offset_(sprite_offset),
 	  dead_type_(type),
-	  dead_sprite_offset_(sprite_offset),
-	  health_(1) { // XXX: implement real health
+	  dead_sprite_offset_(sprite_offset) {
 }
 
-Building::Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& sprite_offset, unsigned short dead_type, const Vector3f& dead_sprite_offset)
+Building::Building(Game& game, const Vector3f& pos, int health, unsigned short type, const Vector3f& sprite_offset, unsigned short dead_type, const Vector3f& dead_sprite_offset)
 	: GameObject(game),
 	  pos_(pos),
+	  health_(health),
 	  type_(type),
 	  sprite_offset_(sprite_offset),
 	  dead_type_(dead_type),
-	  dead_sprite_offset_(dead_sprite_offset),
-	  health_(1) { // XXX: implement real health
+	  dead_sprite_offset_(dead_sprite_offset) {
 }
 
 void Building::Accept(Visitor& visitor) {
