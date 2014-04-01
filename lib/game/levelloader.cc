@@ -68,7 +68,7 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 								-pi/4
 							)
 					);
-		}
+			}
 		} else {
 			building = game.Spawn<Building>(
 					Vector3f(bi.x, bi.y * 2, 0),
