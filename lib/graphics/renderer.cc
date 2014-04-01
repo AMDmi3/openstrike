@@ -66,14 +66,13 @@ void Renderer::Render(Game& game, const Camera& camera) {
 
 void Renderer::SubscribeToLoader(LevelLoader& loader) {
 	loader.AddBuildingTypeProcessor([this](unsigned short id, const DatLevel::BuildingType& type) {
-				block_maps_.emplace(
-					std::make_pair(
-						id,
-						SpriteManager::BlockMap(sprite_manager_, type.resource_name, type.blocks, type.width, type.height)
-					)
-				);
-			}
+		block_maps_.emplace(
+			std::make_pair(
+				id,
+				SpriteManager::BlockMap(sprite_manager_, type.resource_name, type.blocks, type.width, type.height)
+			)
 		);
+	});
 }
 
 std::unique_ptr<SpriteManager::DirectionalSprite>& Renderer::GetHeliSprite(int forward, int side) {
