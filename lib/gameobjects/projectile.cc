@@ -65,10 +65,14 @@ void Projectile::Update(unsigned int deltams) {
 	pos_ += vel_ * delta_sec;
 
 	bool had_collision = false;
-	CollisionVisitor cv(pos_, [&had_collision](Building& building){
-			building.Damage(1); // XXX: implement real damage
-			had_collision = true;
-		});
+	CollisionVisitor cv(pos_, [&had_collision, this](Building& building) {
+		switch (type_) {
+		case BULLET:   building.Damage(3); break;
+		case HYDRA:    building.Damage(25); break;
+		case HELLFIRE: building.Damage(100); break;
+		}
+		had_collision = true;
+	});
 	game_.Accept(cv);
 
 	// object hit
