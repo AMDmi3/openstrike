@@ -36,8 +36,9 @@ class Building : public GameObject {
 protected:
 	Vector3f pos_;
 	unsigned short type_;
-	Vector3f dead_pos_;
+	Vector3f sprite_offset_;
 	unsigned short dead_type_;
+	Vector3f dead_sprite_offset_;
 
 	std::vector<BBoxf> bboxes_;
 	std::vector<BBoxf> dead_bboxes_;
@@ -45,8 +46,8 @@ protected:
 	int health_;
 
 public:
-	Building(Game& game, const Vector3f& pos, unsigned short type);
-	Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& dead_pos, unsigned short dead_type);
+	Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& sprite_offset);
+	Building(Game& game, const Vector3f& pos, unsigned short type, const Vector3f& sprite_offset, unsigned short dead_type, const Vector3f& dead_sprite_offset);
 
 	virtual void Accept(Visitor& visitor);
 	virtual void Update(unsigned int deltams);
@@ -56,6 +57,10 @@ public:
 
 	Vector3f GetPos() const {
 		return pos_;
+	}
+
+	Vector3f GetSpriteOffset() const {
+		return sprite_offset_;
 	}
 
 	unsigned short GetType() const {
@@ -71,8 +76,10 @@ public:
 	}
 
 	void ForeachBBox(const std::function<void(const BBoxf&)> bbox_processor) const {
-		for (auto bbox : bboxes_)
+		for (auto bbox : bboxes_) {
+			bbox.pos = pos_;
 			bbox_processor(bbox);
+		}
 	}
 };
 

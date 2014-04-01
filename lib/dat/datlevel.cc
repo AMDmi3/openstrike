@@ -69,16 +69,16 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 
 			BuildingInstance obj;
 			obj.type = leveldata.GetWord(data_offset);
-			obj.y = leveldata.GetWord(data_offset + 2) * 8;
-			obj.x = leveldata.GetWord(data_offset + 4) * 8;
-			obj.bbox_y = leveldata.GetWord(data_offset + 6);
-			obj.bbox_x = leveldata.GetWord(data_offset + 8);
+			obj.sprite_y = leveldata.GetWord(data_offset + 2) * 8;
+			obj.sprite_x = leveldata.GetWord(data_offset + 4) * 8;
+			obj.y = leveldata.GetWord(data_offset + 6);
+			obj.x = leveldata.GetWord(data_offset + 8);
 
 			if (data_offset != last_offset) {
 				assert(data_offset == last_offset + 6);
 				obj.dead_type = leveldata.GetWord(last_offset);
-				obj.dead_y = leveldata.GetWord(data_offset + 2) * 8;
-				obj.dead_x = leveldata.GetWord(data_offset + 4) * 8;
+				obj.dead_sprite_y = leveldata.GetWord(data_offset + 2) * 8;
+				obj.dead_sprite_x = leveldata.GetWord(data_offset + 4) * 8;
 			}
 
 			// 18 bytes of mandatory data is followed

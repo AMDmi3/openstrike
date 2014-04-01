@@ -54,14 +54,15 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 			building = game.Spawn<Building>(
 					Vector3f(bi.x, bi.y * 2, 0),
 					bi.type,
-					Vector3f(bi.dead_x, bi.dead_y * 2, 0),
-					bi.dead_type
+					Vector3f(bi.sprite_x, bi.sprite_y * 2, 0) - Vector3f(bi.x, bi.y * 2, 0),
+					bi.dead_type,
+					Vector3f(bi.dead_sprite_x, bi.dead_sprite_y * 2, 0) - Vector3f(bi.x, bi.y * 2, 0)
 				);
 
 			for (auto& bbox : dead_type.bboxes) {
 				building->AddDeadBBox(
 						BBoxf(
-								Vector3f(bi.bbox_x, bi.bbox_y * 2, 0),
+								Vector3f(),
 								bbox.x1 * mul, bbox.y1 * mul,
 								bbox.x2 * mul, bbox.y2 * mul,
 								bbox.z1, bbox.z2,
@@ -72,14 +73,15 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 		} else {
 			building = game.Spawn<Building>(
 					Vector3f(bi.x, bi.y * 2, 0),
-					bi.type
+					bi.type,
+					Vector3f(bi.sprite_x, bi.sprite_y * 2, 0) - Vector3f(bi.x, bi.y * 2, 0)
 				);
 		}
 
 		for (auto& bbox : type.bboxes) {
 			building->AddBBox(
 					BBoxf(
-							Vector3f(bi.bbox_x, bi.bbox_y * 2, 0),
+							Vector3f(),
 							bbox.x1 * mul, bbox.y1 * mul,
 							bbox.x2 * mul, bbox.y2 * mul,
 							bbox.z1, bbox.z2,

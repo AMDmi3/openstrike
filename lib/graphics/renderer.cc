@@ -157,7 +157,7 @@ void Renderer::RenderVisitor::Visit(Explosion& explosion) {
 }
 
 void Renderer::RenderVisitor::Visit(Building& building) {
-	SDL2pp::Point pos = camera_.GameToScreen(building.GetPos());
+	SDL2pp::Point pos = camera_.GameToScreen(building.GetPos() + building.GetSpriteOffset());
 
 	auto blockmap = parent_.block_maps_.find(building.GetType());
 	assert(blockmap != parent_.block_maps_.end());
