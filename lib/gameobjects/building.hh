@@ -69,8 +69,9 @@ public:
 		dead_bboxes_.emplace_back(bbox);
 	}
 
-	const std::vector<BBoxf>& GetBBoxes() const {
-		return bboxes_;
+	void ForeachBBox(const std::function<void(const BBoxf&)> bbox_processor) const {
+		for (auto bbox : bboxes_)
+			bbox_processor(bbox);
 	}
 };
 

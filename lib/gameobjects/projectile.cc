@@ -38,9 +38,10 @@ public:
 	}
 
 	void Visit(Building& building) {
-		for (auto& bbox : building.GetBBoxes())
+		building.ForeachBBox([this, &building](const BBoxf& bbox) {
 			if (bbox.Contains(pos_))
 				collision_handler_(building);
+		});
 	}
 };
 
