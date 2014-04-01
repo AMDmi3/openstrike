@@ -114,7 +114,7 @@ struct Vector3 {
 	constexpr Vector3<T> operator*(T m) const { return Vector3<T>(x * m, y * m, z * m); }
 	constexpr Vector3<T> operator/(T d) const { return Vector3<T>(x / d, y / d, z / d); }
 
-	constexpr Vector2<T> operator-() const { return Vector2<T>(-x, -y, -z); }
+	constexpr Vector3<T> operator-() const { return Vector3<T>(-x, -y, -z); }
 
 	constexpr Vector3<T> operator*(const Direction2<T>& d) const { return Vector3(d.RotatedCW(pi/2).ToVector(x) - d.ToVector(y), z); }
 
