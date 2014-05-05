@@ -24,13 +24,13 @@
 #include <dat/buffer.hh>
 
 // MemRange
-uint8_t MemRange::GetByte(size_t offset) const {
-	if (offset + 1 > GetSize())
-		throw std::out_of_range("GetByte out of range");
+uint8_t MemRange::operator[](size_t offset) const {
 	return GetData()[offset];
 }
 
-uint8_t MemRange::operator[](size_t offset) const {
+uint8_t MemRange::GetByte(size_t offset) const {
+	if (offset + 1 > GetSize())
+		throw std::out_of_range("GetByte out of range");
 	return GetData()[offset];
 }
 
@@ -52,6 +52,18 @@ uint32_t MemRange::GetDWord(size_t offset) const {
 #else
 	return ((uint32_t)(*this)[offset] << 24) | ((uint32_t)(*this)[offset + 1] << 16) | ((uint32_t)(*this)[offset + 2] << 8) | (uint32_t)(*this)[offset + 3];
 #endif
+}
+
+int8_t MemRange::GetSByte(size_t offset) const {
+	return static_cast<int8_t>(GetByte(offset));
+}
+
+int16_t MemRange::GetSWord(size_t offset) const {
+	return static_cast<int16_t>(GetWord(offset));
+}
+
+int32_t MemRange::GetSDWord(size_t offset) const {
+	return static_cast<int32_t>(GetDWord(offset));
 }
 
 std::string MemRange::GetString(size_t offset, size_t length) const {

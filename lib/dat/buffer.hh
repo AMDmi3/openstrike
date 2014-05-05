@@ -40,6 +40,9 @@ public:
 	uint8_t GetByte(size_t offset) const;
 	uint16_t GetWord(size_t offset) const;
 	uint32_t GetDWord(size_t offset) const;
+	int8_t GetSByte(size_t offset) const;
+	int16_t GetSWord(size_t offset) const;
+	int32_t GetSDWord(size_t offset) const;
 
 	std::string GetString(size_t offset, size_t length) const;
 

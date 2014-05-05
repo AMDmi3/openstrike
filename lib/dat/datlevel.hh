@@ -35,12 +35,12 @@ public:
 		unsigned short type;
 		unsigned short x;
 		unsigned short y;
-		unsigned short sprite_x;
-		unsigned short sprite_y;
+		signed short sprite_x;
+		signed short sprite_y;
 
 		unsigned short dead_type;
-		unsigned short dead_sprite_x;
-		unsigned short dead_sprite_y;
+		signed short dead_sprite_x;
+		signed short dead_sprite_y;
 
 		BuildingInstance() : dead_type(0) {
 		}
