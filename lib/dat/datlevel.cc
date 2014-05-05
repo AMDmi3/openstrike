@@ -126,6 +126,7 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 			UnitInstance obj;
 			obj.y = leveldata.GetWord(data_offset + 6);
 			obj.x = leveldata.GetWord(data_offset + 8);
+			obj.z = leveldata.GetSWord(data_offset + 10);
 
 			// 20 bytes of mandatory data is followed
 			// by chunks which presumably encode what

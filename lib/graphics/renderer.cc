@@ -190,11 +190,23 @@ void Renderer::RenderVisitor::Visit(Unit& unit) {
 
 	parent_.sprite_manager_.GetRenderer().DrawLine(
 			camera_.GameToScreen(unit.GetPos() + Vector3f(-10, 0, 0)),
+			camera_.GameToScreen(unit.GetPos() + Vector3f(0, 10, 0))
+		);
+	parent_.sprite_manager_.GetRenderer().DrawLine(
+			camera_.GameToScreen(unit.GetPos() + Vector3f(0, 10, 0)),
 			camera_.GameToScreen(unit.GetPos() + Vector3f(10, 0, 0))
 		);
 	parent_.sprite_manager_.GetRenderer().DrawLine(
+			camera_.GameToScreen(unit.GetPos() + Vector3f(10, 0, 0)),
+			camera_.GameToScreen(unit.GetPos() + Vector3f(0, -10, 0))
+		);
+	parent_.sprite_manager_.GetRenderer().DrawLine(
 			camera_.GameToScreen(unit.GetPos() + Vector3f(0, -10, 0)),
-			camera_.GameToScreen(unit.GetPos() + Vector3f(0, 10, 0))
+			camera_.GameToScreen(unit.GetPos() + Vector3f(-10, 0, 0))
+		);
+	parent_.sprite_manager_.GetRenderer().DrawLine(
+			camera_.GameToScreen(unit.GetPos().Grounded()),
+			camera_.GameToScreen(unit.GetPos())
 		);
 #endif
 }

@@ -67,6 +67,7 @@ public:
 	struct UnitInstance {
 		unsigned short x;
 		unsigned short y;
+		signed short z;
 	};
 
 	typedef std::function<void(const BuildingInstance&)> BuildingInstanceProcessor;

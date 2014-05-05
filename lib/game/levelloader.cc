@@ -95,7 +95,7 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 	});
 
 	level.ForeachUnitInstance([&game, &level](const DatLevel::UnitInstance& ui) {
-		game.Spawn<Unit>(Vector3f(ui.x, ui.y * 2));
+		game.Spawn<Unit>(Vector3f(ui.x, ui.y * 2, ui.z));
 	});
 
 	for (auto& fn : building_instance_processors_)
