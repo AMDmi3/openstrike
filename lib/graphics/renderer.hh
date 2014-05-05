@@ -65,6 +65,7 @@ protected:
 		virtual void Visit(Projectile& projectile);
 		virtual void Visit(Explosion& explosion);
 		virtual void Visit(Building& building);
+		virtual void Visit(Unit& unit);
 	};
 
 protected:

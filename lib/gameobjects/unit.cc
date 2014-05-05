@@ -17,26 +17,20 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#include <game/visitor.hh>
+#include <game/game.hh>
 
-class GameObject;
+#include <gameobjects/unit.hh>
 
-class Building;
-class Explosion;
-class Heli;
-class Projectile;
-class Unit;
+Unit::Unit(Game& game, const Vector3f& pos)
+	: GameObject(game),
+	  pos_(pos) {
+}
 
-class Visitor {
-public:
-	virtual void Visit(GameObject&) {}
+void Unit::Accept(Visitor& visitor) {
+	visitor.Visit(*this);
+}
 
-	virtual void Visit(Building& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Explosion& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Heli& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Projectile& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Unit& obj) { Visit((GameObject&)obj); }
-};
-
-#endif // VISITOR_HH
+void Unit::Update(unsigned int) {
+	// TODO
+}

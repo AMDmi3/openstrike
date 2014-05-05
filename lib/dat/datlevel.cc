@@ -54,6 +54,9 @@ const std::map<unsigned short, std::string> DatLevel::gfx_resources_ = {
 };
 
 DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks) {
+	//
+	// First block table encodes buildings
+	//
 	int last_offset = 0;
 	int table_offset = last_offset;
 	for (int nblock = 0; nblock < width_blocks * height_blocks; nblock++) {
@@ -105,6 +108,9 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 		}
 	}
 
+	//
+	// Second block table encodes units
+	//
 	table_offset = last_offset;
 	for (int nblock = 0; nblock < width_blocks * height_blocks; nblock++) {
 		int blockdata_offset = leveldata.GetWord(table_offset + nblock * 2);
@@ -117,15 +123,16 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 		for (int ndata = 0; ndata < data_count; ndata++) {
 			int data_offset = leveldata.GetWord(blockdata_offset + 2 + 2 * ndata);
 
-			// TODO: create unit instance
+			UnitInstance obj;
+			obj.y = leveldata.GetWord(data_offset + 6);
+			obj.x = leveldata.GetWord(data_offset + 8);
 
 			// 20 bytes of mandatory data is followed
 			// by chunks which presumably encode what
-			// happens when the building is destroyed
-			// (e.g. fuel pickup or enemy appears nearby)
+			// happens when the unit is destroyed
+			// (e.g. objective is counted complete)
 			int effect_offset = data_offset + 20;
 			while (1) {
-				//int effect_type = leveldata.GetByte(effect_offset);
 				int effect_data_len = leveldata.GetByte(effect_offset+1);
 
 				if (effect_data_len == 0)
@@ -135,12 +142,18 @@ DatLevel::DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int wi
 			}
 			last_offset = effect_offset + 2;
 
+			unit_instances_.emplace_back(obj);
+
 			// TODO: create unit type
 		}
 	}
 
+	// Check that level file was read completely
 	assert((size_t)last_offset == leveldata.GetSize());
 
+	//
+	// Load extra data from other files (buildings)
+	//
 	for (auto& type : building_types_) {
 		unsigned short blocks_identifier = thingsdata.GetWord(type.first);
 
@@ -185,6 +198,11 @@ void DatLevel::ForeachBuildingInstance(const BuildingInstanceProcessor& fn) cons
 void DatLevel::ForeachBuildingType(const BuildingTypeProcessor& fn) const {
 	for (auto& bt : building_types_)
 		fn(bt.first, bt.second);
+}
+
+void DatLevel::ForeachUnitInstance(const UnitInstanceProcessor& fn) const {
+	for (auto& ui : unit_instances_)
+		fn(ui);
 }
 
 const DatLevel::BuildingType& DatLevel::GetBuildingType(unsigned short type) const {

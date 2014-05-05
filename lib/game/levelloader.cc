@@ -24,6 +24,7 @@
 #include <dat/datlevel.hh>
 
 #include <gameobjects/building.hh>
+#include <gameobjects/unit.hh>
 
 #include <game/levelloader.hh>
 
@@ -93,11 +94,18 @@ Game LevelLoader::Load(const DatFile& datfile, const std::string& levelname, int
 		}
 	});
 
+	level.ForeachUnitInstance([&game, &level](const DatLevel::UnitInstance& ui) {
+		game.Spawn<Unit>(Vector3f(ui.x, ui.y * 2));
+	});
+
 	for (auto& fn : building_instance_processors_)
 		level.ForeachBuildingInstance(fn);
 
 	for (auto& fn : building_type_processors_)
 		level.ForeachBuildingType(fn);
+
+	for (auto& fn : unit_instance_processors_)
+		level.ForeachUnitInstance(fn);
 
 	return game;
 }
@@ -108,4 +116,8 @@ void LevelLoader::AddBuildingInstanceProcessor(const DatLevel::BuildingInstanceP
 
 void LevelLoader::AddBuildingTypeProcessor(const DatLevel::BuildingTypeProcessor& fn) {
 	building_type_processors_.push_back(fn);
+}
+
+void LevelLoader::AddUnitInstanceProcessor(const DatLevel::UnitInstanceProcessor& fn) {
+	unit_instance_processors_.push_back(fn);
 }

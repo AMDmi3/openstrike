@@ -17,26 +17,29 @@
  * along with openstrike.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VISITOR_HH
-#define VISITOR_HH
+#ifndef UNIT_HH
+#define UNIT_HH
 
-class GameObject;
+#include <math/geom.hh>
 
-class Building;
-class Explosion;
-class Heli;
-class Projectile;
-class Unit;
+#include <game/gameobject.hh>
 
-class Visitor {
+class Game;
+class Visitor;
+
+class Unit : public GameObject {
+protected:
+	Vector3f pos_;
+
 public:
-	virtual void Visit(GameObject&) {}
+	Unit(Game& game, const Vector3f& pos);
 
-	virtual void Visit(Building& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Explosion& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Heli& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Projectile& obj) { Visit((GameObject&)obj); }
-	virtual void Visit(Unit& obj) { Visit((GameObject&)obj); }
+	virtual void Accept(Visitor& visitor);
+	virtual void Update(unsigned int deltams);
+
+	Vector3f GetPos() const {
+		return pos_;
+	}
 };
 
-#endif // VISITOR_HH
+#endif // UNIT_HH

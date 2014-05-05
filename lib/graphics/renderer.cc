@@ -30,6 +30,7 @@
 #include <gameobjects/explosion.hh>
 #include <gameobjects/heli.hh>
 #include <gameobjects/projectile.hh>
+#include <gameobjects/unit.hh>
 
 #include <graphics/renderer.hh>
 
@@ -180,5 +181,20 @@ void Renderer::RenderVisitor::Visit(Building& building) {
 				camera_.GameToScreen(bbox.pos + Vector3f(0, 10, 0))
 			);
 	});
+#endif
+}
+
+void Renderer::RenderVisitor::Visit(Unit& unit) {
+#ifdef DEBUG_RENDERING
+	parent_.sprite_manager_.GetRenderer().SetDrawColor(0, 0, 255);
+
+	parent_.sprite_manager_.GetRenderer().DrawLine(
+			camera_.GameToScreen(unit.GetPos() + Vector3f(-10, 0, 0)),
+			camera_.GameToScreen(unit.GetPos() + Vector3f(10, 0, 0))
+		);
+	parent_.sprite_manager_.GetRenderer().DrawLine(
+			camera_.GameToScreen(unit.GetPos() + Vector3f(0, -10, 0)),
+			camera_.GameToScreen(unit.GetPos() + Vector3f(0, 10, 0))
+		);
 #endif
 }

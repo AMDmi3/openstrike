@@ -33,12 +33,15 @@ class LevelLoader {
 private:
 	std::vector<DatLevel::BuildingInstanceProcessor> building_instance_processors_;
 	std::vector<DatLevel::BuildingTypeProcessor> building_type_processors_;
+	std::vector<DatLevel::UnitInstanceProcessor> unit_instance_processors_;
 
 public:
 	LevelLoader();
 
 	void AddBuildingInstanceProcessor(const DatLevel::BuildingInstanceProcessor& fn);
 	void AddBuildingTypeProcessor(const DatLevel::BuildingTypeProcessor& fn);
+	void AddUnitInstanceProcessor(const DatLevel::UnitInstanceProcessor& fn);
+
 	Game Load(const DatFile& datfile, const std::string& levelname, int width_blocks, int height_blocks);
 };
 

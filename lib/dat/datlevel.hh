@@ -64,8 +64,15 @@ public:
 		std::vector<BBox> bboxes;
 	};
 
+	struct UnitInstance {
+		unsigned short x;
+		unsigned short y;
+	};
+
 	typedef std::function<void(const BuildingInstance&)> BuildingInstanceProcessor;
 	typedef std::function<void(unsigned short, const BuildingType&)> BuildingTypeProcessor;
+
+	typedef std::function<void(const UnitInstance&)> UnitInstanceProcessor;
 
 protected:
 	const static std::map<unsigned short, std::string> gfx_resources_;
@@ -73,12 +80,15 @@ protected:
 protected:
 	std::list<BuildingInstance> building_instances_;
 	std::map<unsigned int, BuildingType> building_types_;
+	std::list<UnitInstance> unit_instances_;
 
 public:
 	DatLevel(const MemRange& leveldata, const MemRange& thingsdata, int width_blocks, int height_blocks);
 
 	void ForeachBuildingInstance(const BuildingInstanceProcessor& fn) const;
 	void ForeachBuildingType(const BuildingTypeProcessor& fn) const;
+
+	void ForeachUnitInstance(const UnitInstanceProcessor& fn) const;
 
 	const BuildingType& GetBuildingType(unsigned short type) const;
 };
