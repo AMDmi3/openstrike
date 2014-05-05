@@ -37,7 +37,7 @@ int realmain(int argc, char** argv) {
 	bool dolist = false, doextract = false;
 	const char* progname = argv[0];
 
-	while ((c = getopt(argc, argv, "lx")) != -1) {
+	while ((c = getopt(argc, argv, "lxh")) != -1) {
 		switch (c) {
 		case 'l': dolist = true; break;
 		case 'x': doextract = true; break;
