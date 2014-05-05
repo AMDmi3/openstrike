@@ -24,7 +24,7 @@
 #include <dat/datfile.hh>
 
 void usage(const char* progname) {
-	std::cerr << "Usage: " << progname << " [-hlv] <filename.dat>" << std::endl;
+	std::cerr << "Usage: " << progname << " [-hlx] <filename.dat>" << std::endl;
 	std::cerr << std::endl;
 	std::cerr << "    -l    List datfile entries" << std::endl;
 	std::cerr << "    -x    Extract data files into current durectory" << std::endl;
@@ -49,7 +49,7 @@ int realmain(int argc, char** argv) {
 	argc -= optind;
 	argv += optind;
 
-	if (argc != 1) {
+	if (argc != 1 || (!dolist && !doextract)) {
 		usage(progname);
 		return 1;
 	}
