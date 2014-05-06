@@ -31,10 +31,10 @@ public:
 
 private:
 	Vector3f pos_;
-	const CollisionHandler& collision_handler_;
+	const CollisionHandler collision_handler_;
 
 public:
-	CollisionVisitor(const Vector3f& pos, const CollisionHandler& collision_handler) : pos_(pos), collision_handler_(collision_handler) {
+	CollisionVisitor(const Vector3f& pos, CollisionHandler&& collision_handler) : pos_(pos), collision_handler_(collision_handler) {
 	}
 
 	void Visit(Building& building) {
