@@ -85,11 +85,7 @@ int realmain(int argc, char** argv) {
 
 	// game_renderer has notified sprite manager of needed sprites,
 	// now it will load them
-	spriteman.LoadAll(
-			[](int loaded, int total) {
-				std::cerr << "Loading sprites: " << loaded << "/" << total << std::endl;
-			}
-		);
+	spriteman.LoadAll();
 
 	unsigned int delta_ms, prev_ms, this_ms = SDL_GetTicks();
 	while (1) {

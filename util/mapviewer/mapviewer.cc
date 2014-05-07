@@ -63,11 +63,7 @@ int realmain(int argc, char** argv) {
 
     // game_renderer has notified sprite manager of needed sprites,
     // now it will load them
-    spriteman.LoadAll(
-            [](int loaded, int total) {
-                std::cerr << "Loading sprites: " << loaded << "/" << total << std::endl;
-            }
-        );
+    spriteman.LoadAll();
 
     Camera camera(Vector3f(12 * 512 / 2, 6 * 512 / 2, 0), SDL2pp::Rect(0, 0, 800, 600));
 	static const int x_scroll_speed = 32;
