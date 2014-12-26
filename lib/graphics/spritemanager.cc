@@ -120,7 +120,7 @@ void SpriteManager::Render(sprite_id_t id, int x, int y, int flags) {
 				SDL2pp::Rect(sprite.atlasx, sprite.atlasy, sprite.width, sprite.height),
 				SDL2pp::Rect(x + xoffset, y + yoffset, sprite.width, sprite.height),
 				0.0,
-				SDL2pp::Point::Null(),
+				SDL2pp::NullOpt,
 				SDL_FLIP_HORIZONTAL
 			);
 	} else {

@@ -87,7 +87,7 @@ int realmain(int argc, char** argv) {
 				continue;
 
 			SDL2pp::Texture tex(render, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, graphics.GetWidth(i), graphics.GetHeight(i));
-			tex.Update(SDL2pp::Rect::Null(), graphics.GetPixels(i).data(), graphics.GetWidth(i) * 4);
+			tex.Update(SDL2pp::NullOpt, graphics.GetPixels(i).data(), graphics.GetWidth(i) * 4);
 			tex.SetBlendMode(SDL_BLENDMODE_BLEND);
 
 			if (x + graphics.GetFrameWidth(i) * zoom > window.GetWidth()) {
@@ -112,7 +112,7 @@ int realmain(int argc, char** argv) {
 						graphics.GetHeight(i) * zoom
 					));
 
-			render.Copy(tex, SDL2pp::Rect::Null(), SDL2pp::Rect(
+			render.Copy(tex, SDL2pp::NullOpt, SDL2pp::Rect(
 						x + graphics.GetXOffset(i) * zoom,
 						y + graphics.GetYOffset(i) * zoom,
 						graphics.GetWidth(i) * zoom,
