@@ -1,3 +1,3 @@
 [submodule "extlibs/SDL2pp"]
 	path = extlibs/SDL2pp
-	url = git://github.com/AMDmi3/libSDL2pp.git
+	url = https://github.com/libSDL2pp/libSDL2pp.git
