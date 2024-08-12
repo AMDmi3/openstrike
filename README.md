@@ -4,6 +4,8 @@ F/OSS Desert Strike and Jungle Strike reimplementation.
 
 ## Status
 
+![Animation](https://github.com/AMDmi3/openstrike/blob/master/animation.gif)
+
 The project is currently on the early stages of development, and
 is not yet playable. What it can offer right now:
 

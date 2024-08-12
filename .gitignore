@@ -1,0 +1,14 @@
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+
+# Linux
+*.a
+Makefile
+tests/test_*
+openstrike
+fonttest
+gfxviewer
+mapviewer
+unpacker
