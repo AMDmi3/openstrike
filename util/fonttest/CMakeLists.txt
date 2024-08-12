@@ -1,7 +1,7 @@
-SET(SOURCES
+set(SOURCES
 	fonttest.cc
 )
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib ${SDL2PP_INCLUDE_DIRS})
-ADD_EXECUTABLE(fonttest ${SOURCES})
-TARGET_LINK_LIBRARIES(fonttest graphics dat ${SDL2PP_LIBRARIES})
+include_directories(${PROJECT_SOURCE_DIR}/lib ${SDL2PP_INCLUDE_DIRS})
+add_executable(fonttest ${SOURCES})
+target_link_libraries(fonttest graphics dat ${SDL2PP_LIBRARIES})

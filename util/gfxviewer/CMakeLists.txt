@@ -1,7 +1,7 @@
-SET(SOURCES
+set(SOURCES
 	gfxviewer.cc
 )
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib ${SDL2PP_INCLUDE_DIRS})
-ADD_EXECUTABLE(gfxviewer ${SOURCES})
-TARGET_LINK_LIBRARIES(gfxviewer dat ${SDL2PP_LIBRARIES})
+include_directories(${PROJECT_SOURCE_DIR}/lib ${SDL2PP_INCLUDE_DIRS})
+add_executable(gfxviewer ${SOURCES})
+target_link_libraries(gfxviewer dat ${SDL2PP_LIBRARIES})

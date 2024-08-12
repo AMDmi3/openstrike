@@ -1,4 +1,4 @@
-ADD_SUBDIRECTORY(dat)
-ADD_SUBDIRECTORY(graphics)
-ADD_SUBDIRECTORY(game)
-ADD_SUBDIRECTORY(gameobjects)
+add_subdirectory(dat)
+add_subdirectory(graphics)
+add_subdirectory(game)
+add_subdirectory(gameobjects)

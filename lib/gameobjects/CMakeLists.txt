@@ -1,4 +1,4 @@
-SET(SOURCES
+set(SOURCES
 	building.cc
 	explosion.cc
 	heli.cc
@@ -6,5 +6,5 @@ SET(SOURCES
 	unit.cc
 )
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
-ADD_LIBRARY(gameobjects STATIC ${SOURCES})
+include_directories(${PROJECT_SOURCE_DIR}/lib)
+add_library(gameobjects STATIC ${SOURCES})

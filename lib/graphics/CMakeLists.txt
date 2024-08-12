@@ -1,4 +1,4 @@
-SET(SOURCES
+set(SOURCES
 	camera.cc
 	groundrenderer.cc
 	objectsorter.cc
@@ -8,5 +8,5 @@ SET(SOURCES
 	sprites.cc
 )
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib ${SDL2PP_INCLUDE_DIRS})
-ADD_LIBRARY(graphics STATIC ${SOURCES})
+include_directories(${PROJECT_SOURCE_DIR}/lib ${SDL2PP_INCLUDE_DIRS})
+add_library(graphics STATIC ${SOURCES})

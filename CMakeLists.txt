@@ -1,21 +1,23 @@
-PROJECT(OpenStrike)
+cmake_minimum_required(VERSION 3.22)
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+project(OpenStrike LANGUAGES CXX VERSION 0.0.0)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS NO)
 
-# common depends and definitions
-ADD_DEFINITIONS("-std=c++11 -Wall -Wextra -pedantic")
-ADD_DEFINITIONS("-DDEBUG_RENDERING")
+add_definitions("-Wall -Wextra -pedantic")
+add_definitions("-DDEBUG_RENDERING")
 
 # depends
-IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/extlibs/SDL2pp/CMakeLists.txt)
-    MESSAGE(FATAL_ERROR "The source directory\n  ${PROJECT_SOURCE_DIR}/extlibs/SDL2pp\ndoes not contain a CMakeLists.txt file.\nIt is likely that you forgot to run\n  git submodule init && git submodule update")
-ENDIF(NOT EXISTS ${PROJECT_SOURCE_DIR}/extlibs/SDL2pp/CMakeLists.txt)
-ADD_SUBDIRECTORY(extlibs/SDL2pp)
+if(NOT EXISTS ${PROJECT_SOURCE_DIR}/extlibs/SDL2pp/CMakeLists.txt)
+    message(FATAL_ERROR "The source directory\n  ${PROJECT_SOURCE_DIR}/extlibs/SDL2pp\ndoes not contain a CMakeLists.txt file.\nIt is likely that you forgot to run\n  git submodule init && git submodule update")
+endif()
+add_subdirectory(extlibs/SDL2pp)
 
 # projects
-ENABLE_TESTING()
+enable_testing()
 
-ADD_SUBDIRECTORY(lib)
-ADD_SUBDIRECTORY(util)
-ADD_SUBDIRECTORY(src)
-ADD_SUBDIRECTORY(tests)
+add_subdirectory(lib)
+add_subdirectory(util)
+add_subdirectory(src)
+add_subdirectory(tests)
