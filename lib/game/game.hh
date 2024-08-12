@@ -20,13 +20,14 @@
 #ifndef GAME_HH
 #define GAME_HH
 
+#include <game/gameobject.hh>
+
 #include <memory>
 #include <list>
 #include <set>
 #include <utility>
 
 class Visitor;
-class GameObject;
 
 class Game {
 protected:
