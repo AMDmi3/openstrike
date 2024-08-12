@@ -23,6 +23,7 @@
 #include <vector>
 #include <iostream>
 #include <cstddef>
+#include <cstdint>
 #include <string>
 
 class Slice;
